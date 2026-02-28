@@ -350,7 +350,7 @@ def generate_html(all_articles_by_cat):
 
 def main():
     print("Fetching news from NewsAPI...")
-    articles = {{}}
+    articles = {}
     for cat in ['general', 'business', 'sports', 'technology', 'entertainment']:
         articles[cat] = fetch(cat, size=5)
         print(f"  {cat}: {len(articles[cat])} articles fetched")
