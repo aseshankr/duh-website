@@ -1,559 +1,658 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="DUH ‚Äî India's news in plain English. Simple, clear, no jargon."/>
-  <title>DUH ‚Äî India's Simplest News</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Duh — Know What's Happening</title>
+  <meta name="description" content="Type any topic. Get an instant intelligence brief from News, Reddit and Hacker News." />
+  <meta property="og:title" content="Duh — Know What's Happening" />
+  <meta property="og:description" content="Type any topic. Get an instant brief from News, Reddit and Hacker News." />
+  <meta property="og:url" content="https://duh.co.in" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap');
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #f8fafc; color: #1e293b; min-height: 100vh; }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --navy: #1a2744;
-      --navy-light: #2d4070;
-      --accent: #8b1a1a;
-      --text: #1a1a1a;
-      --muted: #666;
-      --light: #f5f3ef;
-      --border: #d4cfc7;
-      --white: #ffffff;
+    /* ═══ LANDING ═══ */
+    #landing {
+      min-height: 100vh;
+      background: #0a0a0a;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 40px 20px; text-align: center;
+      position: relative; overflow: hidden;
     }
 
-    body {
-      background: var(--white);
-      color: var(--text);
-      font-family: 'Source Serif 4', Georgia, serif;
-      font-size: 16px;
-      line-height: 1.6;
+    /* subtle animated grid bg */
+    #landing::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black, transparent);
     }
 
-    a { color: inherit; text-decoration: none; }
-    a:hover { color: var(--accent); }
-
-    /* ‚îÄ‚îÄ TOP BAR ‚îÄ‚îÄ */
-    .topbar {
-      background: var(--navy);
-      color: rgba(255,255,255,0.7);
-      font-family: 'Inter', sans-serif;
-      font-size: 11px;
-      letter-spacing: 0.5px;
-      padding: 7px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .topbar a { color: rgba(255,255,255,0.7); }
-    .topbar a:hover { color: white; }
-    .topbar-links { display: flex; gap: 20px; }
-
-    /* ‚îÄ‚îÄ MASTHEAD ‚îÄ‚îÄ */
-    .masthead {
-      text-align: center;
-      padding: 40px 40px 24px;
-      border-bottom: 3px double var(--navy);
-    }
-    .masthead-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      font-family: 'Inter', sans-serif;
-      font-size: 12px;
-      color: var(--muted);
-    }
-    .logo {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 80px;
-      font-weight: 900;
-      color: var(--navy);
-      letter-spacing: 8px;
-      text-transform: uppercase;
-      line-height: 1;
-    }
-    .tagline {
-      font-family: 'Source Serif 4', Georgia, serif;
-      font-style: italic;
-      font-size: 15px;
-      color: var(--muted);
-      margin-top: 8px;
-      letter-spacing: 1px;
-    }
-    .masthead-rule {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 16px 0 0;
+    #landing::after {
+      content: '';
+      position: absolute; top: -120px; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 400px;
+      background: radial-gradient(ellipse, rgba(234,179,8,0.12) 0%, transparent 70%);
+      pointer-events: none;
     }
 
-    /* ‚îÄ‚îÄ NAV ‚îÄ‚îÄ */
-    nav {
-      border-bottom: 1px solid var(--border);
-      background: var(--white);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .nav-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: center;
-      overflow-x: auto;
-      scrollbar-width: none;
-      padding: 0 40px;
-    }
-    .nav-inner::-webkit-scrollbar { display: none; }
-    .nav-item {
-      padding: 12px 18px;
-      font-family: 'Inter', sans-serif;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--navy);
-      white-space: nowrap;
-      border-bottom: 2px solid transparent;
-      transition: all 0.2s;
-    }
-    .nav-item:hover, .nav-item.active {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
-    }
+    .hero { position: relative; z-index: 1; max-width: 700px; width: 100%; }
 
-    /* ‚îÄ‚îÄ MAIN LAYOUT ‚îÄ‚îÄ */
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 40px;
+    .duh-wordmark {
+      font-size: 88px; font-weight: 900; color: #fff;
+      letter-spacing: -4px; line-height: 1;
+      margin-bottom: 4px;
     }
+    .duh-wordmark span { color: #eab308; }
 
-    /* ‚îÄ‚îÄ EDITION BAR ‚îÄ‚îÄ */
-    .edition-bar {
-      text-align: center;
-      padding: 12px;
-      font-family: 'Inter', sans-serif;
-      font-size: 11px;
-      letter-spacing: 1px;
-      color: var(--muted);
-      border-bottom: 1px solid var(--border);
-      text-transform: uppercase;
-    }
-
-    /* ‚îÄ‚îÄ SECTION HEADING ‚îÄ‚îÄ */
-    .section-heading {
-      font-family: 'Inter', sans-serif;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 2.5px;
-      text-transform: uppercase;
-      color: var(--accent);
-      padding: 28px 0 12px;
-      border-bottom: 2px solid var(--navy);
-      margin-bottom: 28px;
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-    }
-
-    /* ‚îÄ‚îÄ FEATURED STORY ‚îÄ‚îÄ */
-    .featured-wrap {
-      padding: 40px 0;
-      border-bottom: 1px solid var(--border);
-      text-align: center;
-      max-width: 780px;
-      margin: 0 auto;
-    }
-    .featured-article .article-category {
-      font-family: 'Inter', sans-serif;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 16px;
-    }
-    .featured-title {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 42px;
-      font-weight: 700;
-      font-style: italic;
-      line-height: 1.2;
-      color: var(--navy);
-      margin-bottom: 18px;
-    }
-    .featured-title a:hover { color: var(--accent); }
-    .featured-excerpt {
-      font-size: 17px;
-      line-height: 1.8;
-      color: #444;
-      margin-bottom: 16px;
-      font-style: italic;
-    }
-    .featured-source {
-      font-family: 'Inter', sans-serif;
-      font-size: 11px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 16px;
-    }
-
-    /* ‚îÄ‚îÄ READ MORE ‚îÄ‚îÄ */
-    .read-more {
-      font-family: 'Inter', sans-serif;
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--navy);
-      letter-spacing: 0.5px;
+    .duh-dot {
       display: inline-block;
-      margin-top: 8px;
-    }
-    .read-more:hover { color: var(--accent); }
-
-    /* ‚îÄ‚îÄ 3 COLUMN GRID ‚îÄ‚îÄ */
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 40px;
-    }
-    @media(max-width: 900px) { .grid-3 { grid-template-columns: 1fr 1fr; } }
-    @media(max-width: 600px) { .grid-3 { grid-template-columns: 1fr; } }
-
-    .article-card {
-      padding: 24px 28px;
-      border-right: 1px solid var(--border);
-    }
-    .article-card:last-child { border-right: none; }
-
-    .article-category {
-      font-family: 'Inter', sans-serif;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 10px;
+      font-size: 14px; font-weight: 700; letter-spacing: 2px;
+      color: #52525b; text-transform: uppercase; margin-bottom: 28px;
     }
 
-    .article-title {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 19px;
-      font-weight: 700;
-      font-style: italic;
-      line-height: 1.35;
-      color: var(--navy);
-      margin-bottom: 10px;
+    .tagline {
+      font-size: 18px; color: #71717a; line-height: 1.6; margin-bottom: 44px;
     }
-    .article-title a:hover { color: var(--accent); }
+    .tagline strong { color: #a1a1aa; font-weight: 600; }
 
-    .article-excerpt {
-      font-size: 13.5px;
-      color: #555;
-      line-height: 1.7;
-      margin-bottom: 12px;
+    .search-wrap {
+      width: 100%; display: flex;
+      background: #18181b; border: 1px solid #27272a; border-radius: 16px; overflow: hidden;
+      box-shadow: 0 0 0 1px rgba(234,179,8,0.1), 0 24px 64px rgba(0,0,0,0.5);
+      margin-bottom: 20px; transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .search-wrap:focus-within {
+      border-color: rgba(234,179,8,0.4);
+      box-shadow: 0 0 0 3px rgba(234,179,8,0.08), 0 24px 64px rgba(0,0,0,0.5);
     }
 
-    /* ‚îÄ‚îÄ 2 COLUMN LAYOUT ‚îÄ‚îÄ */
-    .two-col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      padding: 0 0 40px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 40px;
+    .search-wrap input {
+      flex: 1; padding: 20px 24px; font-size: 16px; border: none; outline: none;
+      color: #fff; background: transparent; caret-color: #eab308;
     }
-    @media(max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+    .search-wrap input::placeholder { color: #52525b; }
 
-    .col-section { }
+    .search-wrap button {
+      padding: 20px 28px; background: #eab308; color: #0a0a0a;
+      font-size: 15px; font-weight: 800; border: none; cursor: pointer;
+      transition: background 0.2s; white-space: nowrap; letter-spacing: -0.3px;
+    }
+    .search-wrap button:hover { background: #ca8a04; }
 
-    .col-article {
-      padding: 16px 0;
-      border-bottom: 1px solid var(--border);
+    .src-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; }
+    .src-pill {
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      color: #52525b; padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 500;
     }
-    .col-article:last-child { border-bottom: none; }
 
-    /* ‚îÄ‚îÄ SUBSCRIBE ‚îÄ‚îÄ */
-    .subscribe-wrap {
-      background: var(--light);
-      border-top: 2px solid var(--navy);
-      border-bottom: 2px solid var(--navy);
-      padding: 48px 40px;
-      text-align: center;
-      margin-bottom: 40px;
+    .chips-label { font-size: 12px; color: #3f3f46; margin-bottom: 10px; letter-spacing: 0.5px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .chip {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+      color: #71717a; padding: 7px 14px; border-radius: 20px; font-size: 13px;
+      cursor: pointer; transition: all 0.18s;
     }
-    .subscribe-wrap h2 {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 30px;
-      font-weight: 700;
-      font-style: italic;
-      color: var(--navy);
-      margin-bottom: 10px;
-    }
-    .subscribe-wrap p {
-      font-size: 15px;
-      color: var(--muted);
-      margin-bottom: 24px;
-      font-style: italic;
-    }
-    .sub-form {
-      display: flex;
-      gap: 0;
-      max-width: 420px;
-      margin: 0 auto;
-      border: 1px solid var(--navy);
-    }
-    .sub-form input {
-      flex: 1;
-      padding: 12px 16px;
-      border: none;
-      font-size: 14px;
-      outline: none;
-      font-family: 'Inter', sans-serif;
-      background: white;
-    }
-    .sub-form button {
-      background: var(--navy);
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      white-space: nowrap;
-    }
-    .sub-form button:hover { background: var(--accent); }
+    .chip:hover { background: rgba(234,179,8,0.1); border-color: rgba(234,179,8,0.3); color: #eab308; }
 
-    /* ‚îÄ‚îÄ FOOTER ‚îÄ‚îÄ */
-    footer {
-      background: var(--navy);
-      color: rgba(255,255,255,0.6);
-      padding: 40px;
-      text-align: center;
+    /* ═══ LOADING ═══ */
+    #loading {
+      min-height: 100vh; background: #0a0a0a;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px;
     }
-    .footer-logo {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 32px;
-      font-weight: 900;
-      letter-spacing: 6px;
-      color: white;
-      margin-bottom: 12px;
+    .load-mark { font-size: 48px; font-weight: 900; color: #fff; letter-spacing: -2px; }
+    .load-mark span { color: #eab308; }
+    .load-topic { color: #52525b; font-size: 14px; max-width: 400px; }
+
+    .load-steps { display: flex; flex-direction: column; gap: 8px; width: 360px; }
+    .load-step {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px; border-radius: 10px;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+      color: #3f3f46; font-size: 13px; transition: all 0.3s;
     }
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-      margin: 16px 0;
-      flex-wrap: wrap;
+    .load-step.active { background: rgba(234,179,8,0.08); border-color: rgba(234,179,8,0.25); color: #eab308; }
+    .load-step.done   { background: rgba(34,197,94,0.06); border-color: rgba(34,197,94,0.2); color: #4ade80; }
+    .step-icon { font-size: 18px; }
+
+    .prog-track { width: 360px; height: 3px; background: rgba(255,255,255,0.06); border-radius: 99px; overflow: hidden; }
+    .prog-fill  { height: 100%; background: linear-gradient(90deg, #eab308, #f59e0b); border-radius: 99px; transition: width 0.5s ease; width: 0%; }
+
+    /* ═══ REPORT ═══ */
+    #report { background: #f8fafc; min-height: 100vh; }
+
+    .rpt-header {
+      background: #0a0a0a; color: #fff;
+      padding: 28px 40px 24px; position: relative; overflow: hidden;
     }
-    .footer-links a {
-      color: rgba(255,255,255,0.6);
-      font-family: 'Inter', sans-serif;
-      font-size: 11px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
+    .rpt-header::after {
+      content: ''; position: absolute; top: -60px; right: -60px;
+      width: 220px; height: 220px; background: rgba(234,179,8,0.06); border-radius: 50%;
     }
-    .footer-links a:hover { color: white; }
-    .footer-text {
-      font-size: 12px;
-      font-family: 'Inter', sans-serif;
-      line-height: 1.8;
+
+    .rpt-back {
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+      color: #a1a1aa; padding: 7px 16px; border-radius: 8px; cursor: pointer;
+      font-size: 13px; font-weight: 600; margin-bottom: 16px;
+      display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;
+    }
+    .rpt-back:hover { background: rgba(255,255,255,0.12); color: #fff; }
+
+    .rpt-pill {
+      display: inline-block; background: rgba(234,179,8,0.15); border: 1px solid rgba(234,179,8,0.35);
+      color: #eab308; padding: 3px 12px; border-radius: 20px;
+      font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px;
+    }
+    .rpt-header h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 5px; }
+    .rpt-header .rpt-meta { font-size: 13px; color: #52525b; }
+    .rpt-src-row { display: flex; gap: 12px; margin-top: 14px; flex-wrap: wrap; }
+    .rpt-src-chip {
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+      padding: 4px 12px; border-radius: 16px; font-size: 12px; color: #71717a;
+    }
+    .rpt-src-chip strong { color: #eab308; margin-left: 2px; }
+
+    .rpt-body { max-width: 1120px; margin: 0 auto; padding: 28px 24px; }
+
+    /* KPIs */
+    .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 28px; }
+    .kpi {
+      background: #fff; border-radius: 12px; padding: 18px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06); border-top: 3px solid;
+    }
+    .kpi .kl { font-size: 10px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #a1a1aa; margin-bottom: 6px; }
+    .kpi .kv { font-size: 22px; font-weight: 800; line-height: 1; margin-bottom: 3px; }
+    .kpi .ks { font-size: 11px; color: #a1a1aa; }
+    .kpi.yellow { border-color: #eab308; } .kpi.yellow .kv { color: #ca8a04; }
+    .kpi.red    { border-color: #ef4444; } .kpi.red    .kv { color: #dc2626; }
+    .kpi.orange { border-color: #f97316; } .kpi.orange .kv { color: #ea580c; }
+    .kpi.green  { border-color: #22c55e; } .kpi.green  .kv { color: #16a34a; }
+    .kpi.violet { border-color: #8b5cf6; } .kpi.violet .kv { color: #7c3aed; }
+
+    /* Section title */
+    .sec { font-size: 11px; font-weight: 800; color: #a1a1aa; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid #e4e4e7; }
+
+    /* TL;DR */
+    .tldr {
+      background: #0a0a0a; border-radius: 14px; padding: 26px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.15); margin-bottom: 28px;
+    }
+    .tldr-eyebrow { font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #eab308; margin-bottom: 10px; }
+    .tldr-heading { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 16px; letter-spacing: -0.3px; }
+    .tldr-list { display: flex; flex-direction: column; gap: 12px; }
+    .tldr-item { display: flex; gap: 12px; font-size: 14px; line-height: 1.65; color: #a1a1aa; }
+    .tldr-dot { width: 7px; height: 7px; background: #eab308; border-radius: 50%; flex-shrink: 0; margin-top: 7px; }
+    .tldr-src { color: #52525b; font-size: 11px; }
+
+    /* News */
+    .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; margin-bottom: 28px; }
+    .news-card {
+      background: #fff; border-radius: 12px; padding: 18px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06); border-left: 3px solid #eab308;
+      display: flex; flex-direction: column; gap: 9px;
+      transition: box-shadow 0.2s, transform 0.2s; text-decoration: none; color: inherit;
+    }
+    .news-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.1); transform: translateY(-2px); }
+    .nc-meta  { display: flex; align-items: center; gap: 8px; }
+    .nc-fav   { width: 15px; height: 15px; border-radius: 3px; }
+    .nc-src   { font-size: 11px; font-weight: 700; color: #ca8a04; text-transform: uppercase; letter-spacing: 0.4px; }
+    .nc-date  { font-size: 11px; color: #a1a1aa; margin-left: auto; }
+    .nc-title { font-size: 14px; font-weight: 700; color: #0f172a; line-height: 1.4; }
+    .nc-desc  { font-size: 12px; color: #71717a; line-height: 1.6; flex: 1; }
+    .nc-cta   { font-size: 11px; font-weight: 700; color: #eab308; }
+
+    /* Two col */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+    .panel { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .panel-head { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+    .panel-head h3 { font-size: 14px; font-weight: 800; color: #0f172a; }
+    .panel-head .pc { margin-left: auto; font-size: 11px; color: #a1a1aa; }
+
+    .sent-bars { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; }
+    .sent-row { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+    .sent-lbl { width: 58px; color: #71717a; font-weight: 600; }
+    .sent-track { flex: 1; height: 7px; background: #f4f4f5; border-radius: 99px; overflow: hidden; }
+    .sent-fill  { height: 100%; border-radius: 99px; transition: width 0.8s ease; }
+    .sent-n { width: 28px; text-align: right; font-size: 11px; font-weight: 700; color: #71717a; }
+
+    .post-list { display: flex; flex-direction: column; gap: 9px; }
+    .post-item {
+      padding: 10px 12px; background: #fafafa; border-radius: 8px;
+      border-left: 3px solid; display: flex; flex-direction: column; gap: 4px;
+    }
+    .pi-meta  { font-size: 11px; color: #a1a1aa; display: flex; gap: 8px; flex-wrap: wrap; }
+    .pi-score { font-weight: 700; color: #f97316; }
+    .pi-title { font-size: 13px; font-weight: 600; color: #1e293b; line-height: 1.4; }
+    .pi-title a { color: inherit; text-decoration: none; }
+    .pi-title a:hover { color: #eab308; }
+
+    /* Chart */
+    .chart-card { background: #fff; border-radius: 12px; padding: 22px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); margin-bottom: 28px; }
+    .chart-card h3 { font-size: 13px; font-weight: 700; color: #71717a; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .chart-card canvas { max-height: 210px; }
+
+    /* No data */
+    .no-data { padding: 24px; text-align: center; color: #a1a1aa; font-size: 13px; background: #fafafa; border-radius: 8px; border: 1px dashed #e4e4e7; }
+
+    /* Footer */
+    .rpt-footer {
+      text-align: center; padding: 20px; font-size: 12px; color: #a1a1aa;
+      border-top: 1px solid #f4f4f5;
+    }
+    .rpt-footer a { color: #eab308; text-decoration: none; cursor: pointer; font-weight: 600; }
+
+    @media (max-width: 680px) {
+      .duh-wordmark { font-size: 64px; letter-spacing: -3px; }
+      .two-col  { grid-template-columns: 1fr; }
+      .news-grid { grid-template-columns: 1fr; }
+      .rpt-header { padding: 22px 16px; }
+      .rpt-body   { padding: 18px 14px; }
+      .kpi-row { grid-template-columns: 1fr 1fr; }
+      .load-steps, .prog-track { width: 100%; max-width: 340px; }
     }
   </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
-<div class="topbar">
-  <span>‚òÄÔ∏è Monday, March 02, 2026</span>
-  <div class="topbar-links">
-    <a href="#">About</a>
-    <a href="#">Subscribe</a>
-    <a href="#">Archive</a>
-  </div>
-</div>
+<!-- ════════ LANDING ════════ -->
+<div id="landing">
+  <div class="hero">
+    <div class="duh-wordmark">duh<span>.</span></div>
+    <div class="duh-dot">duh.co.in</div>
+    <p class="tagline">Type any topic. Get an instant brief from <strong>News</strong>, <strong>Reddit</strong> and <strong>Hacker News</strong> — in seconds.</p>
 
-<!-- MASTHEAD -->
-<div class="masthead">
-  <div class="masthead-top">
-    <span style="font-style:italic">News so simple, you'll go duh</span>
-    <span>Updated daily at 7am IST</span>
-  </div>
-  <div class="logo">DUH</div>
-  <div class="tagline">India's news in plain English ‚Äî no jargon, no drama</div>
-  <hr class="masthead-rule"/>
-</div>
-
-<!-- NAV -->
-<nav>
-  <div class="nav-inner">
-    <a class="nav-item active" href="#">Today</a>
-    <a class="nav-item" href="#">India</a>
-    <a class="nav-item" href="#">World</a>
-    <a class="nav-item" href="#">Business</a>
-    <a class="nav-item" href="#">Sports</a>
-    <a class="nav-item" href="#">Technology</a>
-    <a class="nav-item" href="#">Entertainment</a>
-  </div>
-</nav>
-
-<!-- EDITION BAR -->
-<div class="edition-bar">
-  Edition of Monday, March 02, 2026 &nbsp;¬∑&nbsp; Updated at 11:03 AM IST
-</div>
-
-<!-- MAIN -->
-<div class="container">
-
-  <!-- FEATURED -->
-  <div class="featured-wrap">
-    
-        <article class="featured-article">
-          <p class="article-category">India</p>
-          <h2 class="featured-title"><a href="https://www.ndtv.com/world-news/iran-us-tensions-live-updates-explosion-rocks-iran-amid-heightened-nuclear-tensions-with-us-iran-israel-tensions-tehran-tel-aviv-tensions-11148388#publisher=newsstand" target="_blank">US-Israel Attacks Iran LIVE Updates: Israel, Hezbollah Exchange Fire As Regional Tensions Escalate</a></h2>
-          <p class="featured-excerpt">Israel Iran Conflict LIVE Updates: Iran's state TV has confirmed the death of Ali Khamenei</p>
-          <p class="featured-source">NDTV News Search Records Found 1000</p>
-          <a href="https://www.ndtv.com/world-news/iran-us-tensions-live-updates-explosion-rocks-iran-amid-heightened-nuclear-tensions-with-us-iran-israel-tensions-tehran-tel-aviv-tensions-11148388#publisher=newsstand" target="_blank" class="read-more">Read full article ¬ª</a>
-        </article>
-  </div>
-
-  <!-- TOP 3 GRID -->
-  <div class="section-heading">
-    <span>Top Stories</span>
-    <span style="font-style:italic;font-family:'Source Serif 4',serif;font-size:11px;font-weight:300;letter-spacing:0;">Today's most important news</span>
-  </div>
-  <div class="grid-3">
-    
-        <article class="article-card">
-          <p class="article-category">India</p>
-          <h3 class="article-title"><a href="https://www.ndtv.com/world-news/israeli-strikes-target-beiruts-southern-suburbs-after-hezbollah-fires-rockets-and-drones-over-ayatollah-khameneis-killing-11156408#publisher=newsstand" target="_blank">Israel Strikes Lebanon Capital Beirut After Hezbollah Fires Rockets, Drones</a></h3>
-          <p class="article-excerpt">Beirut's southern suburbs were targeted by a series of Israeli strikes, the report.</p>
-          <a href="https://www.ndtv.com/world-news/israeli-strikes-target-beiruts-southern-suburbs-after-hezbollah-fires-rockets-and-drones-over-ayatollah-khameneis-killing-11156408#publisher=newsstand" target="_blank" class="read-more">Read full article ¬ª</a>
-        </article>
-        <article class="article-card">
-          <p class="article-category">Business</p>
-          <h3 class="article-title"><a href="https://timesofindia.indiatimes.com/business/india-business/stock-market-today-nifty50-bse-sensex-march-02-2026-israel-us-iran-tensions-middle-east-oil-gold-prices-global-markets/articleshow/128935153.cms" target="_blank">Stock market crash today: Nifty50 goes below 24,900; BSE Sensex down over 1,000 points on Middle East tensions</a></h3>
-          <p class="article-excerpt">Stock market crash today: Nifty50 and BSE Sensex crashed in opening trade on Monday amidst rising Middle East tensions and global market turmoil, with impact on crude oil prices and...</p>
-          <a href="https://timesofindia.indiatimes.com/business/india-business/stock-market-today-nifty50-bse-sensex-march-02-2026-israel-us-iran-tensions-middle-east-oil-gold-prices-global-markets/articleshow/128935153.cms" target="_blank" class="read-more">Read full article ¬ª</a>
-        </article>
-        <article class="article-card">
-          <p class="article-category">Sports</p>
-          <h3 class="article-title"><a href="https://timesofindia.indiatimes.com/sports/new-zealand-in-india-2016/top-stories/india-v-new-zealand-odi-tickets-worth-rs-52-36-lakh-went-unsold-claims-ck-khanna/articleshow/55230517.cms" target="_blank">ODI tickets worth Rs 52.36 lakh went unsold: Khanna</a></h3>
-          <p class="article-excerpt">"Tickets worth Rupees 52,36,000 were unsold. Why all the tickets were not sold-out? DDCA started online ticket sale quite late that too without proper advertisement," Khanna claimed in a media...</p>
-          <a href="https://timesofindia.indiatimes.com/sports/new-zealand-in-india-2016/top-stories/india-v-new-zealand-odi-tickets-worth-rs-52-36-lakh-went-unsold-claims-ck-khanna/articleshow/55230517.cms" target="_blank" class="read-more">Read full article ¬ª</a>
-        </article>
-  </div>
-
-  <!-- TWO COLUMN: INDIA + BUSINESS -->
-  <div class="two-col">
-    <div class="col-section">
-      <div class="section-heading">India</div>
-      
-        <article class="article-card">
-          <p class="article-category">India</p>
-          <h3 class="article-title"><a href="https://www.ndtv.com/world-news/israel-iran-war-tehran-khamenei-uae-dubai-us-can-use-british-military-bases-for-iran-missile-strikes-uk-pm-starmer-11156174#publisher=newsstand" target="_blank">US Can Use British Military Bases For Iran Missile Strikes: UK PM Starmer</a></h3>
-          <p class="article-excerpt">Starmer reiterated that Britain was not involved in the joint US-Israel air strikes</p>
-          <a href="https://www.ndtv.com/world-news/israel-iran-war-tehran-khamenei-uae-dubai-us-can-use-british-military-bases-for-iran-missile-strikes-uk-pm-starmer-11156174#publisher=newsstand" target="_blank" class="read-more">Read full article ¬ª</a>
-        </article>
-        <article class="article-card">
-          <p class="article-category">India</p>
-          <h3 class="article-title"><a href="https://www.ndtv.com/world-news/iran-israel-news-3-us-troops-killed-5-seriously-wounded-during-iran-attacks-11156329#publisher=newsstand" target="_blank">3 US Soldiers Killed During Iran Ops, Trump Says "There Will Likely Be More"</a></h3>
-          <p class="article-excerpt">Before the strikes, Trump had built up the largest US military presence in the Middle East in decades.</p>
-          <a href="https://www.ndtv.com/world-news/iran-israel-news-3-us-troops-killed-5-seriously-wounded-during-iran-attacks-11156329#publisher=newsstand" target="_blank" class="read-more">Read full article ¬ª</a>
-        </article>
-        <article class="article-card">
-          <p class="article-category">India</p>
-          <h3 class="article-title"><a href="https://www.ndtv.com/world-news/iran-israel-tensions-live-updates-iran-enters-survival-mode-after-assassination-of-supreme-leader-ayatollah-ali-khamenei-11156630#publisher=newsstand" target="_blank">Iran Enters Survival Mode After Assassination Of Supreme Leader Khamenei</a></h3>
-          <p class="article-excerpt">With Khamenei's demise, voices that sought flexibility in Iran's pursuit of deterrence may gain strength</p>
-          <a href="https://www.ndtv.com/world-news/iran-israel-tensions-live-updates-iran-enters-survival-mode-after-assassination-of-supreme-leader-ayatollah-ali-khamenei-11156630#publisher=newsstand" target="_blank" class="read-more">Read full article ¬ª</a>
-        </article>
+    <div class="search-wrap">
+      <input id="topicInput" type="text" placeholder="e.g. West Hyderabad real estate rents…" autocomplete="off" />
+      <button onclick="generate()">Brief Me →</button>
     </div>
-    <div class="col-section">
-      <div class="section-heading">Business</div>
-      
-        <article class="article-card">
-          <p class="article-category">Business</p>
-          <h3 class="article-title"><a href="https://timesofindia.indiatimes.com/business/india-business/middle-east-tensions-gold-prices-jump-2-on-iran-conflict-india-braces-for-diamond-supply-crunch/articleshow/128934115.cms" target="_blank">Middle East tensions: Gold prices jump 2% on Iran conflict; India braces for diamond supply crunch</a></h3>
-          <p class="article-excerpt">Gold prices surged as major strikes on Iran, reportedly killing Supreme Leader Ayatollah Ali Khamenei, intensified geopolitical tensions and fears of economic instability. The attacks triggered further retaliatory actions, creating...</p>
-          <a href="https://timesofindia.indiatimes.com/business/india-business/middle-east-tensions-gold-prices-jump-2-on-iran-conflict-india-braces-for-diamond-supply-crunch/articleshow/128934115.cms" target="_blank" class="read-more">Read full article ¬ª</a>
-        </article>
-        <article class="article-card">
-          <p class="article-category">Business</p>
-          <h3 class="article-title"><a href="https://timesofindia.indiatimes.com/business/international-business/asian-stocks-today-nikkei-crashes-900-points-hsi-down-over-2-markets-trade-in-red-amid-iran-israel-tensions/articleshow/128935224.cms" target="_blank">Asian stocks today: Nikkei crashes 900 points, HSI down over 2%; markets trade in red amid Iran-Israel tensions</a></h3>
-          <p class="article-excerpt">Asian markets opened lower, impacted by Middle East tensions and stronger-than-expected U.S. inflation data. Gold and oil prices surged as investors reacted to potential supply disruptions. U.S. futures also declined,...</p>
-          <a href="https://timesofindia.indiatimes.com/business/international-business/asian-stocks-today-nikkei-crashes-900-points-hsi-down-over-2-markets-trade-in-red-amid-iran-israel-tensions/articleshow/128935224.cms" target="_blank" class="read-more">Read full article ¬ª</a>
-        </article>
-        <article class="article-card">
-          <p class="article-category">Business</p>
-          <h3 class="article-title"><a href="https://timesofindia.indiatimes.com/business/india-business/top-stock-recommendations-for-march-02-2026-week-siemens-energy-polycab-stocks-to-buy-today/articleshow/128921955.cms" target="_blank">Top stocks to buy: Stock recommendations for March 2, 2026 week</a></h3>
-          <p class="article-excerpt">Stock market recommendations: Siemens Energy, and Polycab are Motilal Oswal Financial Services Ltd’s top stock recommendations for this week starting March 2, 2026. Below is the rationale and target prices:</p>
-          <a href="https://timesofindia.indiatimes.com/business/india-business/top-stock-recommendations-for-march-02-2026-week-siemens-energy-polycab-stocks-to-buy-today/articleshow/128921955.cms" target="_blank" class="read-more">Read full article ¬ª</a>
-        </article>
+
+    <div class="src-row">
+      <div class="src-pill">📰 Google News</div>
+      <div class="src-pill">🔴 Reddit</div>
+      <div class="src-pill">🟠 Hacker News</div>
+    </div>
+
+    <div class="chips-label">Try a topic</div>
+    <div class="chips">
+      <button class="chip" onclick="qs('West Hyderabad real estate rents')">West Hyd Rents</button>
+      <button class="chip" onclick="qs('Zepto Blinkit quick commerce India')">Quick Commerce</button>
+      <button class="chip" onclick="qs('AI agents 2025')">AI Agents 2025</button>
+      <button class="chip" onclick="qs('Bengaluru traffic infrastructure')">Bengaluru Traffic</button>
+      <button class="chip" onclick="qs('electric vehicles India 2025')">EVs in India</button>
+      <button class="chip" onclick="qs('SEBI stock market India 2025')">SEBI &amp; Markets</button>
+      <button class="chip" onclick="qs('startup funding India 2025')">India Startups</button>
     </div>
   </div>
-
-  <!-- BOTTOM GRID: SPORTS / TECH / ENTERTAINMENT -->
-  <div class="section-heading">More Stories</div>
-  <div class="grid-3" style="margin-bottom:40px;">
-    
-        <article class="article-card">
-          <p class="article-category">Sports</p>
-          <h3 class="article-title"><a href="https://timesofindia.indiatimes.com/sports/new-zealand-in-india-2016/top-stories/icc-odi-rankings-axar-patel-breaks-into-top-10-bowlers-amit-mishra-achieves-career-best-spot/articleshow/55141314.cms" target="_blank">Axar Patel breaks into top-10 ODI bowlers</a></h3>
-          <p class="article-excerpt">Axar Patel has become the highest placed India bowler in the latest ICC ODI rankings after breaking into the top-10 bowler's list while legspinner Amit Mishra has vaulted 25 places...</p>
-          <a href="https://timesofindia.indiatimes.com/sports/new-zealand-in-india-2016/top-stories/icc-odi-rankings-axar-patel-breaks-into-top-10-bowlers-amit-mishra-achieves-career-best-spot/articleshow/55141314.cms" target="_blank" class="read-more">Read full article ¬ª</a>
-        </article>
-        <article class="article-card">
-          <p class="article-category">Technology</p>
-          <h3 class="article-title"><a href="https://timesofindia.indiatimes.com/science/why-humans-are-the-only-primates-with-a-chin/articleshow/128936079.cms" target="_blank">Why humans are the only primates with a chin</a></h3>
-          <p class="article-excerpt"></p>
-          <a href="https://timesofindia.indiatimes.com/science/why-humans-are-the-only-primates-with-a-chin/articleshow/128936079.cms" target="_blank" class="read-more">Read full article ¬ª</a>
-        </article>
-        <article class="article-card">
-          <p class="article-category">Technology</p>
-          <h3 class="article-title"><a href="https://timesofindia.indiatimes.com/science/long-dry-spring-season-puts-himalayan-rivers-under-stress/articleshow/128935852.cms" target="_blank">Long, dry spring season puts Himalayan rivers under stress</a></h3>
-          <p class="article-excerpt"></p>
-          <a href="https://timesofindia.indiatimes.com/science/long-dry-spring-season-puts-himalayan-rivers-under-stress/articleshow/128935852.cms" target="_blank" class="read-more">Read full article ¬ª</a>
-        </article>
-        <article class="article-card">
-          <p class="article-category">Entertainment</p>
-          <h3 class="article-title"><a href="https://timesofindia.indiatimes.com/entertainment/hindi/bollywood/box-office/the-kerala-story-2-goes-beyond-box-office-collection-day-3-film-crosses-the-rs-10-crore-mark-over-the-first-weekend-fails-to-surpass-the-earnings-of-part-1/articleshow/128931669.cms" target="_blank">'Kerala Story 2' crosses Rs 10 crore over first weekend</a></h3>
-          <p class="article-excerpt">'The Kerala Story 2 Goes Beyond' has opened to a mixed reception, earning Rs 10.40 crore over its first weekend. Despite a delayed start on its release day, the film...</p>
-          <a href="https://timesofindia.indiatimes.com/entertainment/hindi/bollywood/box-office/the-kerala-story-2-goes-beyond-box-office-collection-day-3-film-crosses-the-rs-10-crore-mark-over-the-first-weekend-fails-to-surpass-the-earnings-of-part-1/articleshow/128931669.cms" target="_blank" class="read-more">Read full article ¬ª</a>
-        </article>
-  </div>
-
 </div>
 
-<!-- SUBSCRIBE -->
-<div class="subscribe-wrap">
-  <h2>Start your morning with DUH</h2>
-  <p>India's news, explained simply ‚Äî in your inbox every day at 7am. Free, always.</p>
-  <div class="sub-form">
-    <input type="email" placeholder="your@email.com"/>
-    <button>Subscribe</button>
+<!-- ════════ LOADING ════════ -->
+<div id="loading" style="display:none">
+  <div class="load-mark">duh<span>.</span></div>
+  <div class="load-topic" id="loadTopic"></div>
+  <div class="load-steps">
+    <div class="load-step" id="step0"><span class="step-icon">📰</span> Fetching news articles…</div>
+    <div class="load-step" id="step1"><span class="step-icon">🔴</span> Scanning Reddit discussions…</div>
+    <div class="load-step" id="step2"><span class="step-icon">🟠</span> Checking Hacker News…</div>
+    <div class="load-step" id="step3"><span class="step-icon">🧠</span> Extracting key insights…</div>
   </div>
+  <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
 </div>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-logo">DUH</div>
-  <div class="footer-links">
-    <a href="#">Home</a>
-    <a href="#">About</a>
-    <a href="#">Archive</a>
-    <a href="#">Subscribe</a>
-    <a href="#">Contact</a>
-  </div>
-  <div class="footer-text">
-    News so simple, you'll go duh &nbsp;¬∑&nbsp; duh.co.in<br/>
-    Not financial or legal advice. Just news, made human.
-  </div>
-</footer>
+<!-- ════════ REPORT ════════ -->
+<div id="report" style="display:none"></div>
 
+
+<script>
+// ════════════════════════════════════
+//  CONFIG
+// ════════════════════════════════════
+const PROXY = 'https://corsproxy.io/?url=';
+
+const POSITIVE = new Set(['good','great','excellent','affordable','worth','nice','happy','love','best','recommend','cheap','value','improve','safe','clean','convenient','modern','beautiful','fantastic','amazing','awesome','perfect','wonderful','helpful','easy','better','quality','reasonable','satisfied','enjoy','superb','brilliant','outstanding','impressive','smooth','reliable','efficient','fair','useful','solid','strong','profitable','growing','boom','success','win','innovative','exciting','positive','benefit','gain','accessible','friendly','fast','thriving','opportunity','promising','boost','soar','surge','gain','rise','launch','expand','record']);
+
+const NEGATIVE = new Set(['expensive','bad','terrible','awful','worst','hate','avoid','scam','overpriced','problem','issue','difficult','concern','flood','pollution','traffic','poor','horrible','pathetic','disappointed','cheated','fraud','waste','useless','broken','fail','failure','ridiculous','absurd','outrageous','shock','alarming','unaffordable','inflation','corrupt','fake','mislead','wrong','error','mistake','regret','sad','angry','frustrated','annoyed','disgusted','scared','worried','danger','risky','overrated','decline','falling','drop','crisis','collapse','nightmare','trap','delay','cancel','ban','breach','leak','attack','threat','loss','cut','layoff','fire','arrest','scandal','scam','crash','plunge','slump']);
+
+const STOPWORDS = new Set(['a','about','above','after','again','all','am','an','and','any','are','as','at','be','because','been','before','being','below','between','both','but','by','can','did','do','does','doing','down','during','each','few','for','from','further','get','got','had','has','have','having','he','her','here','him','his','how','i','if','in','into','is','it','its','just','me','more','most','my','no','nor','not','now','of','off','on','once','only','or','other','our','out','over','own','s','same','she','so','some','such','t','than','that','the','their','them','then','there','these','they','this','those','through','to','too','under','until','up','very','was','we','were','what','when','where','which','while','who','whom','why','will','with','you','your','like','also','think','look','want','one','use','make','even','see','time','go','come','take','people','lot','still','back','way','well','really','thing','actually','already','always','never','ever','said','say','know','going','getting','looking','trying','making','using','doing','having','being','saying','thinking','coming','taking','different','right','left','first','last','long','high','low','next','big','little','old','small','large','same','used','work','life','place','case','point','fact','though','since','while','around','per','let','put','might','could','would','should','may','must','can','ask','find','give','help','keep','move','need','seem','show','try','turn','start','end','stay','set','add','day','part','world','feel','real','hand','kind','line','side','name','two','three','four','five','ago','post','comment','reddit','something','anything','someone','anyone','everyone','re','ve','isn','wasn','aren','weren','haven','hadn','doesn','didn','don','won','wouldn','shouldn','couldn','ll','d','m','yeah','yes','nah','okay','im','ive','id','lol','tbh','imo','fyi','https','http','www','com','new','year','month','week','many','much','less']);
+
+let charts = {};
+
+// ════════════════════════════════════
+//  UI
+// ════════════════════════════════════
+const $    = id => document.getElementById(id);
+const show = id => $(id).style.display = '';
+const hide = id => $(id).style.display = 'none';
+const esc  = s  => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+function qs(t) { $('topicInput').value = t; generate(); }
+
+function setStep(i) {
+  ['step0','step1','step2','step3'].forEach((s, idx) => {
+    const el = $(s); el.classList.remove('active','done');
+    if (idx < i) el.classList.add('done');
+    if (idx === i) el.classList.add('active');
+  });
+  $('progFill').style.width = (i * 24 + 4) + '%';
+}
+
+function relDate(str) {
+  try {
+    const diff = Date.now() - new Date(str).getTime();
+    const h = Math.floor(diff / 3600000);
+    if (h < 1)  return 'Just now';
+    if (h < 24) return `${h}h ago`;
+    const d = Math.floor(h / 24);
+    if (d < 7)  return `${d}d ago`;
+    if (d < 30) return `${Math.floor(d/7)}w ago`;
+    return new Date(str).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' });
+  } catch { return ''; }
+}
+
+// ════════════════════════════════════
+//  FETCH
+// ════════════════════════════════════
+async function fetchNews(topic) {
+  try {
+    const rss = `https://news.google.com/rss/search?q=${encodeURIComponent(topic)}&hl=en-IN&gl=IN&ceid=IN:en`;
+    const res  = await fetch(PROXY + encodeURIComponent(rss));
+    const xml  = new DOMParser().parseFromString(await res.text(), 'application/xml');
+    return Array.from(xml.querySelectorAll('item')).slice(0, 6).map(item => {
+      const rawTitle = item.querySelector('title')?.textContent || '';
+      const srcEl    = item.querySelector('source');
+      const srcName  = srcEl?.textContent || '';
+      const srcUrl   = srcEl?.getAttribute('url') || '';
+      const link     = item.querySelector('link')?.textContent || '';
+      const pubDate  = item.querySelector('pubDate')?.textContent || '';
+      const title    = rawTitle.replace(/ - [^-]+$/, '').trim();
+      const tmp = document.createElement('div');
+      tmp.innerHTML = item.querySelector('description')?.textContent || '';
+      const desc = tmp.textContent.replace(/\s+/g,' ').trim().slice(0, 220);
+      const domain = srcUrl ? (() => { try { return new URL(srcUrl).hostname; } catch { return ''; } })() : '';
+      return { title, srcName, srcUrl, domain, link, pubDate, desc };
+    }).filter(n => n.title && n.srcName);
+  } catch(e) { console.warn('News:', e); return []; }
+}
+
+async function fetchReddit(topic) {
+  try {
+    const target = `https://www.reddit.com/search.json?q=${encodeURIComponent(topic)}&sort=relevance&limit=60&t=year&raw_json=1`;
+    const res    = await fetch(PROXY + encodeURIComponent(target));
+    const data   = await res.json();
+    return data.data.children.map(c => c.data)
+      .filter(p => p.title && p.selftext !== '[deleted]' && p.selftext !== '[removed]');
+  } catch(e) { console.warn('Reddit:', e); return []; }
+}
+
+async function fetchHN(topic) {
+  try {
+    const res  = await fetch(`https://hn.algolia.com/api/v1/search?query=${encodeURIComponent(topic)}&tags=story&hitsPerPage=20`);
+    return (await res.json()).hits?.filter(h => h.title) || [];
+  } catch(e) { console.warn('HN:', e); return []; }
+}
+
+// ════════════════════════════════════
+//  ANALYSIS
+// ════════════════════════════════════
+function tokenize(text) {
+  return (text||'').toLowerCase().replace(/[^a-z\s]/g,' ').split(/\s+/).filter(w => w.length > 2 && !STOPWORDS.has(w));
+}
+
+function sentScore(text) {
+  const ws = tokenize(text);
+  let p = 0, n = 0;
+  ws.forEach(w => { if (POSITIVE.has(w)) p++; else if (NEGATIVE.has(w)) n++; });
+  const t = p + n;
+  return t === 0 ? 0 : (p - n) / t;
+}
+
+function classify(score) {
+  return score > 0.2 ? 'positive' : score < -0.2 ? 'negative' : 'neutral';
+}
+
+function topKws(texts, n = 10) {
+  const f = {};
+  texts.forEach(t => tokenize(t).forEach(w => { f[w] = (f[w]||0) + 1; }));
+  return Object.entries(f).sort((a,b) => b[1]-a[1]).slice(0, n);
+}
+
+function extractSummary(news, reddit, hn) {
+  const cands = [];
+  news.forEach(n => { if (n.desc?.length > 40) cands.push({ text: n.desc, src: n.srcName, score: 2 }); });
+  reddit.slice(0,12).forEach(p => {
+    const sents = (p.selftext||'').split(/[.!?]+/).filter(s => s.trim().length > 50);
+    sents.slice(0,1).forEach(s => cands.push({ text: s.trim(), src: 'Reddit r/'+p.subreddit, score: p.score/200 }));
+    if (!sents.length && p.title) cands.push({ text: p.title, src: 'Reddit', score: p.score/200 });
+  });
+  hn.slice(0,5).forEach(h => { if (h.title) cands.push({ text: h.title, src: 'Hacker News', score: (h.points||0)/50 }); });
+  if (!cands.length) return [];
+  const allText = cands.map(c => c.text).join(' ');
+  const freq = {};
+  tokenize(allText).forEach(w => { freq[w] = (freq[w]||0)+1; });
+  cands.forEach(c => {
+    const ws = tokenize(c.text);
+    c.rank = ws.reduce((s,w) => s + (freq[w]||0), 0) / Math.max(ws.length,1) + c.score;
+  });
+  const seen = new Set(), out = [];
+  cands.sort((a,b) => b.rank - a.rank).forEach(c => {
+    const k = c.text.slice(0,40).toLowerCase();
+    if (!seen.has(k) && out.length < 5) { seen.add(k); out.push(c); }
+  });
+  return out;
+}
+
+// ════════════════════════════════════
+//  RENDER
+// ════════════════════════════════════
+function destroyCharts() { Object.values(charts).forEach(c => c.destroy()); charts = {}; }
+
+function renderReport(topic, news, reddit, hn) {
+  const rSents  = reddit.map(p => classify(sentScore(p.title + ' ' + p.selftext)));
+  const rPos = rSents.filter(s => s === 'positive').length;
+  const rNeg = rSents.filter(s => s === 'negative').length;
+  const rNeu = reddit.length - rPos - rNeg;
+
+  const hSents  = hn.map(h => classify(sentScore(h.title)));
+  const hPos = hSents.filter(s => s === 'positive').length;
+  const hNeg = hSents.filter(s => s === 'negative').length;
+  const hNeu = hn.length - hPos - hNeg;
+
+  const allTexts = [...news.map(n => n.title+' '+n.desc), ...reddit.map(p => p.title), ...hn.map(h => h.title||'')];
+  const overallLabel = classify(sentScore(allTexts.join(' ')));
+  const sentEmoji = { positive:'🟢', negative:'🔴', neutral:'🟡' }[overallLabel];
+  const sentKpi   = { positive:'green', negative:'red', neutral:'orange' }[overallLabel];
+
+  const kws     = topKws(allTexts, 10);
+  const summary = extractSummary(news, reddit, hn);
+  const topR    = [...reddit].sort((a,b) => b.score - a.score).slice(0, 4);
+  const topH    = [...hn].sort((a,b) => (b.points||0) - (a.points||0)).slice(0, 4);
+  const now     = new Date().toLocaleString('en-IN', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+  const totalEng = reddit.reduce((s,p) => s + p.score, 0);
+
+  $('report').innerHTML = `
+    <div class="rpt-header">
+      <button class="rpt-back" onclick="goBack()">← New Search</button>
+      <div class="rpt-pill">Intelligence Brief</div>
+      <h1>${esc(topic)}</h1>
+      <div class="rpt-meta">Generated ${now}</div>
+      <div class="rpt-src-row">
+        <div class="rpt-src-chip">📰 Google News <strong>${news.length}</strong></div>
+        <div class="rpt-src-chip">🔴 Reddit <strong>${reddit.length}</strong></div>
+        <div class="rpt-src-chip">🟠 Hacker News <strong>${hn.length}</strong></div>
+      </div>
+    </div>
+
+    <div class="rpt-body">
+
+      <div class="kpi-row">
+        <div class="kpi yellow">
+          <div class="kl">Sources</div>
+          <div class="kv">${news.length + reddit.length + hn.length}</div>
+          <div class="ks">Items analysed</div>
+        </div>
+        <div class="kpi ${sentKpi}">
+          <div class="kl">Sentiment</div>
+          <div class="kv" style="font-size:15px">${sentEmoji} ${overallLabel.charAt(0).toUpperCase()+overallLabel.slice(1)}</div>
+          <div class="ks">Overall tone</div>
+        </div>
+        <div class="kpi red">
+          <div class="kl">Reddit Votes</div>
+          <div class="kv">${totalEng >= 1000 ? (totalEng/1000).toFixed(1)+'K' : totalEng}</div>
+          <div class="ks">Total upvotes</div>
+        </div>
+        <div class="kpi orange">
+          <div class="kl">HN Points</div>
+          <div class="kv">${hn.reduce((s,h) => s+(h.points||0), 0)}</div>
+          <div class="ks">Total upvotes</div>
+        </div>
+        <div class="kpi violet">
+          <div class="kl">Top Keyword</div>
+          <div class="kv" style="font-size:14px">${kws[0] ? kws[0][0] : '—'}</div>
+          <div class="ks">${kws[0] ? kws[0][1]+' mentions' : ''}</div>
+        </div>
+      </div>
+
+      <div class="tldr">
+        <div class="tldr-eyebrow">💡 TL;DR — Key Points</div>
+        <div class="tldr-heading">${esc(topic)}</div>
+        <div class="tldr-list">
+          ${summary.length
+            ? summary.map(s => `<div class="tldr-item"><div class="tldr-dot"></div><div>${esc(s.text)} <span class="tldr-src">— ${esc(s.src)}</span></div></div>`).join('')
+            : '<div class="tldr-item"><div class="tldr-dot"></div><div>Not enough content to summarise. Try a broader search.</div></div>'
+          }
+        </div>
+      </div>
+
+      <div class="sec">📰 In the News</div>
+      ${news.length ? `
+      <div class="news-grid">
+        ${news.map(n => `
+          <a class="news-card" href="${esc(n.link)}" target="_blank" rel="noopener noreferrer">
+            <div class="nc-meta">
+              ${n.domain ? `<img class="nc-fav" src="https://www.google.com/s2/favicons?domain=${n.domain}&sz=32" onerror="this.style.display='none'" />` : ''}
+              <span class="nc-src">${esc(n.srcName)}</span>
+              <span class="nc-date">${relDate(n.pubDate)}</span>
+            </div>
+            <div class="nc-title">${esc(n.title)}</div>
+            ${n.desc ? `<div class="nc-desc">${esc(n.desc)}</div>` : ''}
+            <div class="nc-cta">Read article →</div>
+          </a>`).join('')}
+      </div>` : '<div class="no-data">No news articles found for this topic.</div>'}
+
+      <div class="two-col">
+        <div class="panel">
+          <div class="panel-head"><span>🔴</span><h3>Reddit</h3><span class="pc">${reddit.length} posts</span></div>
+          ${reddit.length ? `
+          <div class="sent-bars">
+            ${[['Positive','#22c55e',rPos],['Negative','#ef4444',rNeg],['Neutral','#d4d4d8',rNeu]].map(([l,c,n]) => `
+              <div class="sent-row">
+                <span class="sent-lbl" style="color:${c}">${l}</span>
+                <div class="sent-track"><div class="sent-fill" style="width:${reddit.length?Math.round(n/reddit.length*100):0}%;background:${c}"></div></div>
+                <span class="sent-n">${n}</span>
+              </div>`).join('')}
+          </div>
+          <div class="post-list">
+            ${topR.map(p => `
+              <div class="post-item" style="border-color:${classify(sentScore(p.title))==='positive'?'#22c55e':classify(sentScore(p.title))==='negative'?'#ef4444':'#e4e4e7'}">
+                <div class="pi-meta"><span>r/${esc(p.subreddit)}</span><span class="pi-score">▲ ${p.score}</span><span>${p.num_comments} comments</span></div>
+                <div class="pi-title">${esc(p.title)}</div>
+              </div>`).join('')}
+          </div>` : '<div class="no-data">No Reddit posts found.</div>'}
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><span>🟠</span><h3>Hacker News</h3><span class="pc">${hn.length} stories</span></div>
+          ${hn.length ? `
+          <div class="sent-bars">
+            ${[['Positive','#22c55e',hPos],['Negative','#ef4444',hNeg],['Neutral','#d4d4d8',hNeu]].map(([l,c,n]) => `
+              <div class="sent-row">
+                <span class="sent-lbl" style="color:${c}">${l}</span>
+                <div class="sent-track"><div class="sent-fill" style="width:${hn.length?Math.round(n/hn.length*100):0}%;background:${c}"></div></div>
+                <span class="sent-n">${n}</span>
+              </div>`).join('')}
+          </div>
+          <div class="post-list">
+            ${topH.map(h => `
+              <div class="post-item" style="border-color:#f97316">
+                <div class="pi-meta"><span>by ${esc(h.author||'?')}</span><span class="pi-score">▲ ${h.points||0}</span><span>${h.num_comments||0} comments</span></div>
+                <div class="pi-title">${h.url ? `<a href="${esc(h.url)}" target="_blank" rel="noopener">${esc(h.title)}</a>` : esc(h.title)}</div>
+              </div>`).join('')}
+          </div>` : '<div class="no-data">No Hacker News stories found.</div>'}
+        </div>
+      </div>
+
+      ${kws.length ? `
+      <div class="sec">🔍 Key Themes</div>
+      <div class="chart-card">
+        <h3>Most Discussed Keywords Across All Sources</h3>
+        <canvas id="kwChart"></canvas>
+      </div>` : ''}
+
+    </div>
+
+    <div class="rpt-footer">
+      <strong>duh.</strong> · Data from Google News, Reddit &amp; Hacker News · ${now} · <a onclick="goBack()">Search another topic</a>
+    </div>
+  `;
+
+  show('report'); hide('loading');
+
+  if (kws.length) {
+    setTimeout(() => {
+      destroyCharts();
+      charts.kw = new Chart(document.getElementById('kwChart'), {
+        type: 'bar',
+        data: {
+          labels: kws.map(([w]) => w),
+          datasets: [{ data: kws.map(([,n]) => n), backgroundColor: kws.map(([w]) => POSITIVE.has(w) ? '#22c55e' : NEGATIVE.has(w) ? '#ef4444' : '#eab308'), borderRadius: 6 }]
+        },
+        options: {
+          indexAxis: 'y', responsive: true,
+          plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.raw} mentions` } } },
+          scales: { x: { ticks: { stepSize: 1 }, grid: { color: '#f4f4f5' } }, y: { grid: { display: false } } }
+        }
+      });
+    }, 100);
+  }
+}
+
+// ════════════════════════════════════
+//  MAIN
+// ════════════════════════════════════
+async function generate() {
+  const topic = $('topicInput').value.trim();
+  if (!topic) { $('topicInput').focus(); return; }
+  destroyCharts();
+  $('report').innerHTML = '';
+  hide('landing'); show('loading');
+  $('loadTopic').textContent = `"${topic}"`;
+  setStep(0);
+
+  const newsP   = fetchNews(topic);
+  const redditP = fetchReddit(topic);
+  const hnP     = fetchHN(topic);
+
+  await new Promise(r => setTimeout(r, 700)); setStep(1);
+  const news = await newsP;
+  await new Promise(r => setTimeout(r, 600)); setStep(2);
+  const reddit = await redditP;
+  await new Promise(r => setTimeout(r, 500)); setStep(3);
+  const hn = await hnP;
+
+  $('progFill').style.width = '100%';
+  await new Promise(r => setTimeout(r, 350));
+  renderReport(topic, news, reddit, hn);
+}
+
+function goBack() { destroyCharts(); hide('report'); hide('loading'); show('landing'); }
+$('topicInput').addEventListener('keydown', e => { if (e.key === 'Enter') generate(); });
+</script>
 </body>
 </html>
