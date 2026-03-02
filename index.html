@@ -23,8 +23,6 @@
       padding: 40px 20px; text-align: center;
       position: relative; overflow: hidden;
     }
-
-    /* subtle animated grid bg */
     #landing::before {
       content: '';
       position: absolute; inset: 0;
@@ -33,7 +31,6 @@
       background-size: 48px 48px;
       mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black, transparent);
     }
-
     #landing::after {
       content: '';
       position: absolute; top: -120px; left: 50%; transform: translateX(-50%);
@@ -41,25 +38,11 @@
       background: radial-gradient(ellipse, rgba(234,179,8,0.12) 0%, transparent 70%);
       pointer-events: none;
     }
-
     .hero { position: relative; z-index: 1; max-width: 700px; width: 100%; }
-
-    .duh-wordmark {
-      font-size: 88px; font-weight: 900; color: #fff;
-      letter-spacing: -4px; line-height: 1;
-      margin-bottom: 4px;
-    }
+    .duh-wordmark { font-size: 88px; font-weight: 900; color: #fff; letter-spacing: -4px; line-height: 1; margin-bottom: 4px; }
     .duh-wordmark span { color: #eab308; }
-
-    .duh-dot {
-      display: inline-block;
-      font-size: 14px; font-weight: 700; letter-spacing: 2px;
-      color: #52525b; text-transform: uppercase; margin-bottom: 28px;
-    }
-
-    .tagline {
-      font-size: 18px; color: #71717a; line-height: 1.6; margin-bottom: 44px;
-    }
+    .duh-dot { display: inline-block; font-size: 14px; font-weight: 700; letter-spacing: 2px; color: #52525b; text-transform: uppercase; margin-bottom: 28px; }
+    .tagline { font-size: 18px; color: #71717a; line-height: 1.6; margin-bottom: 44px; }
     .tagline strong { color: #a1a1aa; font-weight: 600; }
 
     .search-wrap {
@@ -68,106 +51,50 @@
       box-shadow: 0 0 0 1px rgba(234,179,8,0.1), 0 24px 64px rgba(0,0,0,0.5);
       margin-bottom: 20px; transition: border-color 0.2s, box-shadow 0.2s;
     }
-    .search-wrap:focus-within {
-      border-color: rgba(234,179,8,0.4);
-      box-shadow: 0 0 0 3px rgba(234,179,8,0.08), 0 24px 64px rgba(0,0,0,0.5);
-    }
-
-    .search-wrap input {
-      flex: 1; padding: 20px 24px; font-size: 16px; border: none; outline: none;
-      color: #fff; background: transparent; caret-color: #eab308;
-    }
+    .search-wrap:focus-within { border-color: rgba(234,179,8,0.4); box-shadow: 0 0 0 3px rgba(234,179,8,0.08), 0 24px 64px rgba(0,0,0,0.5); }
+    .search-wrap input { flex: 1; padding: 20px 24px; font-size: 16px; border: none; outline: none; color: #fff; background: transparent; caret-color: #eab308; }
     .search-wrap input::placeholder { color: #52525b; }
-
-    .search-wrap button {
-      padding: 20px 28px; background: #eab308; color: #0a0a0a;
-      font-size: 15px; font-weight: 800; border: none; cursor: pointer;
-      transition: background 0.2s; white-space: nowrap; letter-spacing: -0.3px;
-    }
+    .search-wrap button { padding: 20px 28px; background: #eab308; color: #0a0a0a; font-size: 15px; font-weight: 800; border: none; cursor: pointer; transition: background 0.2s; white-space: nowrap; letter-spacing: -0.3px; }
     .search-wrap button:hover { background: #ca8a04; }
 
     .src-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; }
-    .src-pill {
-      display: flex; align-items: center; gap: 6px;
-      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
-      color: #52525b; padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 500;
-    }
+    .src-pill { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: #52525b; padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 500; }
 
     .chips-label { font-size: 12px; color: #3f3f46; margin-bottom: 10px; letter-spacing: 0.5px; }
     .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-    .chip {
-      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
-      color: #71717a; padding: 7px 14px; border-radius: 20px; font-size: 13px;
-      cursor: pointer; transition: all 0.18s;
-    }
+    .chip { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); color: #71717a; padding: 7px 14px; border-radius: 20px; font-size: 13px; cursor: pointer; transition: all 0.18s; }
     .chip:hover { background: rgba(234,179,8,0.1); border-color: rgba(234,179,8,0.3); color: #eab308; }
 
     /* ═══ LOADING ═══ */
-    #loading {
-      min-height: 100vh; background: #0a0a0a;
-      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px;
-    }
+    #loading { min-height: 100vh; background: #0a0a0a; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; }
     .load-mark { font-size: 48px; font-weight: 900; color: #fff; letter-spacing: -2px; }
     .load-mark span { color: #eab308; }
-    .load-topic { color: #52525b; font-size: 14px; max-width: 400px; }
-
+    .load-topic { color: #52525b; font-size: 14px; max-width: 400px; text-align: center; }
     .load-steps { display: flex; flex-direction: column; gap: 8px; width: 360px; }
-    .load-step {
-      display: flex; align-items: center; gap: 12px;
-      padding: 12px 16px; border-radius: 10px;
-      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
-      color: #3f3f46; font-size: 13px; transition: all 0.3s;
-    }
+    .load-step { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); color: #3f3f46; font-size: 13px; transition: all 0.3s; }
     .load-step.active { background: rgba(234,179,8,0.08); border-color: rgba(234,179,8,0.25); color: #eab308; }
     .load-step.done   { background: rgba(34,197,94,0.06); border-color: rgba(34,197,94,0.2); color: #4ade80; }
     .step-icon { font-size: 18px; }
-
     .prog-track { width: 360px; height: 3px; background: rgba(255,255,255,0.06); border-radius: 99px; overflow: hidden; }
     .prog-fill  { height: 100%; background: linear-gradient(90deg, #eab308, #f59e0b); border-radius: 99px; transition: width 0.5s ease; width: 0%; }
 
     /* ═══ REPORT ═══ */
     #report { background: #f8fafc; min-height: 100vh; }
-
-    .rpt-header {
-      background: #0a0a0a; color: #fff;
-      padding: 28px 40px 24px; position: relative; overflow: hidden;
-    }
-    .rpt-header::after {
-      content: ''; position: absolute; top: -60px; right: -60px;
-      width: 220px; height: 220px; background: rgba(234,179,8,0.06); border-radius: 50%;
-    }
-
-    .rpt-back {
-      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
-      color: #a1a1aa; padding: 7px 16px; border-radius: 8px; cursor: pointer;
-      font-size: 13px; font-weight: 600; margin-bottom: 16px;
-      display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;
-    }
+    .rpt-header { background: #0a0a0a; color: #fff; padding: 28px 40px 24px; position: relative; overflow: hidden; }
+    .rpt-header::after { content: ''; position: absolute; top: -60px; right: -60px; width: 220px; height: 220px; background: rgba(234,179,8,0.06); border-radius: 50%; }
+    .rpt-back { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); color: #a1a1aa; padding: 7px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; margin-bottom: 16px; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; }
     .rpt-back:hover { background: rgba(255,255,255,0.12); color: #fff; }
-
-    .rpt-pill {
-      display: inline-block; background: rgba(234,179,8,0.15); border: 1px solid rgba(234,179,8,0.35);
-      color: #eab308; padding: 3px 12px; border-radius: 20px;
-      font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px;
-    }
+    .rpt-pill { display: inline-block; background: rgba(234,179,8,0.15); border: 1px solid rgba(234,179,8,0.35); color: #eab308; padding: 3px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
     .rpt-header h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 5px; }
     .rpt-header .rpt-meta { font-size: 13px; color: #52525b; }
     .rpt-src-row { display: flex; gap: 12px; margin-top: 14px; flex-wrap: wrap; }
-    .rpt-src-chip {
-      display: flex; align-items: center; gap: 6px;
-      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
-      padding: 4px 12px; border-radius: 16px; font-size: 12px; color: #71717a;
-    }
+    .rpt-src-chip { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); padding: 4px 12px; border-radius: 16px; font-size: 12px; color: #71717a; }
     .rpt-src-chip strong { color: #eab308; margin-left: 2px; }
 
     .rpt-body { max-width: 1120px; margin: 0 auto; padding: 28px 24px; }
 
-    /* KPIs */
     .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 28px; }
-    .kpi {
-      background: #fff; border-radius: 12px; padding: 18px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06); border-top: 3px solid;
-    }
+    .kpi { background: #fff; border-radius: 12px; padding: 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); border-top: 3px solid; }
     .kpi .kl { font-size: 10px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #a1a1aa; margin-bottom: 6px; }
     .kpi .kv { font-size: 22px; font-weight: 800; line-height: 1; margin-bottom: 3px; }
     .kpi .ks { font-size: 11px; color: #a1a1aa; }
@@ -177,14 +104,9 @@
     .kpi.green  { border-color: #22c55e; } .kpi.green  .kv { color: #16a34a; }
     .kpi.violet { border-color: #8b5cf6; } .kpi.violet .kv { color: #7c3aed; }
 
-    /* Section title */
     .sec { font-size: 11px; font-weight: 800; color: #a1a1aa; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid #e4e4e7; }
 
-    /* TL;DR */
-    .tldr {
-      background: #0a0a0a; border-radius: 14px; padding: 26px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.15); margin-bottom: 28px;
-    }
+    .tldr { background: #0a0a0a; border-radius: 14px; padding: 26px; box-shadow: 0 4px 24px rgba(0,0,0,0.15); margin-bottom: 28px; }
     .tldr-eyebrow { font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #eab308; margin-bottom: 10px; }
     .tldr-heading { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 16px; letter-spacing: -0.3px; }
     .tldr-list { display: flex; flex-direction: column; gap: 12px; }
@@ -192,14 +114,8 @@
     .tldr-dot { width: 7px; height: 7px; background: #eab308; border-radius: 50%; flex-shrink: 0; margin-top: 7px; }
     .tldr-src { color: #52525b; font-size: 11px; }
 
-    /* News */
     .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; margin-bottom: 28px; }
-    .news-card {
-      background: #fff; border-radius: 12px; padding: 18px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06); border-left: 3px solid #eab308;
-      display: flex; flex-direction: column; gap: 9px;
-      transition: box-shadow 0.2s, transform 0.2s; text-decoration: none; color: inherit;
-    }
+    .news-card { background: #fff; border-radius: 12px; padding: 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); border-left: 3px solid #eab308; display: flex; flex-direction: column; gap: 9px; transition: box-shadow 0.2s, transform 0.2s; text-decoration: none; color: inherit; }
     .news-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.1); transform: translateY(-2px); }
     .nc-meta  { display: flex; align-items: center; gap: 8px; }
     .nc-fav   { width: 15px; height: 15px; border-radius: 3px; }
@@ -209,7 +125,6 @@
     .nc-desc  { font-size: 12px; color: #71717a; line-height: 1.6; flex: 1; }
     .nc-cta   { font-size: 11px; font-weight: 700; color: #eab308; }
 
-    /* Two col */
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
     .panel { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
     .panel-head { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
@@ -224,34 +139,25 @@
     .sent-n { width: 28px; text-align: right; font-size: 11px; font-weight: 700; color: #71717a; }
 
     .post-list { display: flex; flex-direction: column; gap: 9px; }
-    .post-item {
-      padding: 10px 12px; background: #fafafa; border-radius: 8px;
-      border-left: 3px solid; display: flex; flex-direction: column; gap: 4px;
-    }
+    .post-item { padding: 10px 12px; background: #fafafa; border-radius: 8px; border-left: 3px solid; display: flex; flex-direction: column; gap: 4px; }
     .pi-meta  { font-size: 11px; color: #a1a1aa; display: flex; gap: 8px; flex-wrap: wrap; }
     .pi-score { font-weight: 700; color: #f97316; }
     .pi-title { font-size: 13px; font-weight: 600; color: #1e293b; line-height: 1.4; }
     .pi-title a { color: inherit; text-decoration: none; }
     .pi-title a:hover { color: #eab308; }
 
-    /* Chart */
     .chart-card { background: #fff; border-radius: 12px; padding: 22px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); margin-bottom: 28px; }
-    .chart-card h3 { font-size: 13px; font-weight: 700; color: #71717a; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .chart-card h3 { font-size: 11px; font-weight: 800; color: #a1a1aa; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px; }
     .chart-card canvas { max-height: 210px; }
 
-    /* No data */
     .no-data { padding: 24px; text-align: center; color: #a1a1aa; font-size: 13px; background: #fafafa; border-radius: 8px; border: 1px dashed #e4e4e7; }
 
-    /* Footer */
-    .rpt-footer {
-      text-align: center; padding: 20px; font-size: 12px; color: #a1a1aa;
-      border-top: 1px solid #f4f4f5;
-    }
+    .rpt-footer { text-align: center; padding: 20px; font-size: 12px; color: #a1a1aa; border-top: 1px solid #f4f4f5; }
     .rpt-footer a { color: #eab308; text-decoration: none; cursor: pointer; font-weight: 600; }
 
     @media (max-width: 680px) {
       .duh-wordmark { font-size: 64px; letter-spacing: -3px; }
-      .two-col  { grid-template-columns: 1fr; }
+      .two-col   { grid-template-columns: 1fr; }
       .news-grid { grid-template-columns: 1fr; }
       .rpt-header { padding: 22px 16px; }
       .rpt-body   { padding: 18px 14px; }
@@ -268,18 +174,15 @@
     <div class="duh-wordmark">duh<span>.</span></div>
     <div class="duh-dot">duh.co.in</div>
     <p class="tagline">Type any topic. Get an instant brief from <strong>News</strong>, <strong>Reddit</strong> and <strong>Hacker News</strong> — in seconds.</p>
-
     <div class="search-wrap">
       <input id="topicInput" type="text" placeholder="e.g. West Hyderabad real estate rents…" autocomplete="off" />
       <button onclick="generate()">Brief Me →</button>
     </div>
-
     <div class="src-row">
       <div class="src-pill">📰 Google News</div>
       <div class="src-pill">🔴 Reddit</div>
       <div class="src-pill">🟠 Hacker News</div>
     </div>
-
     <div class="chips-label">Try a topic</div>
     <div class="chips">
       <button class="chip" onclick="qs('West Hyderabad real estate rents')">West Hyd Rents</button>
@@ -309,23 +212,39 @@
 <!-- ════════ REPORT ════════ -->
 <div id="report" style="display:none"></div>
 
-
 <script>
 // ════════════════════════════════════
-//  CONFIG
+//  PROXY STRATEGY
+//  - Reddit: try direct first (works on https://), fallback to proxy
+//  - Google News: always needs proxy (no CORS headers)
+//  - HN Algolia: always direct (supports CORS natively)
 // ════════════════════════════════════
-const PROXY = 'https://corsproxy.io/?url=';
+const PROXIES = [
+  'https://corsproxy.io/?url=',
+  'https://api.allorigins.win/raw?url='
+];
 
-const POSITIVE = new Set(['good','great','excellent','affordable','worth','nice','happy','love','best','recommend','cheap','value','improve','safe','clean','convenient','modern','beautiful','fantastic','amazing','awesome','perfect','wonderful','helpful','easy','better','quality','reasonable','satisfied','enjoy','superb','brilliant','outstanding','impressive','smooth','reliable','efficient','fair','useful','solid','strong','profitable','growing','boom','success','win','innovative','exciting','positive','benefit','gain','accessible','friendly','fast','thriving','opportunity','promising','boost','soar','surge','gain','rise','launch','expand','record']);
+async function proxyFetch(url) {
+  for (const proxy of PROXIES) {
+    try {
+      const res = await fetch(proxy + encodeURIComponent(url), { headers: { Accept: 'application/json, text/plain, */*' } });
+      if (res.ok) return res;
+    } catch (_) {}
+  }
+  throw new Error('All proxies failed for: ' + url);
+}
 
-const NEGATIVE = new Set(['expensive','bad','terrible','awful','worst','hate','avoid','scam','overpriced','problem','issue','difficult','concern','flood','pollution','traffic','poor','horrible','pathetic','disappointed','cheated','fraud','waste','useless','broken','fail','failure','ridiculous','absurd','outrageous','shock','alarming','unaffordable','inflation','corrupt','fake','mislead','wrong','error','mistake','regret','sad','angry','frustrated','annoyed','disgusted','scared','worried','danger','risky','overrated','decline','falling','drop','crisis','collapse','nightmare','trap','delay','cancel','ban','breach','leak','attack','threat','loss','cut','layoff','fire','arrest','scandal','scam','crash','plunge','slump']);
-
+// ════════════════════════════════════
+//  WORD LISTS
+// ════════════════════════════════════
+const POSITIVE = new Set(['good','great','excellent','affordable','worth','nice','happy','love','best','recommend','cheap','value','improve','safe','clean','convenient','modern','beautiful','fantastic','amazing','awesome','perfect','wonderful','helpful','easy','better','quality','reasonable','satisfied','enjoy','superb','brilliant','outstanding','impressive','smooth','reliable','efficient','fair','useful','solid','strong','profitable','growing','boom','success','win','innovative','exciting','positive','benefit','gain','accessible','friendly','fast','thriving','opportunity','promising','boost','soar','surge','rise','launch','expand','record']);
+const NEGATIVE = new Set(['expensive','bad','terrible','awful','worst','hate','avoid','scam','overpriced','problem','issue','difficult','concern','flood','pollution','traffic','poor','horrible','pathetic','disappointed','cheated','fraud','waste','useless','broken','fail','failure','ridiculous','absurd','outrageous','shock','alarming','unaffordable','inflation','corrupt','fake','mislead','wrong','error','mistake','regret','sad','angry','frustrated','annoyed','disgusted','scared','worried','danger','risky','overrated','decline','falling','drop','crisis','collapse','nightmare','trap','delay','cancel','ban','breach','leak','attack','threat','loss','cut','layoff','fire','arrest','scandal','crash','plunge','slump']);
 const STOPWORDS = new Set(['a','about','above','after','again','all','am','an','and','any','are','as','at','be','because','been','before','being','below','between','both','but','by','can','did','do','does','doing','down','during','each','few','for','from','further','get','got','had','has','have','having','he','her','here','him','his','how','i','if','in','into','is','it','its','just','me','more','most','my','no','nor','not','now','of','off','on','once','only','or','other','our','out','over','own','s','same','she','so','some','such','t','than','that','the','their','them','then','there','these','they','this','those','through','to','too','under','until','up','very','was','we','were','what','when','where','which','while','who','whom','why','will','with','you','your','like','also','think','look','want','one','use','make','even','see','time','go','come','take','people','lot','still','back','way','well','really','thing','actually','already','always','never','ever','said','say','know','going','getting','looking','trying','making','using','doing','having','being','saying','thinking','coming','taking','different','right','left','first','last','long','high','low','next','big','little','old','small','large','same','used','work','life','place','case','point','fact','though','since','while','around','per','let','put','might','could','would','should','may','must','can','ask','find','give','help','keep','move','need','seem','show','try','turn','start','end','stay','set','add','day','part','world','feel','real','hand','kind','line','side','name','two','three','four','five','ago','post','comment','reddit','something','anything','someone','anyone','everyone','re','ve','isn','wasn','aren','weren','haven','hadn','doesn','didn','don','won','wouldn','shouldn','couldn','ll','d','m','yeah','yes','nah','okay','im','ive','id','lol','tbh','imo','fyi','https','http','www','com','new','year','month','week','many','much','less']);
 
 let charts = {};
 
 // ════════════════════════════════════
-//  UI
+//  UI HELPERS
 // ════════════════════════════════════
 const $    = id => document.getElementById(id);
 const show = id => $(id).style.display = '';
@@ -357,13 +276,13 @@ function relDate(str) {
 }
 
 // ════════════════════════════════════
-//  FETCH
+//  FETCH — NEWS (always proxy)
 // ════════════════════════════════════
 async function fetchNews(topic) {
   try {
     const rss = `https://news.google.com/rss/search?q=${encodeURIComponent(topic)}&hl=en-IN&gl=IN&ceid=IN:en`;
-    const res  = await fetch(PROXY + encodeURIComponent(rss));
-    const xml  = new DOMParser().parseFromString(await res.text(), 'application/xml');
+    const res = await proxyFetch(rss);
+    const xml = new DOMParser().parseFromString(await res.text(), 'application/xml');
     return Array.from(xml.querySelectorAll('item')).slice(0, 6).map(item => {
       const rawTitle = item.querySelector('title')?.textContent || '';
       const srcEl    = item.querySelector('source');
@@ -378,24 +297,38 @@ async function fetchNews(topic) {
       const domain = srcUrl ? (() => { try { return new URL(srcUrl).hostname; } catch { return ''; } })() : '';
       return { title, srcName, srcUrl, domain, link, pubDate, desc };
     }).filter(n => n.title && n.srcName);
-  } catch(e) { console.warn('News:', e); return []; }
+  } catch(e) { console.warn('News failed:', e); return []; }
 }
 
+// ════════════════════════════════════
+//  FETCH — REDDIT (direct first, then proxy)
+// ════════════════════════════════════
 async function fetchReddit(topic) {
+  const target = `https://www.reddit.com/search.json?q=${encodeURIComponent(topic)}&sort=relevance&limit=60&t=year&raw_json=1`;
+  const parse  = data => data.data.children.map(c => c.data)
+    .filter(p => p.title && p.selftext !== '[deleted]' && p.selftext !== '[removed]');
+
+  // Try direct first (works on https:// domains — Reddit sets CORS allow-all)
   try {
-    const target = `https://www.reddit.com/search.json?q=${encodeURIComponent(topic)}&sort=relevance&limit=60&t=year&raw_json=1`;
-    const res    = await fetch(PROXY + encodeURIComponent(target));
-    const data   = await res.json();
-    return data.data.children.map(c => c.data)
-      .filter(p => p.title && p.selftext !== '[deleted]' && p.selftext !== '[removed]');
-  } catch(e) { console.warn('Reddit:', e); return []; }
+    const res = await fetch(target, { headers: { Accept: 'application/json' } });
+    if (res.ok) return parse(await res.json());
+  } catch (_) {}
+
+  // Fallback to proxy
+  try {
+    const res = await proxyFetch(target);
+    return parse(await res.json());
+  } catch(e) { console.warn('Reddit failed:', e); return []; }
 }
 
+// ════════════════════════════════════
+//  FETCH — HACKER NEWS (always direct)
+// ════════════════════════════════════
 async function fetchHN(topic) {
   try {
-    const res  = await fetch(`https://hn.algolia.com/api/v1/search?query=${encodeURIComponent(topic)}&tags=story&hitsPerPage=20`);
+    const res = await fetch(`https://hn.algolia.com/api/v1/search?query=${encodeURIComponent(topic)}&tags=story&hitsPerPage=20`);
     return (await res.json()).hits?.filter(h => h.title) || [];
-  } catch(e) { console.warn('HN:', e); return []; }
+  } catch(e) { console.warn('HN failed:', e); return []; }
 }
 
 // ════════════════════════════════════
@@ -404,25 +337,17 @@ async function fetchHN(topic) {
 function tokenize(text) {
   return (text||'').toLowerCase().replace(/[^a-z\s]/g,' ').split(/\s+/).filter(w => w.length > 2 && !STOPWORDS.has(w));
 }
-
 function sentScore(text) {
-  const ws = tokenize(text);
-  let p = 0, n = 0;
+  const ws = tokenize(text); let p = 0, n = 0;
   ws.forEach(w => { if (POSITIVE.has(w)) p++; else if (NEGATIVE.has(w)) n++; });
-  const t = p + n;
-  return t === 0 ? 0 : (p - n) / t;
+  const t = p + n; return t === 0 ? 0 : (p - n) / t;
 }
-
-function classify(score) {
-  return score > 0.2 ? 'positive' : score < -0.2 ? 'negative' : 'neutral';
-}
-
+function classify(score) { return score > 0.2 ? 'positive' : score < -0.2 ? 'negative' : 'neutral'; }
 function topKws(texts, n = 10) {
   const f = {};
-  texts.forEach(t => tokenize(t).forEach(w => { f[w] = (f[w]||0) + 1; }));
+  texts.forEach(t => tokenize(t).forEach(w => { f[w] = (f[w]||0)+1; }));
   return Object.entries(f).sort((a,b) => b[1]-a[1]).slice(0, n);
 }
-
 function extractSummary(news, reddit, hn) {
   const cands = [];
   news.forEach(n => { if (n.desc?.length > 40) cands.push({ text: n.desc, src: n.srcName, score: 2 }); });
@@ -433,15 +358,14 @@ function extractSummary(news, reddit, hn) {
   });
   hn.slice(0,5).forEach(h => { if (h.title) cands.push({ text: h.title, src: 'Hacker News', score: (h.points||0)/50 }); });
   if (!cands.length) return [];
-  const allText = cands.map(c => c.text).join(' ');
-  const freq = {};
+  const allText = cands.map(c => c.text).join(' '), freq = {};
   tokenize(allText).forEach(w => { freq[w] = (freq[w]||0)+1; });
   cands.forEach(c => {
     const ws = tokenize(c.text);
-    c.rank = ws.reduce((s,w) => s + (freq[w]||0), 0) / Math.max(ws.length,1) + c.score;
+    c.rank = ws.reduce((s,w) => s+(freq[w]||0),0) / Math.max(ws.length,1) + c.score;
   });
   const seen = new Set(), out = [];
-  cands.sort((a,b) => b.rank - a.rank).forEach(c => {
+  cands.sort((a,b) => b.rank-a.rank).forEach(c => {
     const k = c.text.slice(0,40).toLowerCase();
     if (!seen.has(k) && out.length < 5) { seen.add(k); out.push(c); }
   });
@@ -454,27 +378,19 @@ function extractSummary(news, reddit, hn) {
 function destroyCharts() { Object.values(charts).forEach(c => c.destroy()); charts = {}; }
 
 function renderReport(topic, news, reddit, hn) {
-  const rSents  = reddit.map(p => classify(sentScore(p.title + ' ' + p.selftext)));
-  const rPos = rSents.filter(s => s === 'positive').length;
-  const rNeg = rSents.filter(s => s === 'negative').length;
-  const rNeu = reddit.length - rPos - rNeg;
-
-  const hSents  = hn.map(h => classify(sentScore(h.title)));
-  const hPos = hSents.filter(s => s === 'positive').length;
-  const hNeg = hSents.filter(s => s === 'negative').length;
-  const hNeu = hn.length - hPos - hNeg;
-
+  const rSents = reddit.map(p => classify(sentScore(p.title+' '+p.selftext)));
+  const rPos = rSents.filter(s => s==='positive').length, rNeg = rSents.filter(s => s==='negative').length, rNeu = reddit.length-rPos-rNeg;
+  const hSents = hn.map(h => classify(sentScore(h.title)));
+  const hPos = hSents.filter(s => s==='positive').length, hNeg = hSents.filter(s => s==='negative').length, hNeu = hn.length-hPos-hNeg;
   const allTexts = [...news.map(n => n.title+' '+n.desc), ...reddit.map(p => p.title), ...hn.map(h => h.title||'')];
   const overallLabel = classify(sentScore(allTexts.join(' ')));
   const sentEmoji = { positive:'🟢', negative:'🔴', neutral:'🟡' }[overallLabel];
   const sentKpi   = { positive:'green', negative:'red', neutral:'orange' }[overallLabel];
-
-  const kws     = topKws(allTexts, 10);
-  const summary = extractSummary(news, reddit, hn);
-  const topR    = [...reddit].sort((a,b) => b.score - a.score).slice(0, 4);
-  const topH    = [...hn].sort((a,b) => (b.points||0) - (a.points||0)).slice(0, 4);
-  const now     = new Date().toLocaleString('en-IN', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
-  const totalEng = reddit.reduce((s,p) => s + p.score, 0);
+  const kws = topKws(allTexts, 10), summary = extractSummary(news, reddit, hn);
+  const topR = [...reddit].sort((a,b) => b.score-a.score).slice(0,4);
+  const topH = [...hn].sort((a,b) => (b.points||0)-(a.points||0)).slice(0,4);
+  const now = new Date().toLocaleString('en-IN',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  const totalEng = reddit.reduce((s,p) => s+p.score, 0);
 
   $('report').innerHTML = `
     <div class="rpt-header">
@@ -488,35 +404,13 @@ function renderReport(topic, news, reddit, hn) {
         <div class="rpt-src-chip">🟠 Hacker News <strong>${hn.length}</strong></div>
       </div>
     </div>
-
     <div class="rpt-body">
-
       <div class="kpi-row">
-        <div class="kpi yellow">
-          <div class="kl">Sources</div>
-          <div class="kv">${news.length + reddit.length + hn.length}</div>
-          <div class="ks">Items analysed</div>
-        </div>
-        <div class="kpi ${sentKpi}">
-          <div class="kl">Sentiment</div>
-          <div class="kv" style="font-size:15px">${sentEmoji} ${overallLabel.charAt(0).toUpperCase()+overallLabel.slice(1)}</div>
-          <div class="ks">Overall tone</div>
-        </div>
-        <div class="kpi red">
-          <div class="kl">Reddit Votes</div>
-          <div class="kv">${totalEng >= 1000 ? (totalEng/1000).toFixed(1)+'K' : totalEng}</div>
-          <div class="ks">Total upvotes</div>
-        </div>
-        <div class="kpi orange">
-          <div class="kl">HN Points</div>
-          <div class="kv">${hn.reduce((s,h) => s+(h.points||0), 0)}</div>
-          <div class="ks">Total upvotes</div>
-        </div>
-        <div class="kpi violet">
-          <div class="kl">Top Keyword</div>
-          <div class="kv" style="font-size:14px">${kws[0] ? kws[0][0] : '—'}</div>
-          <div class="ks">${kws[0] ? kws[0][1]+' mentions' : ''}</div>
-        </div>
+        <div class="kpi yellow"><div class="kl">Sources</div><div class="kv">${news.length+reddit.length+hn.length}</div><div class="ks">Items analysed</div></div>
+        <div class="kpi ${sentKpi}"><div class="kl">Sentiment</div><div class="kv" style="font-size:15px">${sentEmoji} ${overallLabel.charAt(0).toUpperCase()+overallLabel.slice(1)}</div><div class="ks">Overall tone</div></div>
+        <div class="kpi red"><div class="kl">Reddit Votes</div><div class="kv">${totalEng>=1000?(totalEng/1000).toFixed(1)+'K':totalEng}</div><div class="ks">Total upvotes</div></div>
+        <div class="kpi orange"><div class="kl">HN Points</div><div class="kv">${hn.reduce((s,h)=>s+(h.points||0),0)}</div><div class="ks">Total upvotes</div></div>
+        <div class="kpi violet"><div class="kl">Top Keyword</div><div class="kv" style="font-size:14px">${kws[0]?kws[0][0]:'—'}</div><div class="ks">${kws[0]?kws[0][1]+' mentions':''}</div></div>
       </div>
 
       <div class="tldr">
@@ -524,65 +418,55 @@ function renderReport(topic, news, reddit, hn) {
         <div class="tldr-heading">${esc(topic)}</div>
         <div class="tldr-list">
           ${summary.length
-            ? summary.map(s => `<div class="tldr-item"><div class="tldr-dot"></div><div>${esc(s.text)} <span class="tldr-src">— ${esc(s.src)}</span></div></div>`).join('')
-            : '<div class="tldr-item"><div class="tldr-dot"></div><div>Not enough content to summarise. Try a broader search.</div></div>'
-          }
+            ? summary.map(s=>`<div class="tldr-item"><div class="tldr-dot"></div><div>${esc(s.text)} <span class="tldr-src">— ${esc(s.src)}</span></div></div>`).join('')
+            : '<div class="tldr-item"><div class="tldr-dot"></div><div>Not enough content to summarise. Try a broader search.</div></div>'}
         </div>
       </div>
 
       <div class="sec">📰 In the News</div>
       ${news.length ? `
       <div class="news-grid">
-        ${news.map(n => `
+        ${news.map(n=>`
           <a class="news-card" href="${esc(n.link)}" target="_blank" rel="noopener noreferrer">
             <div class="nc-meta">
-              ${n.domain ? `<img class="nc-fav" src="https://www.google.com/s2/favicons?domain=${n.domain}&sz=32" onerror="this.style.display='none'" />` : ''}
+              ${n.domain?`<img class="nc-fav" src="https://www.google.com/s2/favicons?domain=${n.domain}&sz=32" onerror="this.style.display='none'" />`:''}
               <span class="nc-src">${esc(n.srcName)}</span>
               <span class="nc-date">${relDate(n.pubDate)}</span>
             </div>
             <div class="nc-title">${esc(n.title)}</div>
-            ${n.desc ? `<div class="nc-desc">${esc(n.desc)}</div>` : ''}
+            ${n.desc?`<div class="nc-desc">${esc(n.desc)}</div>`:''}
             <div class="nc-cta">Read article →</div>
           </a>`).join('')}
-      </div>` : '<div class="no-data">No news articles found for this topic.</div>'}
+      </div>` : '<div class="no-data" style="margin-bottom:28px">No news articles found. The topic may be too niche for Google News.</div>'}
 
       <div class="two-col">
         <div class="panel">
           <div class="panel-head"><span>🔴</span><h3>Reddit</h3><span class="pc">${reddit.length} posts</span></div>
           ${reddit.length ? `
           <div class="sent-bars">
-            ${[['Positive','#22c55e',rPos],['Negative','#ef4444',rNeg],['Neutral','#d4d4d8',rNeu]].map(([l,c,n]) => `
-              <div class="sent-row">
-                <span class="sent-lbl" style="color:${c}">${l}</span>
-                <div class="sent-track"><div class="sent-fill" style="width:${reddit.length?Math.round(n/reddit.length*100):0}%;background:${c}"></div></div>
-                <span class="sent-n">${n}</span>
-              </div>`).join('')}
+            ${[['Positive','#22c55e',rPos,reddit.length],['Negative','#ef4444',rNeg,reddit.length],['Neutral','#d4d4d8',rNeu,reddit.length]].map(([l,c,n,t])=>`
+              <div class="sent-row"><span class="sent-lbl" style="color:${c}">${l}</span><div class="sent-track"><div class="sent-fill" style="width:${t?Math.round(n/t*100):0}%;background:${c}"></div></div><span class="sent-n">${n}</span></div>`).join('')}
           </div>
           <div class="post-list">
-            ${topR.map(p => `
+            ${topR.map(p=>`
               <div class="post-item" style="border-color:${classify(sentScore(p.title))==='positive'?'#22c55e':classify(sentScore(p.title))==='negative'?'#ef4444':'#e4e4e7'}">
                 <div class="pi-meta"><span>r/${esc(p.subreddit)}</span><span class="pi-score">▲ ${p.score}</span><span>${p.num_comments} comments</span></div>
                 <div class="pi-title">${esc(p.title)}</div>
               </div>`).join('')}
-          </div>` : '<div class="no-data">No Reddit posts found.</div>'}
+          </div>` : '<div class="no-data">No Reddit posts found for this topic.</div>'}
         </div>
-
         <div class="panel">
           <div class="panel-head"><span>🟠</span><h3>Hacker News</h3><span class="pc">${hn.length} stories</span></div>
           ${hn.length ? `
           <div class="sent-bars">
-            ${[['Positive','#22c55e',hPos],['Negative','#ef4444',hNeg],['Neutral','#d4d4d8',hNeu]].map(([l,c,n]) => `
-              <div class="sent-row">
-                <span class="sent-lbl" style="color:${c}">${l}</span>
-                <div class="sent-track"><div class="sent-fill" style="width:${hn.length?Math.round(n/hn.length*100):0}%;background:${c}"></div></div>
-                <span class="sent-n">${n}</span>
-              </div>`).join('')}
+            ${[['Positive','#22c55e',hPos,hn.length],['Negative','#ef4444',hNeg,hn.length],['Neutral','#d4d4d8',hNeu,hn.length]].map(([l,c,n,t])=>`
+              <div class="sent-row"><span class="sent-lbl" style="color:${c}">${l}</span><div class="sent-track"><div class="sent-fill" style="width:${t?Math.round(n/t*100):0}%;background:${c}"></div></div><span class="sent-n">${n}</span></div>`).join('')}
           </div>
           <div class="post-list">
-            ${topH.map(h => `
+            ${topH.map(h=>`
               <div class="post-item" style="border-color:#f97316">
                 <div class="pi-meta"><span>by ${esc(h.author||'?')}</span><span class="pi-score">▲ ${h.points||0}</span><span>${h.num_comments||0} comments</span></div>
-                <div class="pi-title">${h.url ? `<a href="${esc(h.url)}" target="_blank" rel="noopener">${esc(h.title)}</a>` : esc(h.title)}</div>
+                <div class="pi-title">${h.url?`<a href="${esc(h.url)}" target="_blank" rel="noopener">${esc(h.title)}</a>`:esc(h.title)}</div>
               </div>`).join('')}
           </div>` : '<div class="no-data">No Hacker News stories found.</div>'}
         </div>
@@ -594,9 +478,7 @@ function renderReport(topic, news, reddit, hn) {
         <h3>Most Discussed Keywords Across All Sources</h3>
         <canvas id="kwChart"></canvas>
       </div>` : ''}
-
     </div>
-
     <div class="rpt-footer">
       <strong>duh.</strong> · Data from Google News, Reddit &amp; Hacker News · ${now} · <a onclick="goBack()">Search another topic</a>
     </div>
@@ -611,12 +493,12 @@ function renderReport(topic, news, reddit, hn) {
         type: 'bar',
         data: {
           labels: kws.map(([w]) => w),
-          datasets: [{ data: kws.map(([,n]) => n), backgroundColor: kws.map(([w]) => POSITIVE.has(w) ? '#22c55e' : NEGATIVE.has(w) ? '#ef4444' : '#eab308'), borderRadius: 6 }]
+          datasets: [{ data: kws.map(([,n]) => n), backgroundColor: kws.map(([w]) => POSITIVE.has(w)?'#22c55e':NEGATIVE.has(w)?'#ef4444':'#eab308'), borderRadius: 6 }]
         },
         options: {
           indexAxis: 'y', responsive: true,
-          plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.raw} mentions` } } },
-          scales: { x: { ticks: { stepSize: 1 }, grid: { color: '#f4f4f5' } }, y: { grid: { display: false } } }
+          plugins: { legend:{display:false}, tooltip:{callbacks:{label: ctx=>` ${ctx.raw} mentions`}} },
+          scales: { x:{ticks:{stepSize:1},grid:{color:'#f4f4f5'}}, y:{grid:{display:false}} }
         }
       });
     }, 100);
@@ -629,15 +511,12 @@ function renderReport(topic, news, reddit, hn) {
 async function generate() {
   const topic = $('topicInput').value.trim();
   if (!topic) { $('topicInput').focus(); return; }
-  destroyCharts();
-  $('report').innerHTML = '';
+  destroyCharts(); $('report').innerHTML = '';
   hide('landing'); show('loading');
   $('loadTopic').textContent = `"${topic}"`;
   setStep(0);
 
-  const newsP   = fetchNews(topic);
-  const redditP = fetchReddit(topic);
-  const hnP     = fetchHN(topic);
+  const newsP = fetchNews(topic), redditP = fetchReddit(topic), hnP = fetchHN(topic);
 
   await new Promise(r => setTimeout(r, 700)); setStep(1);
   const news = await newsP;
