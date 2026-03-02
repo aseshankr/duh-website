@@ -55,7 +55,9 @@ Return ONLY valid JSON with no markdown or extra text, in this exact format:
       return res.status(500).json({ error: data.error?.message || 'Claude API error' });
     }
 
-    const text = data.content[0].text.trim();
+    // Strip markdown code fences if Claude wraps the JSON in ```json ... ```
+    const raw = data.content[0].text.trim();
+    const text = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
 
     try {
       const parsed = JSON.parse(text);
