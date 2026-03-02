@@ -204,7 +204,7 @@
     <div class="load-step" id="step0"><span class="step-icon">📰</span> Fetching news articles…</div>
     <div class="load-step" id="step1"><span class="step-icon">🔴</span> Scanning Reddit discussions…</div>
     <div class="load-step" id="step2"><span class="step-icon">🟠</span> Checking Hacker News…</div>
-    <div class="load-step" id="step3"><span class="step-icon">🧠</span> Extracting key insights…</div>
+    <div class="load-step" id="step3"><span class="step-icon">✨</span> Generating AI summary…</div>
   </div>
   <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
 </div>
@@ -308,6 +308,21 @@ async function fetchHN(topic) {
 }
 
 // ════════════════════════════════════
+//  FETCH — AI SUMMARY (Claude via Vercel)
+// ════════════════════════════════════
+async function fetchSummary(topic, news, reddit, hn) {
+  try {
+    const res = await fetch('/api/summarize', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ topic, news, reddit, hn })
+    });
+    const data = await res.json();
+    return data.summary || null;
+  } catch(e) { console.warn('Summary failed:', e); return null; }
+}
+
+// ════════════════════════════════════
 //  ANALYSIS
 // ════════════════════════════════════
 function tokenize(text) {
@@ -353,7 +368,7 @@ function extractSummary(news, reddit, hn) {
 // ════════════════════════════════════
 function destroyCharts() { Object.values(charts).forEach(c => c.destroy()); charts = {}; }
 
-function renderReport(topic, news, reddit, hn) {
+function renderReport(topic, news, reddit, hn, aiSummary) {
   const rSents = reddit.map(p => classify(sentScore(p.title+' '+p.selftext)));
   const rPos = rSents.filter(s => s==='positive').length, rNeg = rSents.filter(s => s==='negative').length, rNeu = reddit.length-rPos-rNeg;
   const hSents = hn.map(h => classify(sentScore(h.title)));
@@ -390,12 +405,19 @@ function renderReport(topic, news, reddit, hn) {
       </div>
 
       <div class="tldr">
-        <div class="tldr-eyebrow">💡 TL;DR — Key Points</div>
+        <div class="tldr-eyebrow">✨ AI Summary — Powered by Claude</div>
         <div class="tldr-heading">${esc(topic)}</div>
         <div class="tldr-list">
-          ${summary.length
-            ? summary.map(s=>`<div class="tldr-item"><div class="tldr-dot"></div><div>${esc(s.text)} <span class="tldr-src">— ${esc(s.src)}</span></div></div>`).join('')
-            : '<div class="tldr-item"><div class="tldr-dot"></div><div>Not enough content to summarise. Try a broader search.</div></div>'}
+          ${aiSummary
+            ? aiSummary.split('\n').filter(l => l.trim()).map(line => `
+                <div class="tldr-item">
+                  <div class="tldr-dot"></div>
+                  <div>${esc(line.trim())}</div>
+                </div>`).join('')
+            : summary.length
+              ? summary.map(s=>`<div class="tldr-item"><div class="tldr-dot"></div><div>${esc(s.text)} <span class="tldr-src">— ${esc(s.src)}</span></div></div>`).join('')
+              : '<div class="tldr-item"><div class="tldr-dot"></div><div>Not enough content to summarise. Try a broader search.</div></div>'
+          }
         </div>
       </div>
 
@@ -501,9 +523,12 @@ async function generate() {
   await new Promise(r => setTimeout(r, 500)); setStep(3);
   const hn = await hnP;
 
+  // Now call Claude with everything we've gathered
+  const aiSummary = await fetchSummary(topic, news, reddit, hn);
+
   $('progFill').style.width = '100%';
   await new Promise(r => setTimeout(r, 350));
-  renderReport(topic, news, reddit, hn);
+  renderReport(topic, news, reddit, hn, aiSummary);
 }
 
 function goBack() { destroyCharts(); hide('report'); hide('loading'); show('landing'); }
