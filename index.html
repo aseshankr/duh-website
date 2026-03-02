@@ -1,225 +1,300 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Duh — Know What's Happening</title>
   <meta name="description" content="Type any topic. Get an instant intelligence brief from News, Reddit, Hacker News, Medium and YouTube." />
-  <meta property="og:title" content="Duh — Know What's Happening" />
-  <meta property="og:url" content="https://duh.co.in" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Outfit', system-ui, sans-serif; background: #fff; color: #111; min-height: 100vh; font-size: 16px; line-height: 1.6; }
+    /* ════ THEME VARIABLES ════ */
+    :root {
+      --bg:           #ffffff;
+      --bg-off:       #f7f7f7;
+      --bg-card:      #ffffff;
+      --bg-input:     #ffffff;
+      --bg-chip:      #f5f5f5;
+      --bg-post:      #fafafa;
+      --text:         #111111;
+      --text-mid:     #555555;
+      --text-muted:   #999999;
+      --text-faint:   #bbbbbb;
+      --border:       #e0e0e0;
+      --border-light: #ebebeb;
+      --btn-bg:       #111111;
+      --btn-text:     #ffffff;
+      --shadow:       rgba(0,0,0,0.06);
+      --shadow-hover: rgba(0,0,0,0.12);
+      --tldr-bg:      #fff8e6;
+      --tldr-border:  #f5d77a;
+      --tldr-text:    #333333;
+      --tldr-eyebrow: #7a4500;
+      --tldr-dot:     #111111;
+      --src-news-bg:  #cfe8ff; --src-news-txt:  #0a4a8a;
+      --src-red-bg:   #ffd6cc; --src-red-txt:   #8b2500;
+      --src-hn-bg:    #fff0c2; --src-hn-txt:    #7a4500;
+      --src-med-bg:   #e8f5e9; --src-med-txt:   #1a5c2a;
+      --src-yt-bg:    #fce4ec; --src-yt-txt:    #880e4f;
+      --chip-hover-bg:#111111; --chip-hover-txt:#ffffff;
+      --nc-src-color: #0a4a8a;
+      --mc-src-color: #1a5c2a;
+      --yt-src-color: #880e4f;
+      --step-active-bg: #fff0c2; --step-active-border: #f5d77a; --step-active-txt: #7a4500;
+      --prog-color:   #111111;
+    }
 
-    /* ═══ LANDING ═══ */
+    [data-theme="dark"] {
+      --bg:           #0f0f0f;
+      --bg-off:       #141414;
+      --bg-card:      #1c1c1c;
+      --bg-input:     #1c1c1c;
+      --bg-chip:      #1c1c1c;
+      --bg-post:      #141414;
+      --text:         #f0f0f0;
+      --text-mid:     #aaaaaa;
+      --text-muted:   #777777;
+      --text-faint:   #444444;
+      --border:       #2a2a2a;
+      --border-light: #222222;
+      --btn-bg:       #f0f0f0;
+      --btn-text:     #111111;
+      --shadow:       rgba(0,0,0,0.3);
+      --shadow-hover: rgba(0,0,0,0.5);
+      --tldr-bg:      #1c1500;
+      --tldr-border:  #3d2e00;
+      --tldr-text:    #e8d5a0;
+      --tldr-eyebrow: #f5c842;
+      --tldr-dot:     #f5c842;
+      --src-news-bg:  #0d2544; --src-news-txt:  #7eb8f7;
+      --src-red-bg:   #2d1008; --src-red-txt:   #f7a08e;
+      --src-hn-bg:    #2a1d00; --src-hn-txt:    #f7d07e;
+      --src-med-bg:   #0d2510; --src-med-txt:   #7ef7a0;
+      --src-yt-bg:    #2d0814; --src-yt-txt:    #f77ea0;
+      --chip-hover-bg:#f0f0f0; --chip-hover-txt:#111111;
+      --nc-src-color: #7eb8f7;
+      --mc-src-color: #7ef7a0;
+      --yt-src-color: #f77ea0;
+      --step-active-bg: #1c1500; --step-active-border: #3d2e00; --step-active-txt: #f5c842;
+      --prog-color:   #f0f0f0;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Outfit', system-ui, sans-serif;
+      background: var(--bg); color: var(--text);
+      min-height: 100vh; font-size: 16px; line-height: 1.6;
+      transition: background 0.25s, color 0.25s;
+    }
+
+    /* ════ THEME TOGGLE ════ */
+    .theme-toggle {
+      position: fixed; top: 20px; right: 20px; z-index: 9999;
+      background: var(--bg-card); border: 1.5px solid var(--border);
+      border-radius: 99px; padding: 9px 18px;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+      color: var(--text); font-family: 'Outfit', sans-serif;
+      box-shadow: 0 2px 12px var(--shadow);
+      transition: all 0.2s; display: flex; align-items: center; gap: 7px;
+    }
+    .theme-toggle:hover { box-shadow: 0 4px 20px var(--shadow-hover); transform: translateY(-1px); }
+
+    /* ════ LANDING ════ */
     #landing {
-      min-height: 100vh; background: #fff;
+      min-height: 100vh; background: var(--bg);
       display: flex; flex-direction: column;
       align-items: flex-start; justify-content: center;
-      padding: 80px 10%;
+      padding: 80px 10%; transition: background 0.25s;
     }
-    .duh-wordmark { font-size: 100px; font-weight: 900; color: #111; letter-spacing: -5px; line-height: 0.95; margin-bottom: 16px; }
-    .duh-tagline-big { font-size: 38px; font-weight: 700; color: #333; letter-spacing: -1px; line-height: 1.2; margin-bottom: 20px; }
-    .tagline { font-size: 19px; font-weight: 400; color: #666; line-height: 1.85; margin-bottom: 48px; max-width: 560px; word-spacing: 0.03em; }
-    .tagline a { color: #111; font-weight: 600; text-decoration: none; border-bottom: 2px solid #111; }
+    .duh-wordmark { font-size: 100px; font-weight: 900; color: var(--text); letter-spacing: -5px; line-height: 0.95; margin-bottom: 16px; }
+    .duh-tagline-big { font-size: 38px; font-weight: 700; color: var(--text-mid); letter-spacing: -1px; line-height: 1.2; margin-bottom: 20px; }
+    .tagline { font-size: 19px; font-weight: 400; color: var(--text-muted); line-height: 1.85; margin-bottom: 48px; max-width: 560px; word-spacing: 0.03em; }
+    .tagline a { color: var(--text); font-weight: 600; text-decoration: none; border-bottom: 2px solid var(--text); }
 
     .search-wrap {
       width: 100%; max-width: 600px; display: flex;
-      background: #fff; border: 2px solid #e0e0e0; border-radius: 14px;
+      background: var(--bg-input); border: 2px solid var(--border); border-radius: 14px;
       overflow: hidden; margin-bottom: 48px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-      transition: border-color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 12px var(--shadow);
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.25s;
     }
-    .search-wrap:focus-within { border-color: #111; box-shadow: 0 2px 16px rgba(0,0,0,0.12); }
+    .search-wrap:focus-within { border-color: var(--text); box-shadow: 0 2px 16px var(--shadow-hover); }
     .search-wrap input {
       flex: 1; padding: 20px 24px; font-size: 17px; border: none; outline: none;
-      color: #111; background: transparent; font-family: 'Outfit', sans-serif;
+      color: var(--text); background: transparent; font-family: 'Outfit', sans-serif;
+      transition: color 0.25s;
     }
-    .search-wrap input::placeholder { color: #bbb; }
+    .search-wrap input::placeholder { color: var(--text-faint); }
     .search-wrap button {
-      padding: 20px 30px; background: #111; color: #fff;
+      padding: 20px 30px; background: var(--btn-bg); color: var(--btn-text);
       font-size: 16px; font-weight: 700; border: none; cursor: pointer;
-      transition: background 0.18s; white-space: nowrap; font-family: 'Outfit', sans-serif;
+      transition: opacity 0.18s; white-space: nowrap; font-family: 'Outfit', sans-serif;
     }
-    .search-wrap button:hover { background: #333; }
+    .search-wrap button:hover { opacity: 0.85; }
 
-    .src-section-label { font-size: 13px; font-weight: 600; color: #999; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 1px; }
+    .src-section-label { font-size: 13px; font-weight: 600; color: var(--text-faint); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 1px; }
     .src-blocks { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 52px; }
-    .src-block {
-      display: flex; align-items: center; gap: 10px;
-      padding: 16px 24px; border-radius: 16px;
-      font-size: 15px; font-weight: 700; min-width: 150px;
-    }
+    .src-block { display: flex; align-items: center; gap: 10px; padding: 16px 24px; border-radius: 16px; font-size: 15px; font-weight: 700; min-width: 150px; transition: background 0.25s, color 0.25s; }
     .src-block .src-icon { font-size: 22px; }
-    .src-block.news    { background: #cfe8ff; color: #0a4a8a; }
-    .src-block.reddit  { background: #ffd6cc; color: #8b2500; }
-    .src-block.hn      { background: #fff0c2; color: #7a4500; }
-    .src-block.medium  { background: #e8f5e9; color: #1a5c2a; }
-    .src-block.youtube { background: #fce4ec; color: #880e4f; }
+    .src-block.news    { background: var(--src-news-bg); color: var(--src-news-txt); }
+    .src-block.reddit  { background: var(--src-red-bg);  color: var(--src-red-txt); }
+    .src-block.hn      { background: var(--src-hn-bg);   color: var(--src-hn-txt); }
+    .src-block.medium  { background: var(--src-med-bg);  color: var(--src-med-txt); }
+    .src-block.youtube { background: var(--src-yt-bg);   color: var(--src-yt-txt); }
 
-    .chips-label { font-size: 12px; color: #bbb; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+    .chips-label { font-size: 12px; color: var(--text-faint); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
     .chips { display: flex; flex-wrap: wrap; gap: 8px; }
     .chip {
-      background: #f5f5f5; border: 1.5px solid #e8e8e8; color: #555;
+      background: var(--bg-chip); border: 1.5px solid var(--border); color: var(--text-mid);
       padding: 9px 20px; border-radius: 99px; font-size: 14px; cursor: pointer;
       transition: all 0.18s; font-family: 'Outfit', sans-serif; font-weight: 500;
     }
-    .chip:hover { background: #111; color: #fff; border-color: #111; }
+    .chip:hover { background: var(--chip-hover-bg); color: var(--chip-hover-txt); border-color: var(--chip-hover-bg); }
 
-    /* ═══ LOADING ═══ */
+    /* ════ LOADING ════ */
     #loading {
-      min-height: 100vh; background: #fff;
+      min-height: 100vh; background: var(--bg);
       display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px;
+      transition: background 0.25s;
     }
-    .load-mark { font-size: 56px; font-weight: 900; color: #111; letter-spacing: -3px; }
-    .load-topic { color: #999; font-size: 16px; max-width: 400px; text-align: center; line-height: 1.6; }
+    .load-mark { font-size: 56px; font-weight: 900; color: var(--text); letter-spacing: -3px; }
+    .load-topic { color: var(--text-muted); font-size: 16px; max-width: 400px; text-align: center; line-height: 1.6; }
     .load-steps { display: flex; flex-direction: column; gap: 9px; width: 380px; }
     .load-step {
       display: flex; align-items: center; gap: 12px;
       padding: 14px 18px; border-radius: 12px;
-      background: #fafafa; border: 1.5px solid #ebebeb;
-      color: #aaa; font-size: 14px; font-weight: 500; transition: all 0.3s;
-      line-height: 1.4;
+      background: var(--bg-card); border: 1.5px solid var(--border);
+      color: var(--text-faint); font-size: 14px; font-weight: 500; transition: all 0.3s; line-height: 1.4;
     }
-    .load-step.active { background: #fff0c2; border-color: #f5d77a; color: #7a4500; }
-    .load-step.done   { background: #f0fdf4; border-color: #bbf7d0; color: #16a34a; }
+    .load-step.active { background: var(--step-active-bg); border-color: var(--step-active-border); color: var(--step-active-txt); }
+    .load-step.done   { background: rgba(34,197,94,0.08); border-color: rgba(34,197,94,0.3); color: #16a34a; }
     .step-icon { font-size: 20px; }
-    .prog-track { width: 380px; height: 4px; background: #f0f0f0; border-radius: 99px; overflow: hidden; }
-    .prog-fill  { height: 100%; background: #111; border-radius: 99px; transition: width 0.5s ease; width: 0%; }
+    .prog-track { width: 380px; height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; }
+    .prog-fill  { height: 100%; background: var(--prog-color); border-radius: 99px; transition: width 0.5s ease; width: 0%; }
 
-    /* ═══ REPORT ═══ */
-    #report { background: #f7f7f7; min-height: 100vh; }
+    /* ════ REPORT ════ */
+    #report { background: var(--bg-off); min-height: 100vh; transition: background 0.25s; }
 
-    .rpt-header { background: #fff; border-bottom: 1px solid #ebebeb; padding: 32px 10%; }
+    .rpt-header { background: var(--bg-card); border-bottom: 1px solid var(--border-light); padding: 32px 10%; transition: background 0.25s, border-color 0.25s; }
     .rpt-back {
-      background: #f5f5f5; border: none; color: #555;
+      background: var(--bg-chip); border: none; color: var(--text-mid);
       padding: 9px 20px; border-radius: 8px; cursor: pointer;
       font-size: 14px; font-weight: 600; margin-bottom: 20px;
       display: inline-flex; align-items: center; gap: 6px;
       transition: all 0.18s; font-family: 'Outfit', sans-serif;
     }
-    .rpt-back:hover { background: #111; color: #fff; }
-    .rpt-pill {
-      display: inline-block; background: #f5f5f5; color: #555;
-      padding: 4px 16px; border-radius: 99px;
-      font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px;
-    }
-    .rpt-header h1 { font-size: 40px; font-weight: 900; letter-spacing: -1.5px; color: #111; margin-bottom: 6px; }
-    .rpt-header .rpt-meta { font-size: 14px; color: #aaa; }
+    .rpt-back:hover { background: var(--btn-bg); color: var(--btn-text); }
+    .rpt-pill { display: inline-block; background: var(--bg-chip); color: var(--text-muted); padding: 4px 16px; border-radius: 99px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+    .rpt-header h1 { font-size: 40px; font-weight: 900; letter-spacing: -1.5px; color: var(--text); margin-bottom: 6px; }
+    .rpt-header .rpt-meta { font-size: 14px; color: var(--text-muted); }
     .rpt-src-row { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
-    .rpt-src-chip { display: flex; align-items: center; gap: 6px; padding: 6px 16px; border-radius: 99px; font-size: 13px; font-weight: 700; }
-    .rpt-src-chip.news-chip   { background: #cfe8ff; color: #0a4a8a; }
-    .rpt-src-chip.reddit-chip { background: #ffd6cc; color: #8b2500; }
-    .rpt-src-chip.hn-chip     { background: #fff0c2; color: #7a4500; }
-    .rpt-src-chip.medium-chip { background: #e8f5e9; color: #1a5c2a; }
-    .rpt-src-chip.yt-chip     { background: #fce4ec; color: #880e4f; }
+    .rpt-src-chip { display: flex; align-items: center; gap: 6px; padding: 6px 16px; border-radius: 99px; font-size: 13px; font-weight: 700; transition: background 0.25s, color 0.25s; }
+    .rpt-src-chip.news-chip   { background: var(--src-news-bg); color: var(--src-news-txt); }
+    .rpt-src-chip.reddit-chip { background: var(--src-red-bg);  color: var(--src-red-txt); }
+    .rpt-src-chip.hn-chip     { background: var(--src-hn-bg);   color: var(--src-hn-txt); }
+    .rpt-src-chip.medium-chip { background: var(--src-med-bg);  color: var(--src-med-txt); }
+    .rpt-src-chip.yt-chip     { background: var(--src-yt-bg);   color: var(--src-yt-txt); }
 
     .rpt-body { max-width: 1180px; margin: 0 auto; padding: 36px 24px; }
 
     .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 36px; }
-    .kpi { background: #fff; border-radius: 16px; padding: 22px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); border-top: 4px solid; }
-    .kpi .kl { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #aaa; margin-bottom: 10px; }
+    .kpi { background: var(--bg-card); border-radius: 16px; padding: 22px; box-shadow: 0 1px 4px var(--shadow); border-top: 4px solid; transition: background 0.25s; }
+    .kpi .kl { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
     .kpi .kv { font-size: 28px; font-weight: 900; line-height: 1; margin-bottom: 4px; letter-spacing: -1px; }
-    .kpi .ks { font-size: 12px; color: #aaa; font-weight: 500; }
-    .kpi.yellow { border-color: #111; }    .kpi.yellow .kv { color: #111; }
-    .kpi.red    { border-color: #ef4444; } .kpi.red    .kv { color: #dc2626; }
-    .kpi.orange { border-color: #f97316; } .kpi.orange .kv { color: #ea580c; }
-    .kpi.green  { border-color: #22c55e; } .kpi.green  .kv { color: #16a34a; }
-    .kpi.violet { border-color: #111; }    .kpi.violet .kv { color: #111; }
+    .kpi .ks { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+    .kpi.yellow { border-color: var(--text); } .kpi.yellow .kv { color: var(--text); }
+    .kpi.red    { border-color: #ef4444; } .kpi.red    .kv { color: #ef4444; }
+    .kpi.orange { border-color: #f97316; } .kpi.orange .kv { color: #f97316; }
+    .kpi.green  { border-color: #22c55e; } .kpi.green  .kv { color: #22c55e; }
+    .kpi.violet { border-color: var(--text); } .kpi.violet .kv { color: var(--text); }
 
-    .sec { font-size: 12px; font-weight: 700; color: #aaa; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 18px; padding-bottom: 10px; border-bottom: 2px solid #ebebeb; }
+    .sec { font-size: 12px; font-weight: 700; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 18px; padding-bottom: 10px; border-bottom: 2px solid var(--border-light); }
 
-    /* TL;DR — warm yellow */
-    .tldr { background: #fff8e6; border: 1.5px solid #f5d77a; border-radius: 18px; padding: 34px; margin-bottom: 36px; }
-    .tldr-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #7a4500; margin-bottom: 10px; }
-    .tldr-heading { font-size: 26px; font-weight: 900; color: #111; margin-bottom: 24px; letter-spacing: -0.8px; }
+    /* TL;DR */
+    .tldr { background: var(--tldr-bg); border: 1.5px solid var(--tldr-border); border-radius: 18px; padding: 34px; margin-bottom: 36px; transition: background 0.25s, border-color 0.25s; }
+    .tldr-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--tldr-eyebrow); margin-bottom: 10px; }
+    .tldr-heading { font-size: 26px; font-weight: 900; color: var(--text); margin-bottom: 24px; letter-spacing: -0.8px; }
     .tldr-list { display: flex; flex-direction: column; gap: 18px; }
-    .tldr-item { display: flex; gap: 16px; font-size: 16px; line-height: 1.85; color: #333; word-spacing: 0.03em; }
-    .tldr-dot { width: 9px; height: 9px; background: #111; border-radius: 50%; flex-shrink: 0; margin-top: 8px; }
-    .tldr-src { color: #bbb; font-size: 12px; }
+    .tldr-item { display: flex; gap: 16px; font-size: 16px; line-height: 1.85; color: var(--tldr-text); word-spacing: 0.03em; }
+    .tldr-dot { width: 9px; height: 9px; background: var(--tldr-dot); border-radius: 50%; flex-shrink: 0; margin-top: 8px; }
+    .tldr-src { color: var(--text-faint); font-size: 12px; }
 
-    /* News cards */
+    /* Cards */
     .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-bottom: 36px; }
     .news-card {
-      background: #fff; border-radius: 16px; padding: 24px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05); border-top: 4px solid #cfe8ff;
+      background: var(--bg-card); border-radius: 16px; padding: 24px;
+      box-shadow: 0 1px 4px var(--shadow); border-top: 4px solid var(--src-news-bg);
       display: flex; flex-direction: column; gap: 10px;
-      transition: box-shadow 0.2s, transform 0.2s; text-decoration: none; color: inherit;
+      transition: box-shadow 0.2s, transform 0.2s, background 0.25s; text-decoration: none; color: inherit;
     }
-    .news-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.1); transform: translateY(-2px); }
+    .news-card:hover { box-shadow: 0 6px 24px var(--shadow-hover); transform: translateY(-2px); }
     .nc-meta  { display: flex; align-items: center; gap: 8px; }
     .nc-fav   { width: 16px; height: 16px; border-radius: 4px; }
-    .nc-src   { font-size: 11px; font-weight: 700; color: #0a4a8a; text-transform: uppercase; letter-spacing: 0.4px; }
-    .nc-date  { font-size: 12px; color: #bbb; margin-left: auto; }
-    .nc-title { font-size: 16px; font-weight: 700; color: #111; line-height: 1.45; }
-    .nc-desc  { font-size: 14px; color: #666; line-height: 1.85; flex: 1; word-spacing: 0.02em; }
-    .nc-cta   { font-size: 13px; font-weight: 700; color: #0a4a8a; }
+    .nc-src   { font-size: 11px; font-weight: 700; color: var(--nc-src-color); text-transform: uppercase; letter-spacing: 0.4px; }
+    .nc-date  { font-size: 12px; color: var(--text-faint); margin-left: auto; }
+    .nc-title { font-size: 16px; font-weight: 700; color: var(--text); line-height: 1.45; }
+    .nc-desc  { font-size: 14px; color: var(--text-mid); line-height: 1.85; flex: 1; word-spacing: 0.02em; }
+    .nc-cta   { font-size: 13px; font-weight: 700; color: var(--nc-src-color); }
 
-    /* Medium cards */
     .medium-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-bottom: 36px; }
     .medium-card {
-      background: #fff; border-radius: 16px; padding: 24px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05); border-top: 4px solid #e8f5e9;
+      background: var(--bg-card); border-radius: 16px; padding: 24px;
+      box-shadow: 0 1px 4px var(--shadow); border-top: 4px solid var(--src-med-bg);
       display: flex; flex-direction: column; gap: 10px;
-      transition: box-shadow 0.2s, transform 0.2s; text-decoration: none; color: inherit;
+      transition: box-shadow 0.2s, transform 0.2s, background 0.25s; text-decoration: none; color: inherit;
     }
-    .medium-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.1); transform: translateY(-2px); }
-    .mc-src  { font-size: 11px; font-weight: 700; color: #1a5c2a; text-transform: uppercase; letter-spacing: 0.4px; }
-    .mc-date { font-size: 12px; color: #bbb; margin-left: auto; }
-    .mc-title { font-size: 16px; font-weight: 700; color: #111; line-height: 1.45; }
-    .mc-author { font-size: 13px; color: #666; font-weight: 500; }
-    .mc-cta   { font-size: 13px; font-weight: 700; color: #1a5c2a; }
+    .medium-card:hover { box-shadow: 0 6px 24px var(--shadow-hover); transform: translateY(-2px); }
+    .mc-src  { font-size: 11px; font-weight: 700; color: var(--mc-src-color); text-transform: uppercase; letter-spacing: 0.4px; }
+    .mc-date { font-size: 12px; color: var(--text-faint); margin-left: auto; }
+    .mc-title { font-size: 16px; font-weight: 700; color: var(--text); line-height: 1.45; }
+    .mc-author { font-size: 13px; color: var(--text-mid); font-weight: 500; }
+    .mc-cta   { font-size: 13px; font-weight: 700; color: var(--mc-src-color); }
 
-    /* YouTube cards */
     .yt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-bottom: 36px; }
     .yt-card {
-      background: #fff; border-radius: 16px; overflow: hidden;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05); border-top: 4px solid #fce4ec;
-      text-decoration: none; color: inherit;
-      display: flex; flex-direction: column;
-      transition: box-shadow 0.2s, transform 0.2s;
+      background: var(--bg-card); border-radius: 16px; overflow: hidden;
+      box-shadow: 0 1px 4px var(--shadow); border-top: 4px solid var(--src-yt-bg);
+      text-decoration: none; color: inherit; display: flex; flex-direction: column;
+      transition: box-shadow 0.2s, transform 0.2s, background 0.25s;
     }
-    .yt-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.1); transform: translateY(-2px); }
-    .yt-thumb { width: 100%; aspect-ratio: 16/9; object-fit: cover; background: #f0f0f0; }
+    .yt-card:hover { box-shadow: 0 6px 24px var(--shadow-hover); transform: translateY(-2px); }
+    .yt-thumb { width: 100%; aspect-ratio: 16/9; object-fit: cover; background: var(--bg-off); }
     .yt-info { padding: 16px 20px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
-    .yt-title { font-size: 15px; font-weight: 700; color: #111; line-height: 1.45; }
-    .yt-meta  { font-size: 12px; color: #880e4f; font-weight: 600; }
-    .yt-cta   { font-size: 13px; font-weight: 700; color: #880e4f; margin-top: auto; padding-top: 8px; }
+    .yt-title { font-size: 15px; font-weight: 700; color: var(--text); line-height: 1.45; }
+    .yt-meta  { font-size: 12px; color: var(--yt-src-color); font-weight: 600; }
+    .yt-cta   { font-size: 13px; font-weight: 700; color: var(--yt-src-color); margin-top: auto; padding-top: 8px; }
 
     /* Panels */
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 36px; }
-    .panel { background: #fff; border-radius: 16px; padding: 26px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+    .panel { background: var(--bg-card); border-radius: 16px; padding: 26px; box-shadow: 0 1px 4px var(--shadow); transition: background 0.25s; }
     .panel-head { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; }
-    .panel-head h3 { font-size: 18px; font-weight: 800; color: #111; }
-    .panel-head .pc { margin-left: auto; font-size: 13px; color: #999; background: #f5f5f5; padding: 4px 14px; border-radius: 99px; font-weight: 600; }
+    .panel-head h3 { font-size: 18px; font-weight: 800; color: var(--text); }
+    .panel-head .pc { margin-left: auto; font-size: 13px; color: var(--text-muted); background: var(--bg-chip); padding: 4px 14px; border-radius: 99px; font-weight: 600; }
     .sent-bars { display: flex; flex-direction: column; gap: 9px; margin-bottom: 20px; }
     .sent-row { display: flex; align-items: center; gap: 8px; font-size: 14px; }
-    .sent-lbl { width: 64px; color: #555; font-weight: 600; }
-    .sent-track { flex: 1; height: 8px; background: #f0f0f0; border-radius: 99px; overflow: hidden; }
+    .sent-lbl { width: 64px; color: var(--text-mid); font-weight: 600; }
+    .sent-track { flex: 1; height: 8px; background: var(--bg-off); border-radius: 99px; overflow: hidden; }
     .sent-fill  { height: 100%; border-radius: 99px; transition: width 0.8s ease; }
-    .sent-n { width: 28px; text-align: right; font-size: 13px; font-weight: 700; color: #aaa; }
+    .sent-n { width: 28px; text-align: right; font-size: 13px; font-weight: 700; color: var(--text-muted); }
     .post-list { display: flex; flex-direction: column; gap: 10px; }
-    .post-item { padding: 14px 16px; background: #fafafa; border-radius: 12px; border-left: 4px solid; display: flex; flex-direction: column; gap: 6px; }
-    .pi-meta  { font-size: 12px; color: #aaa; display: flex; gap: 8px; flex-wrap: wrap; font-weight: 500; }
-    .pi-score { font-weight: 700; color: #ea580c; }
-    .pi-title { font-size: 14px; font-weight: 600; color: #111; line-height: 1.5; }
+    .post-item { padding: 14px 16px; background: var(--bg-post); border-radius: 12px; border-left: 4px solid; display: flex; flex-direction: column; gap: 6px; transition: background 0.25s; }
+    .pi-meta  { font-size: 12px; color: var(--text-muted); display: flex; gap: 8px; flex-wrap: wrap; font-weight: 500; }
+    .pi-score { font-weight: 700; color: #f97316; }
+    .pi-title { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.5; }
     .pi-title a { color: inherit; text-decoration: none; }
-    .pi-title a:hover { color: #333; text-decoration: underline; }
+    .pi-title a:hover { text-decoration: underline; }
 
-    /* Chart */
-    .chart-card { background: #fff; border-radius: 16px; padding: 28px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); margin-bottom: 36px; }
-    .chart-card h3 { font-size: 12px; font-weight: 700; color: #aaa; margin-bottom: 18px; text-transform: uppercase; letter-spacing: 1px; }
+    .chart-card { background: var(--bg-card); border-radius: 16px; padding: 28px; box-shadow: 0 1px 4px var(--shadow); margin-bottom: 36px; transition: background 0.25s; }
+    .chart-card h3 { font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 18px; text-transform: uppercase; letter-spacing: 1px; }
     .chart-card canvas { max-height: 220px; }
 
-    .no-data { padding: 32px; text-align: center; color: #aaa; font-size: 15px; background: #fafafa; border-radius: 12px; border: 2px dashed #ebebeb; font-weight: 500; line-height: 1.6; }
+    .no-data { padding: 32px; text-align: center; color: var(--text-muted); font-size: 15px; background: var(--bg-off); border-radius: 12px; border: 2px dashed var(--border); font-weight: 500; line-height: 1.6; }
 
-    .rpt-footer { text-align: center; padding: 28px; font-size: 14px; color: #aaa; border-top: 1px solid #ebebeb; background: #fff; line-height: 1.6; }
-    .rpt-footer a { color: #111; text-decoration: none; cursor: pointer; font-weight: 700; border-bottom: 2px solid #111; }
+    .rpt-footer { text-align: center; padding: 28px; font-size: 14px; color: var(--text-muted); border-top: 1px solid var(--border-light); background: var(--bg-card); line-height: 1.6; transition: background 0.25s; }
+    .rpt-footer a { color: var(--text); text-decoration: none; cursor: pointer; font-weight: 700; border-bottom: 2px solid var(--text); }
 
     @media (max-width: 768px) {
       #landing { padding: 60px 24px; align-items: center; text-align: center; }
@@ -234,10 +309,17 @@
       .rpt-body { padding: 18px 14px; }
       .kpi-row { grid-template-columns: 1fr 1fr; }
       .load-steps, .prog-track { width: 100%; max-width: 360px; }
+      .theme-toggle { top: 14px; right: 14px; padding: 7px 14px; font-size: 13px; }
     }
   </style>
 </head>
 <body>
+
+<!-- ════ THEME TOGGLE ════ -->
+<button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+  <span id="themeIcon">🌙</span>
+  <span id="themeLabel">Dark</span>
+</button>
 
 <!-- ════════ LANDING ════════ -->
 <div id="landing">
@@ -289,6 +371,24 @@
 <div id="report" style="display:none"></div>
 
 <script>
+// ════ THEME ════
+function toggleTheme() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const next = isDark ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('duh-theme', next);
+  document.getElementById('themeIcon').textContent  = next === 'dark' ? '☀️' : '🌙';
+  document.getElementById('themeLabel').textContent = next === 'dark' ? 'Light' : 'Dark';
+  if (charts.kw) { charts.kw.options.scales.x.grid.color = next==='dark'?'#222':'#f0f0f0'; charts.kw.update(); }
+}
+(function initTheme(){
+  const saved = localStorage.getItem('duh-theme') || 'light';
+  document.documentElement.setAttribute('data-theme', saved);
+  document.getElementById('themeIcon').textContent  = saved === 'dark' ? '☀️' : '🌙';
+  document.getElementById('themeLabel').textContent = saved === 'dark' ? 'Light' : 'Dark';
+})();
+
+// ════ DATA ════
 const POSITIVE = new Set(['good','great','excellent','affordable','worth','nice','happy','love','best','recommend','cheap','value','improve','safe','clean','convenient','modern','beautiful','fantastic','amazing','awesome','perfect','wonderful','helpful','easy','better','quality','reasonable','satisfied','enjoy','superb','brilliant','outstanding','impressive','smooth','reliable','efficient','fair','useful','solid','strong','profitable','growing','boom','success','win','innovative','exciting','positive','benefit','gain','accessible','friendly','fast','thriving','opportunity','promising','boost','soar','surge','rise','launch','expand','record']);
 const NEGATIVE = new Set(['expensive','bad','terrible','awful','worst','hate','avoid','scam','overpriced','problem','issue','difficult','concern','flood','pollution','traffic','poor','horrible','pathetic','disappointed','cheated','fraud','waste','useless','broken','fail','failure','ridiculous','absurd','outrageous','shock','alarming','unaffordable','inflation','corrupt','fake','mislead','wrong','error','mistake','regret','sad','angry','frustrated','annoyed','disgusted','scared','worried','danger','risky','overrated','decline','falling','drop','crisis','collapse','nightmare','trap','delay','cancel','ban','breach','leak','attack','threat','loss','cut','layoff','fire','arrest','scandal','crash','plunge','slump']);
 const STOPWORDS = new Set(['a','about','above','after','again','all','am','an','and','any','are','as','at','be','because','been','before','being','below','between','both','but','by','can','did','do','does','doing','down','during','each','few','for','from','further','get','got','had','has','have','having','he','her','here','him','his','how','i','if','in','into','is','it','its','just','me','more','most','my','no','nor','not','now','of','off','on','once','only','or','other','our','out','over','own','s','same','she','so','some','such','t','than','that','the','their','them','then','there','these','they','this','those','through','to','too','under','until','up','very','was','we','were','what','when','where','which','while','who','whom','why','will','with','you','your','like','also','think','look','want','one','use','make','even','see','time','go','come','take','people','lot','still','back','way','well','really','thing','actually','already','always','never','ever','said','say','know','going','getting','looking','trying','making','using','doing','having','being','saying','thinking','coming','taking','different','right','left','first','last','long','high','low','next','big','little','old','small','large','same','used','work','life','place','case','point','fact','though','since','while','around','per','let','put','might','could','would','should','may','must','can','ask','find','give','help','keep','move','need','seem','show','try','turn','start','end','stay','set','add','day','part','world','feel','real','hand','kind','line','side','name','two','three','four','five','ago','post','comment','reddit','something','anything','someone','anyone','everyone','re','ve','isn','wasn','aren','weren','haven','hadn','doesn','didn','don','won','wouldn','shouldn','couldn','ll','d','m','yeah','yes','nah','okay','im','ive','id','lol','tbh','imo','fyi','https','http','www','com','new','year','month','week','many','much','less']);
@@ -374,8 +474,7 @@ async function fetchHN(topic) {
 async function fetchYoutube(topic) {
   try {
     const res=await fetch(`/api/youtube?q=${encodeURIComponent(topic)}`);
-    const data=await res.json();
-    return data.items||[];
+    return (await res.json()).items||[];
   } catch(e){console.warn('YouTube:',e);return [];}
 }
 
@@ -386,8 +485,7 @@ async function fetchSummary(topic,news,reddit,hn,medium) {
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({topic,news:allNews,reddit,hn})
     });
-    const data=await res.json();
-    return data.summary||null;
+    return (await res.json()).summary||null;
   } catch(e){console.warn('Summary:',e);return null;}
 }
 
@@ -459,8 +557,7 @@ function renderReport(topic,news,reddit,hn,aiSummary,medium,youtube){
         <div class="tldr-heading">${esc(topic)}</div>
         <div class="tldr-list">
           ${aiSummary
-            ? aiSummary.split('\n').filter(l=>l.trim()).map(line=>`
-                <div class="tldr-item"><div class="tldr-dot"></div><div>${esc(line.trim())}</div></div>`).join('')
+            ? aiSummary.split('\n').filter(l=>l.trim()).map(line=>`<div class="tldr-item"><div class="tldr-dot"></div><div>${esc(line.trim())}</div></div>`).join('')
             : summary.length
               ? summary.map(s=>`<div class="tldr-item"><div class="tldr-dot"></div><div>${esc(s.text)} <span class="tldr-src">— ${esc(s.src)}</span></div></div>`).join('')
               : '<div class="tldr-item"><div class="tldr-dot"></div><div>Not enough content to summarise. Try a broader search.</div></div>'
@@ -469,86 +566,66 @@ function renderReport(topic,news,reddit,hn,aiSummary,medium,youtube){
       </div>
 
       <div class="sec">📰 In the News</div>
-      ${news.length?`
-      <div class="news-grid">
-        ${news.map(n=>`
-          <a class="news-card" href="${esc(n.link)}" target="_blank" rel="noopener noreferrer">
-            <div class="nc-meta">
-              ${n.domain?`<img class="nc-fav" src="https://www.google.com/s2/favicons?domain=${n.domain}&sz=32" onerror="this.style.display='none'" />`:''}
-              <span class="nc-src">${esc(n.srcName)}</span>
-              <span class="nc-date">${relDate(n.pubDate)}</span>
-            </div>
-            <div class="nc-title">${esc(n.title)}</div>
-            ${n.desc?`<div class="nc-desc">${esc(n.desc)}</div>`:''}
-            <div class="nc-cta">Read article →</div>
-          </a>`).join('')}
-      </div>`:'<div class="no-data" style="margin-bottom:36px">No news articles found for this topic.</div>'}
+      ${news.length?`<div class="news-grid">${news.map(n=>`
+        <a class="news-card" href="${esc(n.link)}" target="_blank" rel="noopener noreferrer">
+          <div class="nc-meta">${n.domain?`<img class="nc-fav" src="https://www.google.com/s2/favicons?domain=${n.domain}&sz=32" onerror="this.style.display='none'" />`:''}
+            <span class="nc-src">${esc(n.srcName)}</span><span class="nc-date">${relDate(n.pubDate)}</span></div>
+          <div class="nc-title">${esc(n.title)}</div>
+          ${n.desc?`<div class="nc-desc">${esc(n.desc)}</div>`:''}
+          <div class="nc-cta">Read article →</div>
+        </a>`).join('')}</div>`
+      :'<div class="no-data" style="margin-bottom:36px">No news articles found for this topic.</div>'}
 
       ${medium.length?`
       <div class="sec">📝 On Medium</div>
-      <div class="medium-grid">
-        ${medium.map(m=>`
-          <a class="medium-card" href="${esc(m.link)}" target="_blank" rel="noopener noreferrer">
-            <div class="nc-meta">
-              <span class="mc-src">Medium</span>
-              <span class="mc-date">${relDate(m.pubDate)}</span>
-            </div>
-            <div class="mc-title">${esc(m.title)}</div>
-            <div class="mc-author">by ${esc(m.author)}</div>
-            <div class="mc-cta">Read on Medium →</div>
-          </a>`).join('')}
-      </div>`:''}
+      <div class="medium-grid">${medium.map(m=>`
+        <a class="medium-card" href="${esc(m.link)}" target="_blank" rel="noopener noreferrer">
+          <div class="nc-meta"><span class="mc-src">Medium</span><span class="mc-date">${relDate(m.pubDate)}</span></div>
+          <div class="mc-title">${esc(m.title)}</div>
+          <div class="mc-author">by ${esc(m.author)}</div>
+          <div class="mc-cta">Read on Medium →</div>
+        </a>`).join('')}</div>`:''}
 
       ${youtube.length?`
       <div class="sec">▶️ On YouTube</div>
-      <div class="yt-grid">
-        ${youtube.map(v=>{
-          const vid=v.id?.videoId||'';
-          const s=v.snippet||{};
-          const thumb=s.thumbnails?.medium?.url||s.thumbnails?.default?.url||'';
-          const url=vid?`https://www.youtube.com/watch?v=${vid}`:'#';
-          return `
-          <a class="yt-card" href="${esc(url)}" target="_blank" rel="noopener noreferrer">
-            ${thumb?`<img class="yt-thumb" src="${esc(thumb)}" alt="" loading="lazy" />`:'<div class="yt-thumb"></div>'}
-            <div class="yt-info">
-              <div class="yt-title">${esc(s.title||'')}</div>
-              <div class="yt-meta">${esc(s.channelTitle||'')}</div>
-              <div class="yt-cta">Watch on YouTube →</div>
-            </div>
-          </a>`;
-        }).join('')}
-      </div>`:''}
+      <div class="yt-grid">${youtube.map(v=>{
+        const vid=v.id?.videoId||'';
+        const s=v.snippet||{};
+        const thumb=s.thumbnails?.medium?.url||s.thumbnails?.default?.url||'';
+        const url=vid?`https://www.youtube.com/watch?v=${vid}`:'#';
+        return `<a class="yt-card" href="${esc(url)}" target="_blank" rel="noopener noreferrer">
+          ${thumb?`<img class="yt-thumb" src="${esc(thumb)}" alt="" loading="lazy" />`:'<div class="yt-thumb"></div>'}
+          <div class="yt-info">
+            <div class="yt-title">${esc(s.title||'')}</div>
+            <div class="yt-meta">${esc(s.channelTitle||'')}</div>
+            <div class="yt-cta">Watch on YouTube →</div>
+          </div></a>`;
+      }).join('')}</div>`:''}
 
       <div class="two-col">
         <div class="panel">
           <div class="panel-head"><span>🔴</span><h3>Reddit</h3><span class="pc">${reddit.length} posts</span></div>
           ${reddit.length?`
-          <div class="sent-bars">
-            ${[['Positive','#22c55e',rPos,reddit.length],['Negative','#ef4444',rNeg,reddit.length],['Neutral','#d4d4d8',rNeu,reddit.length]].map(([l,c,n,t])=>`
-              <div class="sent-row"><span class="sent-lbl" style="color:${c}">${l}</span><div class="sent-track"><div class="sent-fill" style="width:${t?Math.round(n/t*100):0}%;background:${c}"></div></div><span class="sent-n">${n}</span></div>`).join('')}
-          </div>
-          <div class="post-list">
-            ${topR.map(p=>`
-              <div class="post-item" style="border-color:${classify(sentScore(p.title))==='positive'?'#22c55e':classify(sentScore(p.title))==='negative'?'#ef4444':'#e0e0e0'}">
-                <div class="pi-meta"><span>r/${esc(p.subreddit)}</span><span class="pi-score">▲ ${p.score}</span><span>${p.num_comments} comments</span></div>
-                <div class="pi-title">${esc(p.title)}</div>
-              </div>`).join('')}
-          </div>`:'<div class="no-data">No Reddit posts found for this topic.</div>'}
+          <div class="sent-bars">${[['Positive','#22c55e',rPos,reddit.length],['Negative','#ef4444',rNeg,reddit.length],['Neutral','#888',rNeu,reddit.length]].map(([l,c,n,t])=>`
+            <div class="sent-row"><span class="sent-lbl" style="color:${c}">${l}</span><div class="sent-track"><div class="sent-fill" style="width:${t?Math.round(n/t*100):0}%;background:${c}"></div></div><span class="sent-n">${n}</span></div>`).join('')}</div>
+          <div class="post-list">${topR.map(p=>`
+            <div class="post-item" style="border-color:${classify(sentScore(p.title))==='positive'?'#22c55e':classify(sentScore(p.title))==='negative'?'#ef4444':'#555'}">
+              <div class="pi-meta"><span>r/${esc(p.subreddit)}</span><span class="pi-score">▲ ${p.score}</span><span>${p.num_comments} comments</span></div>
+              <div class="pi-title">${esc(p.title)}</div>
+            </div>`).join('')}</div>`
+          :'<div class="no-data">No Reddit posts found for this topic.</div>'}
         </div>
         <div class="panel">
           <div class="panel-head"><span>🟠</span><h3>Hacker News</h3><span class="pc">${hn.length} stories</span></div>
           ${hn.length?`
-          <div class="sent-bars">
-            ${[['Positive','#22c55e',hPos,hn.length],['Negative','#ef4444',hNeg,hn.length],['Neutral','#d4d4d8',hNeu,hn.length]].map(([l,c,n,t])=>`
-              <div class="sent-row"><span class="sent-lbl" style="color:${c}">${l}</span><div class="sent-track"><div class="sent-fill" style="width:${t?Math.round(n/t*100):0}%;background:${c}"></div></div><span class="sent-n">${n}</span></div>`).join('')}
-          </div>
-          <div class="post-list">
-            ${topH.map(h=>`
-              <div class="post-item" style="border-color:#fff0c2">
-                <div class="pi-meta"><span>by ${esc(h.author||'?')}</span><span class="pi-score">▲ ${h.points||0}</span><span>${h.num_comments||0} comments</span></div>
-                <div class="pi-title">${h.url?`<a href="${esc(h.url)}" target="_blank" rel="noopener">${esc(h.title)}</a>`:esc(h.title)}</div>
-              </div>`).join('')}
-          </div>`:'<div class="no-data">No Hacker News stories found.</div>'}
+          <div class="sent-bars">${[['Positive','#22c55e',hPos,hn.length],['Negative','#ef4444',hNeg,hn.length],['Neutral','#888',hNeu,hn.length]].map(([l,c,n,t])=>`
+            <div class="sent-row"><span class="sent-lbl" style="color:${c}">${l}</span><div class="sent-track"><div class="sent-fill" style="width:${t?Math.round(n/t*100):0}%;background:${c}"></div></div><span class="sent-n">${n}</span></div>`).join('')}</div>
+          <div class="post-list">${topH.map(h=>`
+            <div class="post-item" style="border-color:var(--src-hn-bg)">
+              <div class="pi-meta"><span>by ${esc(h.author||'?')}</span><span class="pi-score">▲ ${h.points||0}</span><span>${h.num_comments||0} comments</span></div>
+              <div class="pi-title">${h.url?`<a href="${esc(h.url)}" target="_blank" rel="noopener">${esc(h.title)}</a>`:esc(h.title)}</div>
+            </div>`).join('')}</div>`
+          :'<div class="no-data">No Hacker News stories found.</div>'}
         </div>
       </div>
 
@@ -560,25 +637,29 @@ function renderReport(topic,news,reddit,hn,aiSummary,medium,youtube){
       </div>`:''}
     </div>
     <div class="rpt-footer">
-      <strong>duh.</strong> · News · Reddit · Hacker News · Medium · YouTube · ${now} · <a onclick="goBack()">Search another topic</a>
+      <strong>duh.</strong> · News · Reddit · HN · Medium · YouTube · ${now} · <a onclick="goBack()">Search another topic</a>
     </div>
   `;
 
   show('report'); hide('loading');
 
   if(kws.length){
+    const isDark=document.documentElement.getAttribute('data-theme')==='dark';
     setTimeout(()=>{
       destroyCharts();
       charts.kw=new Chart(document.getElementById('kwChart'),{
         type:'bar',
         data:{
           labels:kws.map(([w])=>w),
-          datasets:[{data:kws.map(([,n])=>n),backgroundColor:kws.map(([w])=>POSITIVE.has(w)?'#22c55e':NEGATIVE.has(w)?'#ef4444':'#cfe8ff'),borderRadius:8}]
+          datasets:[{data:kws.map(([,n])=>n),backgroundColor:kws.map(([w])=>POSITIVE.has(w)?'#22c55e':NEGATIVE.has(w)?'#ef4444':'#7eb8f7'),borderRadius:8}]
         },
         options:{
           indexAxis:'y',responsive:true,
           plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw} mentions`}}},
-          scales:{x:{ticks:{stepSize:1},grid:{color:'#f0f0f0'}},y:{grid:{display:false}}}
+          scales:{
+            x:{ticks:{stepSize:1,color:isDark?'#777':'#aaa'},grid:{color:isDark?'#222':'#f0f0f0'}},
+            y:{grid:{display:false},ticks:{color:isDark?'#aaa':'#555'}}
+          }
         }
       });
     },100);
@@ -592,14 +673,7 @@ async function generate(){
   hide('landing');show('loading');
   $('loadTopic').textContent=`"${topic}"`;
   setStep(0);
-
-  // Start all fetches in parallel immediately
-  const newsP=fetchNews(topic);
-  const mediumP=fetchMedium(topic);
-  const redditP=fetchReddit(topic);
-  const hnP=fetchHN(topic);
-  const youtubeP=fetchYoutube(topic);
-
+  const newsP=fetchNews(topic),mediumP=fetchMedium(topic),redditP=fetchReddit(topic),hnP=fetchHN(topic),youtubeP=fetchYoutube(topic);
   const [news,medium]=await Promise.all([newsP,mediumP]);
   setStep(1);
   const reddit=await redditP;
@@ -607,7 +681,6 @@ async function generate(){
   const [hn,youtube]=await Promise.all([hnP,youtubeP]);
   setStep(3);
   const aiSummary=await fetchSummary(topic,news,reddit,hn,medium);
-
   $('progFill').style.width='100%';
   await new Promise(r=>setTimeout(r,300));
   renderReport(topic,news,reddit,hn,aiSummary,medium,youtube);
