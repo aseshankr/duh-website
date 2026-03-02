@@ -469,8 +469,9 @@ async function fetchMedium(topic) {
 
 async function fetchReddit(topic) {
   try {
-    // Fetch Reddit directly from the browser — Reddit blocks Vercel server IPs but allows browser requests
-    const res=await fetch(`https://www.reddit.com/search.json?q=${encodeURIComponent(topic)}&sort=relevance&limit=60&t=year&raw_json=1`,{headers:{'Accept':'application/json'}});
+    // Reddit blocks both Vercel IPs and direct browser CORS requests, so route via corsproxy.io
+    const redditUrl=`https://www.reddit.com/search.json?q=${encodeURIComponent(topic)}&sort=relevance&limit=60&t=year&raw_json=1`;
+    const res=await fetch(`https://corsproxy.io/?${encodeURIComponent(redditUrl)}`);
     const data=await res.json();
     return data.data.children.map(c=>c.data).filter(p=>p.title&&p.selftext!=='[deleted]'&&p.selftext!=='[removed]');
   } catch(e){console.warn('Reddit:',e);return [];}
