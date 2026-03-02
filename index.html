@@ -222,6 +222,17 @@
     .tldr-dot { width: 9px; height: 9px; background: var(--tldr-dot); border-radius: 50%; flex-shrink: 0; margin-top: 8px; }
     .tldr-src { color: var(--text-faint); font-size: 12px; }
 
+    /* In One Line */
+    .oneliner {
+      background: var(--bg-card); border-radius: 16px;
+      padding: 28px 32px; margin-bottom: 36px;
+      box-shadow: 0 1px 4px var(--shadow);
+      border-left: 5px solid var(--text);
+      transition: background 0.25s;
+    }
+    .oneliner-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 14px; }
+    .oneliner-text { font-size: 22px; font-weight: 700; color: var(--text); line-height: 1.5; letter-spacing: -0.3px; }
+
     /* Cards */
     .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-bottom: 36px; }
     .news-card {
@@ -485,8 +496,9 @@ async function fetchSummary(topic,news,reddit,hn,medium) {
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({topic,news:allNews,reddit,hn})
     });
-    return (await res.json()).summary||null;
-  } catch(e){console.warn('Summary:',e);return null;}
+    const data=await res.json();
+    return { summary: data.summary||null, oneliner: data.oneliner||null };
+  } catch(e){console.warn('Summary:',e);return {summary:null,oneliner:null};}
 }
 
 function tokenize(t){return(t||'').toLowerCase().replace(/[^a-z\s]/g,' ').split(/\s+/).filter(w=>w.length>2&&!STOPWORDS.has(w));}
@@ -513,7 +525,7 @@ function extractSummary(news,reddit,hn){
 
 function destroyCharts(){Object.values(charts).forEach(c=>c.destroy());charts={};}
 
-function renderReport(topic,news,reddit,hn,aiSummary,medium,youtube){
+function renderReport(topic,news,reddit,hn,aiSummary,oneliner,medium,youtube){
   const rSents=reddit.map(p=>classify(sentScore(p.title+' '+p.selftext)));
   const rPos=rSents.filter(s=>s==='positive').length,rNeg=rSents.filter(s=>s==='negative').length,rNeu=reddit.length-rPos-rNeg;
   const hSents=hn.map(h=>classify(sentScore(h.title)));
@@ -526,7 +538,8 @@ function renderReport(topic,news,reddit,hn,aiSummary,medium,youtube){
   const topR=[...reddit].sort((a,b)=>b.score-a.score).slice(0,4);
   const topH=[...hn].sort((a,b)=>(b.points||0)-(a.points||0)).slice(0,4);
   const now=new Date().toLocaleString('en-IN',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
-  const totalEng=reddit.reduce((s,p)=>s+p.score,0);
+  const redditActivity=reddit.length>=10?'High':reddit.length>=5?'Moderate':reddit.length>=1?'Low':'Limited';
+  const redditActivityEmoji=reddit.length>=10?'🔥':reddit.length>=5?'💬':reddit.length>=1?'📉':'😶';
   const totalSrc=news.length+reddit.length+hn.length+medium.length+youtube.length;
 
   $('report').innerHTML=`
@@ -547,10 +560,11 @@ function renderReport(topic,news,reddit,hn,aiSummary,medium,youtube){
       <div class="kpi-row">
         <div class="kpi yellow"><div class="kl">Sources</div><div class="kv">${totalSrc}</div><div class="ks">Items analysed</div></div>
         <div class="kpi ${sentKpi}"><div class="kl">Sentiment</div><div class="kv" style="font-size:18px">${sentEmoji} ${overallLabel.charAt(0).toUpperCase()+overallLabel.slice(1)}</div><div class="ks">Overall tone</div></div>
-        <div class="kpi red"><div class="kl">Reddit Votes</div><div class="kv">${totalEng>=1000?(totalEng/1000).toFixed(1)+'K':totalEng}</div><div class="ks">Total upvotes</div></div>
+        <div class="kpi red"><div class="kl">Reddit Activity</div><div class="kv" style="font-size:20px">${redditActivityEmoji} ${redditActivity}</div><div class="ks">${reddit.length} discussion${reddit.length!==1?'s':''} found</div></div>
         <div class="kpi orange"><div class="kl">HN Points</div><div class="kv">${hn.reduce((s,h)=>s+(h.points||0),0)}</div><div class="ks">Total upvotes</div></div>
-        <div class="kpi violet"><div class="kl">Top Keyword</div><div class="kv" style="font-size:17px">${kws[0]?kws[0][0]:'—'}</div><div class="ks">${kws[0]?kws[0][1]+' mentions':''}</div></div>
       </div>
+
+      ${oneliner ? `<div class="oneliner"><div class="oneliner-label">💬 In One Line</div><div class="oneliner-text">"${esc(oneliner)}"</div></div>` : ''}
 
       <div class="tldr">
         <div class="tldr-eyebrow">✨ AI Summary — Powered by Claude</div>
@@ -680,10 +694,10 @@ async function generate(){
   setStep(2);
   const [hn,youtube]=await Promise.all([hnP,youtubeP]);
   setStep(3);
-  const aiSummary=await fetchSummary(topic,news,reddit,hn,medium);
+  const {summary:aiSummary,oneliner}=await fetchSummary(topic,news,reddit,hn,medium);
   $('progFill').style.width='100%';
   await new Promise(r=>setTimeout(r,300));
-  renderReport(topic,news,reddit,hn,aiSummary,medium,youtube);
+  renderReport(topic,news,reddit,hn,aiSummary,oneliner,medium,youtube);
 }
 
 function goBack(){destroyCharts();hide('report');hide('loading');show('landing');}
