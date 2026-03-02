@@ -214,25 +214,11 @@
 
 <script>
 // ════════════════════════════════════
-//  PROXY STRATEGY
-//  - Reddit: try direct first (works on https://), fallback to proxy
-//  - Google News: always needs proxy (no CORS headers)
+//  API STRATEGY
+//  - Reddit: calls /api/reddit (Vercel serverless function, no CORS issues)
+//  - Google News: calls /api/news (Vercel serverless function, no CORS issues)
 //  - HN Algolia: always direct (supports CORS natively)
 // ════════════════════════════════════
-const PROXIES = [
-  'https://corsproxy.io/?url=',
-  'https://api.allorigins.win/raw?url='
-];
-
-async function proxyFetch(url) {
-  for (const proxy of PROXIES) {
-    try {
-      const res = await fetch(proxy + encodeURIComponent(url), { headers: { Accept: 'application/json, text/plain, */*' } });
-      if (res.ok) return res;
-    } catch (_) {}
-  }
-  throw new Error('All proxies failed for: ' + url);
-}
 
 // ════════════════════════════════════
 //  WORD LISTS
@@ -276,12 +262,11 @@ function relDate(str) {
 }
 
 // ════════════════════════════════════
-//  FETCH — NEWS (always proxy)
+//  FETCH — NEWS (via Vercel serverless)
 // ════════════════════════════════════
 async function fetchNews(topic) {
   try {
-    const rss = `https://news.google.com/rss/search?q=${encodeURIComponent(topic)}&hl=en-IN&gl=IN&ceid=IN:en`;
-    const res = await proxyFetch(rss);
+    const res = await fetch(`/api/news?q=${encodeURIComponent(topic)}`);
     const xml = new DOMParser().parseFromString(await res.text(), 'application/xml');
     return Array.from(xml.querySelectorAll('item')).slice(0, 6).map(item => {
       const rawTitle = item.querySelector('title')?.textContent || '';
@@ -301,23 +286,14 @@ async function fetchNews(topic) {
 }
 
 // ════════════════════════════════════
-//  FETCH — REDDIT (direct first, then proxy)
+//  FETCH — REDDIT (via Vercel serverless)
 // ════════════════════════════════════
 async function fetchReddit(topic) {
-  const target = `https://www.reddit.com/search.json?q=${encodeURIComponent(topic)}&sort=relevance&limit=60&t=year&raw_json=1`;
-  const parse  = data => data.data.children.map(c => c.data)
-    .filter(p => p.title && p.selftext !== '[deleted]' && p.selftext !== '[removed]');
-
-  // Try direct first (works on https:// domains — Reddit sets CORS allow-all)
   try {
-    const res = await fetch(target, { headers: { Accept: 'application/json' } });
-    if (res.ok) return parse(await res.json());
-  } catch (_) {}
-
-  // Fallback to proxy
-  try {
-    const res = await proxyFetch(target);
-    return parse(await res.json());
+    const res  = await fetch(`/api/reddit?q=${encodeURIComponent(topic)}`);
+    const data = await res.json();
+    return data.data.children.map(c => c.data)
+      .filter(p => p.title && p.selftext !== '[deleted]' && p.selftext !== '[removed]');
   } catch(e) { console.warn('Reddit failed:', e); return []; }
 }
 
