@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Duh — Know What's Happening</title>
-  <meta name="description" content="Type any topic. Get an instant intelligence brief from News, Reddit and Hacker News." />
+  <meta name="description" content="Type any topic. Get an instant intelligence brief from News, Reddit, Hacker News, Medium and YouTube." />
   <meta property="og:title" content="Duh — Know What's Happening" />
   <meta property="og:url" content="https://duh.co.in" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>" />
@@ -14,78 +14,59 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Outfit', system-ui, sans-serif; background: #fff; color: #111; min-height: 100vh; }
+    body { font-family: 'Outfit', system-ui, sans-serif; background: #fff; color: #111; min-height: 100vh; font-size: 16px; line-height: 1.6; }
 
     /* ═══ LANDING ═══ */
     #landing {
-      min-height: 100vh;
-      background: #fff;
+      min-height: 100vh; background: #fff;
       display: flex; flex-direction: column;
       align-items: flex-start; justify-content: center;
       padding: 80px 10%;
     }
-
-    .duh-wordmark {
-      font-size: 96px; font-weight: 900; color: #111;
-      letter-spacing: -5px; line-height: 0.95; margin-bottom: 16px;
-    }
-    .duh-tagline-big {
-      font-size: 36px; font-weight: 700; color: #333;
-      letter-spacing: -1px; line-height: 1.2; margin-bottom: 20px;
-    }
-    .tagline {
-      font-size: 17px; font-weight: 400; color: #666;
-      line-height: 1.7; margin-bottom: 48px; max-width: 540px;
-    }
+    .duh-wordmark { font-size: 100px; font-weight: 900; color: #111; letter-spacing: -5px; line-height: 0.95; margin-bottom: 16px; }
+    .duh-tagline-big { font-size: 38px; font-weight: 700; color: #333; letter-spacing: -1px; line-height: 1.2; margin-bottom: 20px; }
+    .tagline { font-size: 19px; font-weight: 400; color: #666; line-height: 1.85; margin-bottom: 48px; max-width: 560px; word-spacing: 0.03em; }
     .tagline a { color: #111; font-weight: 600; text-decoration: none; border-bottom: 2px solid #111; }
 
-    /* Search */
     .search-wrap {
-      width: 100%; max-width: 580px; display: flex;
+      width: 100%; max-width: 600px; display: flex;
       background: #fff; border: 2px solid #e0e0e0; border-radius: 14px;
       overflow: hidden; margin-bottom: 48px;
       box-shadow: 0 2px 12px rgba(0,0,0,0.07);
       transition: border-color 0.2s, box-shadow 0.2s;
     }
-    .search-wrap:focus-within {
-      border-color: #111;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.12);
-    }
+    .search-wrap:focus-within { border-color: #111; box-shadow: 0 2px 16px rgba(0,0,0,0.12); }
     .search-wrap input {
-      flex: 1; padding: 18px 22px; font-size: 16px; border: none; outline: none;
-      color: #111; background: transparent;
-      font-family: 'Outfit', sans-serif; font-weight: 400;
+      flex: 1; padding: 20px 24px; font-size: 17px; border: none; outline: none;
+      color: #111; background: transparent; font-family: 'Outfit', sans-serif;
     }
     .search-wrap input::placeholder { color: #bbb; }
     .search-wrap button {
-      padding: 18px 28px; background: #111; color: #fff;
-      font-size: 15px; font-weight: 700; border: none; cursor: pointer;
-      transition: background 0.18s; white-space: nowrap;
-      font-family: 'Outfit', sans-serif;
+      padding: 20px 30px; background: #111; color: #fff;
+      font-size: 16px; font-weight: 700; border: none; cursor: pointer;
+      transition: background 0.18s; white-space: nowrap; font-family: 'Outfit', sans-serif;
     }
     .search-wrap button:hover { background: #333; }
 
-    /* Source blocks — Varsity style coloured cards */
     .src-section-label { font-size: 13px; font-weight: 600; color: #999; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 1px; }
     .src-blocks { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 52px; }
     .src-block {
       display: flex; align-items: center; gap: 10px;
-      padding: 18px 28px; border-radius: 16px;
-      font-size: 16px; font-weight: 700; cursor: default;
-      min-width: 160px;
+      padding: 16px 24px; border-radius: 16px;
+      font-size: 15px; font-weight: 700; min-width: 150px;
     }
-    .src-block .src-icon { font-size: 24px; }
-    .src-block.news   { background: #cfe8ff; color: #0a4a8a; }
-    .src-block.reddit { background: #ffd6cc; color: #8b2500; }
-    .src-block.hn     { background: #fff0c2; color: #7a4500; }
-    .src-block.ai     { background: #e8f5e9; color: #1a5c2a; }
+    .src-block .src-icon { font-size: 22px; }
+    .src-block.news    { background: #cfe8ff; color: #0a4a8a; }
+    .src-block.reddit  { background: #ffd6cc; color: #8b2500; }
+    .src-block.hn      { background: #fff0c2; color: #7a4500; }
+    .src-block.medium  { background: #e8f5e9; color: #1a5c2a; }
+    .src-block.youtube { background: #fce4ec; color: #880e4f; }
 
-    /* Chips */
     .chips-label { font-size: 12px; color: #bbb; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
     .chips { display: flex; flex-wrap: wrap; gap: 8px; }
     .chip {
       background: #f5f5f5; border: 1.5px solid #e8e8e8; color: #555;
-      padding: 8px 18px; border-radius: 99px; font-size: 13px; cursor: pointer;
+      padding: 9px 20px; border-radius: 99px; font-size: 14px; cursor: pointer;
       transition: all 0.18s; font-family: 'Outfit', sans-serif; font-weight: 500;
     }
     .chip:hover { background: #111; color: #fff; border-color: #111; }
@@ -96,91 +77,77 @@
       display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px;
     }
     .load-mark { font-size: 56px; font-weight: 900; color: #111; letter-spacing: -3px; }
-    .load-topic { color: #999; font-size: 15px; max-width: 400px; text-align: center; }
-    .load-steps { display: flex; flex-direction: column; gap: 8px; width: 360px; }
+    .load-topic { color: #999; font-size: 16px; max-width: 400px; text-align: center; line-height: 1.6; }
+    .load-steps { display: flex; flex-direction: column; gap: 9px; width: 380px; }
     .load-step {
       display: flex; align-items: center; gap: 12px;
-      padding: 13px 18px; border-radius: 12px;
+      padding: 14px 18px; border-radius: 12px;
       background: #fafafa; border: 1.5px solid #ebebeb;
-      color: #aaa; font-size: 13px; font-weight: 500; transition: all 0.3s;
+      color: #aaa; font-size: 14px; font-weight: 500; transition: all 0.3s;
+      line-height: 1.4;
     }
     .load-step.active { background: #fff0c2; border-color: #f5d77a; color: #7a4500; }
     .load-step.done   { background: #f0fdf4; border-color: #bbf7d0; color: #16a34a; }
-    .step-icon { font-size: 18px; }
-    .prog-track { width: 360px; height: 4px; background: #f0f0f0; border-radius: 99px; overflow: hidden; }
+    .step-icon { font-size: 20px; }
+    .prog-track { width: 380px; height: 4px; background: #f0f0f0; border-radius: 99px; overflow: hidden; }
     .prog-fill  { height: 100%; background: #111; border-radius: 99px; transition: width 0.5s ease; width: 0%; }
 
     /* ═══ REPORT ═══ */
     #report { background: #f7f7f7; min-height: 100vh; }
 
-    .rpt-header {
-      background: #fff; border-bottom: 1px solid #ebebeb;
-      padding: 32px 10%;
-    }
+    .rpt-header { background: #fff; border-bottom: 1px solid #ebebeb; padding: 32px 10%; }
     .rpt-back {
       background: #f5f5f5; border: none; color: #555;
-      padding: 8px 18px; border-radius: 8px; cursor: pointer;
-      font-size: 13px; font-weight: 600; margin-bottom: 20px;
+      padding: 9px 20px; border-radius: 8px; cursor: pointer;
+      font-size: 14px; font-weight: 600; margin-bottom: 20px;
       display: inline-flex; align-items: center; gap: 6px;
       transition: all 0.18s; font-family: 'Outfit', sans-serif;
     }
     .rpt-back:hover { background: #111; color: #fff; }
     .rpt-pill {
       display: inline-block; background: #f5f5f5; color: #555;
-      padding: 4px 14px; border-radius: 99px;
+      padding: 4px 16px; border-radius: 99px;
       font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px;
     }
-    .rpt-header h1 { font-size: 38px; font-weight: 900; letter-spacing: -1.5px; color: #111; margin-bottom: 6px; }
-    .rpt-header .rpt-meta { font-size: 13px; color: #aaa; }
+    .rpt-header h1 { font-size: 40px; font-weight: 900; letter-spacing: -1.5px; color: #111; margin-bottom: 6px; }
+    .rpt-header .rpt-meta { font-size: 14px; color: #aaa; }
     .rpt-src-row { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
-    .rpt-src-chip {
-      display: flex; align-items: center; gap: 6px;
-      padding: 6px 16px; border-radius: 99px;
-      font-size: 12px; font-weight: 700;
-    }
+    .rpt-src-chip { display: flex; align-items: center; gap: 6px; padding: 6px 16px; border-radius: 99px; font-size: 13px; font-weight: 700; }
     .rpt-src-chip.news-chip   { background: #cfe8ff; color: #0a4a8a; }
     .rpt-src-chip.reddit-chip { background: #ffd6cc; color: #8b2500; }
     .rpt-src-chip.hn-chip     { background: #fff0c2; color: #7a4500; }
+    .rpt-src-chip.medium-chip { background: #e8f5e9; color: #1a5c2a; }
+    .rpt-src-chip.yt-chip     { background: #fce4ec; color: #880e4f; }
 
-    .rpt-body { max-width: 1120px; margin: 0 auto; padding: 36px 24px; }
+    .rpt-body { max-width: 1180px; margin: 0 auto; padding: 36px 24px; }
 
-    /* KPIs */
     .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 36px; }
-    .kpi {
-      background: #fff; border-radius: 16px; padding: 22px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-      border-top: 4px solid;
-    }
+    .kpi { background: #fff; border-radius: 16px; padding: 22px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); border-top: 4px solid; }
     .kpi .kl { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #aaa; margin-bottom: 10px; }
     .kpi .kv { font-size: 28px; font-weight: 900; line-height: 1; margin-bottom: 4px; letter-spacing: -1px; }
-    .kpi .ks { font-size: 11px; color: #aaa; font-weight: 500; }
+    .kpi .ks { font-size: 12px; color: #aaa; font-weight: 500; }
     .kpi.yellow { border-color: #111; }    .kpi.yellow .kv { color: #111; }
     .kpi.red    { border-color: #ef4444; } .kpi.red    .kv { color: #dc2626; }
     .kpi.orange { border-color: #f97316; } .kpi.orange .kv { color: #ea580c; }
     .kpi.green  { border-color: #22c55e; } .kpi.green  .kv { color: #16a34a; }
     .kpi.violet { border-color: #111; }    .kpi.violet .kv { color: #111; }
 
-    .sec { font-size: 11px; font-weight: 700; color: #aaa; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid #ebebeb; }
+    .sec { font-size: 12px; font-weight: 700; color: #aaa; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 18px; padding-bottom: 10px; border-bottom: 2px solid #ebebeb; }
 
-    /* TL;DR — warm yellow, like Varsity's highlight style */
-    .tldr {
-      background: #fff8e6; border: 1.5px solid #f5d77a;
-      border-radius: 18px; padding: 32px;
-      margin-bottom: 36px;
-    }
-    .tldr-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #7a4500; margin-bottom: 10px; }
-    .tldr-heading { font-size: 24px; font-weight: 900; color: #111; margin-bottom: 22px; letter-spacing: -0.8px; }
-    .tldr-list { display: flex; flex-direction: column; gap: 16px; }
-    .tldr-item { display: flex; gap: 14px; font-size: 15px; line-height: 1.7; color: #333; }
-    .tldr-dot { width: 8px; height: 8px; background: #111; border-radius: 50%; flex-shrink: 0; margin-top: 8px; }
-    .tldr-src { color: #bbb; font-size: 11px; }
+    /* TL;DR — warm yellow */
+    .tldr { background: #fff8e6; border: 1.5px solid #f5d77a; border-radius: 18px; padding: 34px; margin-bottom: 36px; }
+    .tldr-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #7a4500; margin-bottom: 10px; }
+    .tldr-heading { font-size: 26px; font-weight: 900; color: #111; margin-bottom: 24px; letter-spacing: -0.8px; }
+    .tldr-list { display: flex; flex-direction: column; gap: 18px; }
+    .tldr-item { display: flex; gap: 16px; font-size: 16px; line-height: 1.85; color: #333; word-spacing: 0.03em; }
+    .tldr-dot { width: 9px; height: 9px; background: #111; border-radius: 50%; flex-shrink: 0; margin-top: 8px; }
+    .tldr-src { color: #bbb; font-size: 12px; }
 
-    /* News */
-    .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; margin-bottom: 36px; }
+    /* News cards */
+    .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-bottom: 36px; }
     .news-card {
-      background: #fff; border-radius: 16px; padding: 22px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-      border-top: 4px solid #cfe8ff;
+      background: #fff; border-radius: 16px; padding: 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05); border-top: 4px solid #cfe8ff;
       display: flex; flex-direction: column; gap: 10px;
       transition: box-shadow 0.2s, transform 0.2s; text-decoration: none; color: inherit;
     }
@@ -188,41 +155,70 @@
     .nc-meta  { display: flex; align-items: center; gap: 8px; }
     .nc-fav   { width: 16px; height: 16px; border-radius: 4px; }
     .nc-src   { font-size: 11px; font-weight: 700; color: #0a4a8a; text-transform: uppercase; letter-spacing: 0.4px; }
-    .nc-date  { font-size: 11px; color: #bbb; margin-left: auto; }
-    .nc-title { font-size: 15px; font-weight: 700; color: #111; line-height: 1.4; }
-    .nc-desc  { font-size: 13px; color: #666; line-height: 1.65; flex: 1; }
-    .nc-cta   { font-size: 12px; font-weight: 700; color: #0a4a8a; }
+    .nc-date  { font-size: 12px; color: #bbb; margin-left: auto; }
+    .nc-title { font-size: 16px; font-weight: 700; color: #111; line-height: 1.45; }
+    .nc-desc  { font-size: 14px; color: #666; line-height: 1.85; flex: 1; word-spacing: 0.02em; }
+    .nc-cta   { font-size: 13px; font-weight: 700; color: #0a4a8a; }
+
+    /* Medium cards */
+    .medium-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-bottom: 36px; }
+    .medium-card {
+      background: #fff; border-radius: 16px; padding: 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05); border-top: 4px solid #e8f5e9;
+      display: flex; flex-direction: column; gap: 10px;
+      transition: box-shadow 0.2s, transform 0.2s; text-decoration: none; color: inherit;
+    }
+    .medium-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.1); transform: translateY(-2px); }
+    .mc-src  { font-size: 11px; font-weight: 700; color: #1a5c2a; text-transform: uppercase; letter-spacing: 0.4px; }
+    .mc-date { font-size: 12px; color: #bbb; margin-left: auto; }
+    .mc-title { font-size: 16px; font-weight: 700; color: #111; line-height: 1.45; }
+    .mc-author { font-size: 13px; color: #666; font-weight: 500; }
+    .mc-cta   { font-size: 13px; font-weight: 700; color: #1a5c2a; }
+
+    /* YouTube cards */
+    .yt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-bottom: 36px; }
+    .yt-card {
+      background: #fff; border-radius: 16px; overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05); border-top: 4px solid #fce4ec;
+      text-decoration: none; color: inherit;
+      display: flex; flex-direction: column;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .yt-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.1); transform: translateY(-2px); }
+    .yt-thumb { width: 100%; aspect-ratio: 16/9; object-fit: cover; background: #f0f0f0; }
+    .yt-info { padding: 16px 20px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+    .yt-title { font-size: 15px; font-weight: 700; color: #111; line-height: 1.45; }
+    .yt-meta  { font-size: 12px; color: #880e4f; font-weight: 600; }
+    .yt-cta   { font-size: 13px; font-weight: 700; color: #880e4f; margin-top: auto; padding-top: 8px; }
 
     /* Panels */
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 36px; }
-    .panel { background: #fff; border-radius: 16px; padding: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
-    .panel-head { display: flex; align-items: center; gap: 8px; margin-bottom: 18px; }
-    .panel-head h3 { font-size: 17px; font-weight: 800; color: #111; }
-    .panel-head .pc { margin-left: auto; font-size: 12px; color: #999; background: #f5f5f5; padding: 3px 12px; border-radius: 99px; font-weight: 600; }
-
-    .sent-bars { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
-    .sent-row { display: flex; align-items: center; gap: 8px; font-size: 13px; }
-    .sent-lbl { width: 60px; color: #555; font-weight: 600; }
+    .panel { background: #fff; border-radius: 16px; padding: 26px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+    .panel-head { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; }
+    .panel-head h3 { font-size: 18px; font-weight: 800; color: #111; }
+    .panel-head .pc { margin-left: auto; font-size: 13px; color: #999; background: #f5f5f5; padding: 4px 14px; border-radius: 99px; font-weight: 600; }
+    .sent-bars { display: flex; flex-direction: column; gap: 9px; margin-bottom: 20px; }
+    .sent-row { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+    .sent-lbl { width: 64px; color: #555; font-weight: 600; }
     .sent-track { flex: 1; height: 8px; background: #f0f0f0; border-radius: 99px; overflow: hidden; }
     .sent-fill  { height: 100%; border-radius: 99px; transition: width 0.8s ease; }
-    .sent-n { width: 28px; text-align: right; font-size: 12px; font-weight: 700; color: #aaa; }
-
+    .sent-n { width: 28px; text-align: right; font-size: 13px; font-weight: 700; color: #aaa; }
     .post-list { display: flex; flex-direction: column; gap: 10px; }
-    .post-item { padding: 12px 16px; background: #fafafa; border-radius: 12px; border-left: 4px solid; display: flex; flex-direction: column; gap: 5px; }
-    .pi-meta  { font-size: 11px; color: #aaa; display: flex; gap: 8px; flex-wrap: wrap; font-weight: 500; }
+    .post-item { padding: 14px 16px; background: #fafafa; border-radius: 12px; border-left: 4px solid; display: flex; flex-direction: column; gap: 6px; }
+    .pi-meta  { font-size: 12px; color: #aaa; display: flex; gap: 8px; flex-wrap: wrap; font-weight: 500; }
     .pi-score { font-weight: 700; color: #ea580c; }
-    .pi-title { font-size: 13px; font-weight: 600; color: #111; line-height: 1.4; }
+    .pi-title { font-size: 14px; font-weight: 600; color: #111; line-height: 1.5; }
     .pi-title a { color: inherit; text-decoration: none; }
     .pi-title a:hover { color: #333; text-decoration: underline; }
 
     /* Chart */
-    .chart-card { background: #fff; border-radius: 16px; padding: 26px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); margin-bottom: 36px; }
-    .chart-card h3 { font-size: 11px; font-weight: 700; color: #aaa; margin-bottom: 18px; text-transform: uppercase; letter-spacing: 1px; }
+    .chart-card { background: #fff; border-radius: 16px; padding: 28px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); margin-bottom: 36px; }
+    .chart-card h3 { font-size: 12px; font-weight: 700; color: #aaa; margin-bottom: 18px; text-transform: uppercase; letter-spacing: 1px; }
     .chart-card canvas { max-height: 220px; }
 
-    .no-data { padding: 32px; text-align: center; color: #aaa; font-size: 14px; background: #fafafa; border-radius: 12px; border: 2px dashed #ebebeb; font-weight: 500; }
+    .no-data { padding: 32px; text-align: center; color: #aaa; font-size: 15px; background: #fafafa; border-radius: 12px; border: 2px dashed #ebebeb; font-weight: 500; line-height: 1.6; }
 
-    .rpt-footer { text-align: center; padding: 28px; font-size: 13px; color: #aaa; border-top: 1px solid #ebebeb; font-weight: 500; background: #fff; }
+    .rpt-footer { text-align: center; padding: 28px; font-size: 14px; color: #aaa; border-top: 1px solid #ebebeb; background: #fff; line-height: 1.6; }
     .rpt-footer a { color: #111; text-decoration: none; cursor: pointer; font-weight: 700; border-bottom: 2px solid #111; }
 
     @media (max-width: 768px) {
@@ -230,14 +226,14 @@
       .src-blocks { justify-content: center; }
       .chips { justify-content: center; }
       .duh-wordmark { font-size: 72px; letter-spacing: -4px; }
-      .duh-tagline-big { font-size: 26px; }
-      .two-col   { grid-template-columns: 1fr; }
-      .news-grid { grid-template-columns: 1fr; }
+      .duh-tagline-big { font-size: 28px; }
+      .two-col { grid-template-columns: 1fr; }
+      .news-grid, .medium-grid, .yt-grid { grid-template-columns: 1fr; }
       .rpt-header { padding: 24px 16px; }
       .rpt-header h1 { font-size: 28px; }
-      .rpt-body   { padding: 18px 14px; }
+      .rpt-body { padding: 18px 14px; }
       .kpi-row { grid-template-columns: 1fr 1fr; }
-      .load-steps, .prog-track { width: 100%; max-width: 340px; }
+      .load-steps, .prog-track { width: 100%; max-width: 360px; }
     }
   </style>
 </head>
@@ -245,26 +241,24 @@
 
 <!-- ════════ LANDING ════════ -->
 <div id="landing">
-  <div style="max-width:700px;width:100%">
+  <div style="max-width:720px;width:100%">
     <div class="duh-wordmark">duh.</div>
     <div class="duh-tagline-big">Free and instant<br>topic intelligence</div>
     <p class="tagline">
-      Type any topic and get a sharp brief from <a>News</a>, <a>Reddit</a> and <a>Hacker News</a> — summarised by AI in seconds. No signup, no paywall, no ads.
+      Type any topic and get a sharp brief from <a>News</a>, <a>Reddit</a>, <a>Hacker News</a>, <a>Medium</a> and <a>YouTube</a> — summarised by AI in seconds. No signup, no paywall, no ads.
     </p>
-
     <div class="search-wrap">
       <input id="topicInput" type="text" placeholder="e.g. West Hyderabad real estate rents…" autocomplete="off" />
       <button onclick="generate()">Brief Me →</button>
     </div>
-
-    <div class="src-section-label">Explore by source</div>
+    <div class="src-section-label">Sources we search</div>
     <div class="src-blocks">
       <div class="src-block news"><span class="src-icon">📰</span> Google News</div>
       <div class="src-block reddit"><span class="src-icon">🔴</span> Reddit</div>
       <div class="src-block hn"><span class="src-icon">🟠</span> Hacker News</div>
-      <div class="src-block ai"><span class="src-icon">✨</span> AI Summary</div>
+      <div class="src-block medium"><span class="src-icon">📝</span> Medium</div>
+      <div class="src-block youtube"><span class="src-icon">▶️</span> YouTube</div>
     </div>
-
     <div class="chips-label">Try a topic</div>
     <div class="chips">
       <button class="chip" onclick="qs('West Hyderabad real estate rents')">West Hyd Rents</button>
@@ -283,9 +277,9 @@
   <div class="load-mark">duh.</div>
   <div class="load-topic" id="loadTopic"></div>
   <div class="load-steps">
-    <div class="load-step" id="step0"><span class="step-icon">📰</span> Fetching news articles…</div>
+    <div class="load-step" id="step0"><span class="step-icon">📰</span> Fetching news &amp; Medium articles…</div>
     <div class="load-step" id="step1"><span class="step-icon">🔴</span> Scanning Reddit discussions…</div>
-    <div class="load-step" id="step2"><span class="step-icon">🟠</span> Checking Hacker News…</div>
+    <div class="load-step" id="step2"><span class="step-icon">▶️</span> Checking Hacker News &amp; YouTube…</div>
     <div class="load-step" id="step3"><span class="step-icon">✨</span> Generating AI summary…</div>
   </div>
   <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
@@ -348,6 +342,20 @@ async function fetchNews(topic) {
   } catch(e){console.warn('News:',e);return [];}
 }
 
+async function fetchMedium(topic) {
+  try {
+    const res=await fetch(`/api/medium?q=${encodeURIComponent(topic)}`);
+    const xml=new DOMParser().parseFromString(await res.text(),'application/xml');
+    return Array.from(xml.querySelectorAll('item')).slice(0,4).map(item=>{
+      const title=item.querySelector('title')?.textContent?.replace(/<!\[CDATA\[|\]\]>/g,'').trim()||'';
+      const link=item.querySelector('link')?.textContent||item.querySelector('guid')?.textContent||'';
+      const pubDate=item.querySelector('pubDate')?.textContent||'';
+      const creator=item.getElementsByTagNameNS('*','creator')[0]?.textContent||item.querySelector('author')?.textContent||'Medium';
+      return {title,link,pubDate,author:creator};
+    }).filter(m=>m.title&&m.link);
+  } catch(e){console.warn('Medium:',e);return [];}
+}
+
 async function fetchReddit(topic) {
   try {
     const res=await fetch(`/api/reddit?q=${encodeURIComponent(topic)}`);
@@ -363,11 +371,20 @@ async function fetchHN(topic) {
   } catch(e){console.warn('HN:',e);return [];}
 }
 
-async function fetchSummary(topic,news,reddit,hn) {
+async function fetchYoutube(topic) {
   try {
+    const res=await fetch(`/api/youtube?q=${encodeURIComponent(topic)}`);
+    const data=await res.json();
+    return data.items||[];
+  } catch(e){console.warn('YouTube:',e);return [];}
+}
+
+async function fetchSummary(topic,news,reddit,hn,medium) {
+  try {
+    const allNews=[...news,...medium.map(m=>({title:m.title,srcName:'Medium',desc:''}))];
     const res=await fetch('/api/summarize',{
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({topic,news,reddit,hn})
+      body:JSON.stringify({topic,news:allNews,reddit,hn})
     });
     const data=await res.json();
     return data.summary||null;
@@ -398,12 +415,12 @@ function extractSummary(news,reddit,hn){
 
 function destroyCharts(){Object.values(charts).forEach(c=>c.destroy());charts={};}
 
-function renderReport(topic,news,reddit,hn,aiSummary){
+function renderReport(topic,news,reddit,hn,aiSummary,medium,youtube){
   const rSents=reddit.map(p=>classify(sentScore(p.title+' '+p.selftext)));
   const rPos=rSents.filter(s=>s==='positive').length,rNeg=rSents.filter(s=>s==='negative').length,rNeu=reddit.length-rPos-rNeg;
   const hSents=hn.map(h=>classify(sentScore(h.title)));
   const hPos=hSents.filter(s=>s==='positive').length,hNeg=hSents.filter(s=>s==='negative').length,hNeu=hn.length-hPos-hNeg;
-  const allTexts=[...news.map(n=>n.title+' '+n.desc),...reddit.map(p=>p.title),...hn.map(h=>h.title||'')];
+  const allTexts=[...news.map(n=>n.title+' '+n.desc),...reddit.map(p=>p.title),...hn.map(h=>h.title||''),...medium.map(m=>m.title)];
   const overallLabel=classify(sentScore(allTexts.join(' ')));
   const sentEmoji={positive:'🟢',negative:'🔴',neutral:'🟡'}[overallLabel];
   const sentKpi={positive:'green',negative:'red',neutral:'orange'}[overallLabel];
@@ -412,6 +429,7 @@ function renderReport(topic,news,reddit,hn,aiSummary){
   const topH=[...hn].sort((a,b)=>(b.points||0)-(a.points||0)).slice(0,4);
   const now=new Date().toLocaleString('en-IN',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
   const totalEng=reddit.reduce((s,p)=>s+p.score,0);
+  const totalSrc=news.length+reddit.length+hn.length+medium.length+youtube.length;
 
   $('report').innerHTML=`
     <div class="rpt-header">
@@ -420,18 +438,20 @@ function renderReport(topic,news,reddit,hn,aiSummary){
       <h1>${esc(topic)}</h1>
       <div class="rpt-meta">Generated ${now}</div>
       <div class="rpt-src-row">
-        <div class="rpt-src-chip news-chip">📰 Google News <strong>${news.length}</strong></div>
+        <div class="rpt-src-chip news-chip">📰 News <strong>${news.length}</strong></div>
         <div class="rpt-src-chip reddit-chip">🔴 Reddit <strong>${reddit.length}</strong></div>
-        <div class="rpt-src-chip hn-chip">🟠 Hacker News <strong>${hn.length}</strong></div>
+        <div class="rpt-src-chip hn-chip">🟠 HN <strong>${hn.length}</strong></div>
+        <div class="rpt-src-chip medium-chip">📝 Medium <strong>${medium.length}</strong></div>
+        ${youtube.length?`<div class="rpt-src-chip yt-chip">▶️ YouTube <strong>${youtube.length}</strong></div>`:''}
       </div>
     </div>
     <div class="rpt-body">
       <div class="kpi-row">
-        <div class="kpi yellow"><div class="kl">Sources</div><div class="kv">${news.length+reddit.length+hn.length}</div><div class="ks">Items analysed</div></div>
-        <div class="kpi ${sentKpi}"><div class="kl">Sentiment</div><div class="kv" style="font-size:17px">${sentEmoji} ${overallLabel.charAt(0).toUpperCase()+overallLabel.slice(1)}</div><div class="ks">Overall tone</div></div>
+        <div class="kpi yellow"><div class="kl">Sources</div><div class="kv">${totalSrc}</div><div class="ks">Items analysed</div></div>
+        <div class="kpi ${sentKpi}"><div class="kl">Sentiment</div><div class="kv" style="font-size:18px">${sentEmoji} ${overallLabel.charAt(0).toUpperCase()+overallLabel.slice(1)}</div><div class="ks">Overall tone</div></div>
         <div class="kpi red"><div class="kl">Reddit Votes</div><div class="kv">${totalEng>=1000?(totalEng/1000).toFixed(1)+'K':totalEng}</div><div class="ks">Total upvotes</div></div>
         <div class="kpi orange"><div class="kl">HN Points</div><div class="kv">${hn.reduce((s,h)=>s+(h.points||0),0)}</div><div class="ks">Total upvotes</div></div>
-        <div class="kpi violet"><div class="kl">Top Keyword</div><div class="kv" style="font-size:16px">${kws[0]?kws[0][0]:'—'}</div><div class="ks">${kws[0]?kws[0][1]+' mentions':''}</div></div>
+        <div class="kpi violet"><div class="kl">Top Keyword</div><div class="kv" style="font-size:17px">${kws[0]?kws[0][0]:'—'}</div><div class="ks">${kws[0]?kws[0][1]+' mentions':''}</div></div>
       </div>
 
       <div class="tldr">
@@ -440,10 +460,7 @@ function renderReport(topic,news,reddit,hn,aiSummary){
         <div class="tldr-list">
           ${aiSummary
             ? aiSummary.split('\n').filter(l=>l.trim()).map(line=>`
-                <div class="tldr-item">
-                  <div class="tldr-dot"></div>
-                  <div>${esc(line.trim())}</div>
-                </div>`).join('')
+                <div class="tldr-item"><div class="tldr-dot"></div><div>${esc(line.trim())}</div></div>`).join('')
             : summary.length
               ? summary.map(s=>`<div class="tldr-item"><div class="tldr-dot"></div><div>${esc(s.text)} <span class="tldr-src">— ${esc(s.src)}</span></div></div>`).join('')
               : '<div class="tldr-item"><div class="tldr-dot"></div><div>Not enough content to summarise. Try a broader search.</div></div>'
@@ -466,6 +483,41 @@ function renderReport(topic,news,reddit,hn,aiSummary){
             <div class="nc-cta">Read article →</div>
           </a>`).join('')}
       </div>`:'<div class="no-data" style="margin-bottom:36px">No news articles found for this topic.</div>'}
+
+      ${medium.length?`
+      <div class="sec">📝 On Medium</div>
+      <div class="medium-grid">
+        ${medium.map(m=>`
+          <a class="medium-card" href="${esc(m.link)}" target="_blank" rel="noopener noreferrer">
+            <div class="nc-meta">
+              <span class="mc-src">Medium</span>
+              <span class="mc-date">${relDate(m.pubDate)}</span>
+            </div>
+            <div class="mc-title">${esc(m.title)}</div>
+            <div class="mc-author">by ${esc(m.author)}</div>
+            <div class="mc-cta">Read on Medium →</div>
+          </a>`).join('')}
+      </div>`:''}
+
+      ${youtube.length?`
+      <div class="sec">▶️ On YouTube</div>
+      <div class="yt-grid">
+        ${youtube.map(v=>{
+          const vid=v.id?.videoId||'';
+          const s=v.snippet||{};
+          const thumb=s.thumbnails?.medium?.url||s.thumbnails?.default?.url||'';
+          const url=vid?`https://www.youtube.com/watch?v=${vid}`:'#';
+          return `
+          <a class="yt-card" href="${esc(url)}" target="_blank" rel="noopener noreferrer">
+            ${thumb?`<img class="yt-thumb" src="${esc(thumb)}" alt="" loading="lazy" />`:'<div class="yt-thumb"></div>'}
+            <div class="yt-info">
+              <div class="yt-title">${esc(s.title||'')}</div>
+              <div class="yt-meta">${esc(s.channelTitle||'')}</div>
+              <div class="yt-cta">Watch on YouTube →</div>
+            </div>
+          </a>`;
+        }).join('')}
+      </div>`:''}
 
       <div class="two-col">
         <div class="panel">
@@ -508,7 +560,7 @@ function renderReport(topic,news,reddit,hn,aiSummary){
       </div>`:''}
     </div>
     <div class="rpt-footer">
-      <strong>duh.</strong> · Data from Google News, Reddit &amp; Hacker News · ${now} · <a onclick="goBack()">Search another topic</a>
+      <strong>duh.</strong> · News · Reddit · Hacker News · Medium · YouTube · ${now} · <a onclick="goBack()">Search another topic</a>
     </div>
   `;
 
@@ -540,17 +592,25 @@ async function generate(){
   hide('landing');show('loading');
   $('loadTopic').textContent=`"${topic}"`;
   setStep(0);
-  const newsP=fetchNews(topic),redditP=fetchReddit(topic),hnP=fetchHN(topic);
-  await new Promise(r=>setTimeout(r,700));setStep(1);
-  const news=await newsP;
-  await new Promise(r=>setTimeout(r,600));setStep(2);
+
+  // Start all fetches in parallel immediately
+  const newsP=fetchNews(topic);
+  const mediumP=fetchMedium(topic);
+  const redditP=fetchReddit(topic);
+  const hnP=fetchHN(topic);
+  const youtubeP=fetchYoutube(topic);
+
+  const [news,medium]=await Promise.all([newsP,mediumP]);
+  setStep(1);
   const reddit=await redditP;
-  await new Promise(r=>setTimeout(r,500));setStep(3);
-  const hn=await hnP;
-  const aiSummary=await fetchSummary(topic,news,reddit,hn);
+  setStep(2);
+  const [hn,youtube]=await Promise.all([hnP,youtubeP]);
+  setStep(3);
+  const aiSummary=await fetchSummary(topic,news,reddit,hn,medium);
+
   $('progFill').style.width='100%';
-  await new Promise(r=>setTimeout(r,350));
-  renderReport(topic,news,reddit,hn,aiSummary);
+  await new Promise(r=>setTimeout(r,300));
+  renderReport(topic,news,reddit,hn,aiSummary,medium,youtube);
 }
 
 function goBack(){destroyCharts();hide('report');hide('loading');show('landing');}
