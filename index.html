@@ -1,708 +1,559 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Duh — Know What's Happening</title>
-  <meta name="description" content="Type any topic. Get an instant intelligence brief from News, Reddit, Hacker News, Medium and YouTube." />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="DUH ‚Äî India's news in plain English. Simple, clear, no jargon."/>
+  <title>DUH ‚Äî India's Simplest News</title>
   <style>
-    /* ════ THEME VARIABLES ════ */
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --bg:           #ffffff;
-      --bg-off:       #f7f7f7;
-      --bg-card:      #ffffff;
-      --bg-input:     #ffffff;
-      --bg-chip:      #f5f5f5;
-      --bg-post:      #fafafa;
-      --text:         #111111;
-      --text-mid:     #555555;
-      --text-muted:   #999999;
-      --text-faint:   #bbbbbb;
-      --border:       #e0e0e0;
-      --border-light: #ebebeb;
-      --btn-bg:       #111111;
-      --btn-text:     #ffffff;
-      --shadow:       rgba(0,0,0,0.06);
-      --shadow-hover: rgba(0,0,0,0.12);
-      --tldr-bg:      #fff8e6;
-      --tldr-border:  #f5d77a;
-      --tldr-text:    #333333;
-      --tldr-eyebrow: #7a4500;
-      --tldr-dot:     #111111;
-      --src-news-bg:  #cfe8ff; --src-news-txt:  #0a4a8a;
-      --src-red-bg:   #ffd6cc; --src-red-txt:   #8b2500;
-      --src-hn-bg:    #fff0c2; --src-hn-txt:    #7a4500;
-      --src-med-bg:   #e8f5e9; --src-med-txt:   #1a5c2a;
-      --src-yt-bg:    #fce4ec; --src-yt-txt:    #880e4f;
-      --chip-hover-bg:#111111; --chip-hover-txt:#ffffff;
-      --nc-src-color: #0a4a8a;
-      --mc-src-color: #1a5c2a;
-      --yt-src-color: #880e4f;
-      --step-active-bg: #fff0c2; --step-active-border: #f5d77a; --step-active-txt: #7a4500;
-      --prog-color:   #111111;
+      --navy: #1a2744;
+      --navy-light: #2d4070;
+      --accent: #8b1a1a;
+      --text: #1a1a1a;
+      --muted: #666;
+      --light: #f5f3ef;
+      --border: #d4cfc7;
+      --white: #ffffff;
     }
 
-    [data-theme="dark"] {
-      --bg:           #0f0f0f;
-      --bg-off:       #141414;
-      --bg-card:      #1c1c1c;
-      --bg-input:     #1c1c1c;
-      --bg-chip:      #1c1c1c;
-      --bg-post:      #141414;
-      --text:         #f0f0f0;
-      --text-mid:     #aaaaaa;
-      --text-muted:   #777777;
-      --text-faint:   #444444;
-      --border:       #2a2a2a;
-      --border-light: #222222;
-      --btn-bg:       #f0f0f0;
-      --btn-text:     #111111;
-      --shadow:       rgba(0,0,0,0.3);
-      --shadow-hover: rgba(0,0,0,0.5);
-      --tldr-bg:      #1c1500;
-      --tldr-border:  #3d2e00;
-      --tldr-text:    #e8d5a0;
-      --tldr-eyebrow: #f5c842;
-      --tldr-dot:     #f5c842;
-      --src-news-bg:  #0d2544; --src-news-txt:  #7eb8f7;
-      --src-red-bg:   #2d1008; --src-red-txt:   #f7a08e;
-      --src-hn-bg:    #2a1d00; --src-hn-txt:    #f7d07e;
-      --src-med-bg:   #0d2510; --src-med-txt:   #7ef7a0;
-      --src-yt-bg:    #2d0814; --src-yt-txt:    #f77ea0;
-      --chip-hover-bg:#f0f0f0; --chip-hover-txt:#111111;
-      --nc-src-color: #7eb8f7;
-      --mc-src-color: #7ef7a0;
-      --yt-src-color: #f77ea0;
-      --step-active-bg: #1c1500; --step-active-border: #3d2e00; --step-active-txt: #f5c842;
-      --prog-color:   #f0f0f0;
-    }
-
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: 'Outfit', system-ui, sans-serif;
-      background: var(--bg); color: var(--text);
-      min-height: 100vh; font-size: 16px; line-height: 1.6;
-      transition: background 0.25s, color 0.25s;
+      background: var(--white);
+      color: var(--text);
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 16px;
+      line-height: 1.6;
     }
 
-    /* ════ THEME TOGGLE ════ */
-    .theme-toggle {
-      position: fixed; top: 20px; right: 20px; z-index: 9999;
-      background: var(--bg-card); border: 1.5px solid var(--border);
-      border-radius: 99px; padding: 9px 18px;
-      font-size: 14px; font-weight: 600; cursor: pointer;
-      color: var(--text); font-family: 'Outfit', sans-serif;
-      box-shadow: 0 2px 12px var(--shadow);
-      transition: all 0.2s; display: flex; align-items: center; gap: 7px;
+    a { color: inherit; text-decoration: none; }
+    a:hover { color: var(--accent); }
+
+    /* ‚îÄ‚îÄ TOP BAR ‚îÄ‚îÄ */
+    .topbar {
+      background: var(--navy);
+      color: rgba(255,255,255,0.7);
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      padding: 7px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .theme-toggle:hover { box-shadow: 0 4px 20px var(--shadow-hover); transform: translateY(-1px); }
+    .topbar a { color: rgba(255,255,255,0.7); }
+    .topbar a:hover { color: white; }
+    .topbar-links { display: flex; gap: 20px; }
 
-    /* ════ LANDING ════ */
-    #landing {
-      min-height: 100vh; background: var(--bg);
-      display: flex; flex-direction: column;
-      align-items: flex-start; justify-content: center;
-      padding: 80px 10%; transition: background 0.25s;
+    /* ‚îÄ‚îÄ MASTHEAD ‚îÄ‚îÄ */
+    .masthead {
+      text-align: center;
+      padding: 40px 40px 24px;
+      border-bottom: 3px double var(--navy);
     }
-    .duh-wordmark { font-size: 100px; font-weight: 900; color: var(--text); letter-spacing: -5px; line-height: 0.95; margin-bottom: 16px; }
-    .duh-tagline-big { font-size: 38px; font-weight: 700; color: var(--text-mid); letter-spacing: -1px; line-height: 1.2; margin-bottom: 20px; }
-    .tagline { font-size: 19px; font-weight: 400; color: var(--text-muted); line-height: 1.85; margin-bottom: 48px; max-width: 560px; word-spacing: 0.03em; }
-    .tagline a { color: var(--text); font-weight: 600; text-decoration: none; border-bottom: 2px solid var(--text); }
-
-    .search-wrap {
-      width: 100%; max-width: 600px; display: flex;
-      background: var(--bg-input); border: 2px solid var(--border); border-radius: 14px;
-      overflow: hidden; margin-bottom: 48px;
-      box-shadow: 0 2px 12px var(--shadow);
-      transition: border-color 0.2s, box-shadow 0.2s, background 0.25s;
+    .masthead-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      color: var(--muted);
     }
-    .search-wrap:focus-within { border-color: var(--text); box-shadow: 0 2px 16px var(--shadow-hover); }
-    .search-wrap input {
-      flex: 1; padding: 20px 24px; font-size: 17px; border: none; outline: none;
-      color: var(--text); background: transparent; font-family: 'Outfit', sans-serif;
-      transition: color 0.25s;
+    .logo {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 80px;
+      font-weight: 900;
+      color: var(--navy);
+      letter-spacing: 8px;
+      text-transform: uppercase;
+      line-height: 1;
     }
-    .search-wrap input::placeholder { color: var(--text-faint); }
-    .search-wrap button {
-      padding: 20px 30px; background: var(--btn-bg); color: var(--btn-text);
-      font-size: 16px; font-weight: 700; border: none; cursor: pointer;
-      transition: opacity 0.18s; white-space: nowrap; font-family: 'Outfit', sans-serif;
+    .tagline {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-style: italic;
+      font-size: 15px;
+      color: var(--muted);
+      margin-top: 8px;
+      letter-spacing: 1px;
     }
-    .search-wrap button:hover { opacity: 0.85; }
-
-    .src-section-label { font-size: 13px; font-weight: 600; color: var(--text-faint); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 1px; }
-    .src-blocks { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 52px; }
-    .src-block { display: flex; align-items: center; gap: 10px; padding: 16px 24px; border-radius: 16px; font-size: 15px; font-weight: 700; min-width: 150px; transition: background 0.25s, color 0.25s; }
-    .src-block .src-icon { font-size: 22px; }
-    .src-block.news    { background: var(--src-news-bg); color: var(--src-news-txt); }
-    .src-block.reddit  { background: var(--src-red-bg);  color: var(--src-red-txt); }
-    .src-block.hn      { background: var(--src-hn-bg);   color: var(--src-hn-txt); }
-    .src-block.medium  { background: var(--src-med-bg);  color: var(--src-med-txt); }
-    .src-block.youtube { background: var(--src-yt-bg);   color: var(--src-yt-txt); }
-
-    .chips-label { font-size: 12px; color: var(--text-faint); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
-    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-    .chip {
-      background: var(--bg-chip); border: 1.5px solid var(--border); color: var(--text-mid);
-      padding: 9px 20px; border-radius: 99px; font-size: 14px; cursor: pointer;
-      transition: all 0.18s; font-family: 'Outfit', sans-serif; font-weight: 500;
+    .masthead-rule {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 16px 0 0;
     }
-    .chip:hover { background: var(--chip-hover-bg); color: var(--chip-hover-txt); border-color: var(--chip-hover-bg); }
 
-    /* ════ LOADING ════ */
-    #loading {
-      min-height: 100vh; background: var(--bg);
-      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px;
-      transition: background 0.25s;
+    /* ‚îÄ‚îÄ NAV ‚îÄ‚îÄ */
+    nav {
+      border-bottom: 1px solid var(--border);
+      background: var(--white);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
-    .load-mark { font-size: 56px; font-weight: 900; color: var(--text); letter-spacing: -3px; }
-    .load-topic { color: var(--text-muted); font-size: 16px; max-width: 400px; text-align: center; line-height: 1.6; }
-    .load-steps { display: flex; flex-direction: column; gap: 9px; width: 380px; }
-    .load-step {
-      display: flex; align-items: center; gap: 12px;
-      padding: 14px 18px; border-radius: 12px;
-      background: var(--bg-card); border: 1.5px solid var(--border);
-      color: var(--text-faint); font-size: 14px; font-weight: 500; transition: all 0.3s; line-height: 1.4;
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding: 0 40px;
     }
-    .load-step.active { background: var(--step-active-bg); border-color: var(--step-active-border); color: var(--step-active-txt); }
-    .load-step.done   { background: rgba(34,197,94,0.08); border-color: rgba(34,197,94,0.3); color: #16a34a; }
-    .step-icon { font-size: 20px; }
-    .prog-track { width: 380px; height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; }
-    .prog-fill  { height: 100%; background: var(--prog-color); border-radius: 99px; transition: width 0.5s ease; width: 0%; }
-
-    /* ════ REPORT ════ */
-    #report { background: var(--bg-off); min-height: 100vh; transition: background 0.25s; }
-
-    .rpt-header { background: var(--bg-card); border-bottom: 1px solid var(--border-light); padding: 32px 10%; transition: background 0.25s, border-color 0.25s; }
-    .rpt-back {
-      background: var(--bg-chip); border: none; color: var(--text-mid);
-      padding: 9px 20px; border-radius: 8px; cursor: pointer;
-      font-size: 14px; font-weight: 600; margin-bottom: 20px;
-      display: inline-flex; align-items: center; gap: 6px;
-      transition: all 0.18s; font-family: 'Outfit', sans-serif;
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav-item {
+      padding: 12px 18px;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--navy);
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
     }
-    .rpt-back:hover { background: var(--btn-bg); color: var(--btn-text); }
-    .rpt-pill { display: inline-block; background: var(--bg-chip); color: var(--text-muted); padding: 4px 16px; border-radius: 99px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
-    .rpt-header h1 { font-size: 40px; font-weight: 900; letter-spacing: -1.5px; color: var(--text); margin-bottom: 6px; }
-    .rpt-header .rpt-meta { font-size: 14px; color: var(--text-muted); }
-    .rpt-oneliner { font-size: 20px; font-weight: 600; color: var(--text-mid); margin-top: 14px; line-height: 1.5; font-style: italic; max-width: 780px; }
-    .rpt-src-row { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
-    .rpt-src-chip { display: flex; align-items: center; gap: 6px; padding: 6px 16px; border-radius: 99px; font-size: 13px; font-weight: 700; transition: background 0.25s, color 0.25s; }
-    .rpt-src-chip.news-chip   { background: var(--src-news-bg); color: var(--src-news-txt); }
-    .rpt-src-chip.reddit-chip { background: var(--src-red-bg);  color: var(--src-red-txt); }
-    .rpt-src-chip.hn-chip     { background: var(--src-hn-bg);   color: var(--src-hn-txt); }
-    .rpt-src-chip.medium-chip { background: var(--src-med-bg);  color: var(--src-med-txt); }
-    .rpt-src-chip.yt-chip     { background: var(--src-yt-bg);   color: var(--src-yt-txt); }
-
-    .rpt-body { max-width: 1180px; margin: 0 auto; padding: 36px 24px; }
-
-    .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 36px; }
-    .kpi { background: var(--bg-card); border-radius: 16px; padding: 22px; box-shadow: 0 1px 4px var(--shadow); border-top: 4px solid; transition: background 0.25s; }
-    .kpi .kl { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
-    .kpi .kv { font-size: 28px; font-weight: 900; line-height: 1; margin-bottom: 4px; letter-spacing: -1px; }
-    .kpi .ks { font-size: 12px; color: var(--text-muted); font-weight: 500; }
-    .kpi.yellow { border-color: var(--text); } .kpi.yellow .kv { color: var(--text); }
-    .kpi.red    { border-color: #ef4444; } .kpi.red    .kv { color: #ef4444; }
-    .kpi.orange { border-color: #f97316; } .kpi.orange .kv { color: #f97316; }
-    .kpi.green  { border-color: #22c55e; } .kpi.green  .kv { color: #22c55e; }
-    .kpi.violet { border-color: var(--text); } .kpi.violet .kv { color: var(--text); }
-
-    .sec { font-size: 12px; font-weight: 700; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 18px; padding-bottom: 10px; border-bottom: 2px solid var(--border-light); }
-
-    /* TL;DR */
-    .tldr { background: var(--tldr-bg); border: 1.5px solid var(--tldr-border); border-radius: 18px; padding: 34px; margin-bottom: 36px; transition: background 0.25s, border-color 0.25s; }
-    .tldr-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--tldr-eyebrow); margin-bottom: 10px; }
-    .tldr-heading { font-size: 26px; font-weight: 900; color: var(--text); margin-bottom: 24px; letter-spacing: -0.8px; }
-    .tldr-list { display: flex; flex-direction: column; gap: 18px; }
-    .tldr-item { display: flex; gap: 16px; font-size: 16px; line-height: 1.85; color: var(--tldr-text); word-spacing: 0.03em; }
-    .tldr-dot { width: 9px; height: 9px; background: var(--tldr-dot); border-radius: 50%; flex-shrink: 0; margin-top: 8px; }
-    .tldr-src { color: var(--text-faint); font-size: 12px; }
-
-    /* In One Line */
-    .oneliner {
-      background: var(--bg-card); border-radius: 16px;
-      padding: 28px 32px; margin-bottom: 36px;
-      box-shadow: 0 1px 4px var(--shadow);
-      border-left: 5px solid var(--text);
-      transition: background 0.25s;
+    .nav-item:hover, .nav-item.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
     }
-    .oneliner-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 14px; }
-    .oneliner-text { font-size: 22px; font-weight: 700; color: var(--text); line-height: 1.5; letter-spacing: -0.3px; }
 
-    /* Cards */
-    .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-bottom: 36px; }
-    .news-card {
-      background: var(--bg-card); border-radius: 16px; padding: 24px;
-      box-shadow: 0 1px 4px var(--shadow); border-top: 4px solid var(--src-news-bg);
-      display: flex; flex-direction: column; gap: 10px;
-      transition: box-shadow 0.2s, transform 0.2s, background 0.25s; text-decoration: none; color: inherit;
+    /* ‚îÄ‚îÄ MAIN LAYOUT ‚îÄ‚îÄ */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 40px;
     }
-    .news-card:hover { box-shadow: 0 6px 24px var(--shadow-hover); transform: translateY(-2px); }
-    .nc-meta  { display: flex; align-items: center; gap: 8px; }
-    .nc-fav   { width: 16px; height: 16px; border-radius: 4px; }
-    .nc-src   { font-size: 11px; font-weight: 700; color: var(--nc-src-color); text-transform: uppercase; letter-spacing: 0.4px; }
-    .nc-date  { font-size: 12px; color: var(--text-faint); margin-left: auto; }
-    .nc-title { font-size: 16px; font-weight: 700; color: var(--text); line-height: 1.45; }
-    .nc-desc  { font-size: 14px; color: var(--text-mid); line-height: 1.85; flex: 1; word-spacing: 0.02em; }
-    .nc-cta   { font-size: 13px; font-weight: 700; color: var(--nc-src-color); }
 
-    .medium-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-bottom: 36px; }
-    .medium-card {
-      background: var(--bg-card); border-radius: 16px; padding: 24px;
-      box-shadow: 0 1px 4px var(--shadow); border-top: 4px solid var(--src-med-bg);
-      display: flex; flex-direction: column; gap: 10px;
-      transition: box-shadow 0.2s, transform 0.2s, background 0.25s; text-decoration: none; color: inherit;
+    /* ‚îÄ‚îÄ EDITION BAR ‚îÄ‚îÄ */
+    .edition-bar {
+      text-align: center;
+      padding: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      text-transform: uppercase;
     }
-    .medium-card:hover { box-shadow: 0 6px 24px var(--shadow-hover); transform: translateY(-2px); }
-    .mc-src  { font-size: 11px; font-weight: 700; color: var(--mc-src-color); text-transform: uppercase; letter-spacing: 0.4px; }
-    .mc-date { font-size: 12px; color: var(--text-faint); margin-left: auto; }
-    .mc-title { font-size: 16px; font-weight: 700; color: var(--text); line-height: 1.45; }
-    .mc-author { font-size: 13px; color: var(--text-mid); font-weight: 500; }
-    .mc-cta   { font-size: 13px; font-weight: 700; color: var(--mc-src-color); }
 
-    .yt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-bottom: 36px; }
-    .yt-card {
-      background: var(--bg-card); border-radius: 16px; overflow: hidden;
-      box-shadow: 0 1px 4px var(--shadow); border-top: 4px solid var(--src-yt-bg);
-      text-decoration: none; color: inherit; display: flex; flex-direction: column;
-      transition: box-shadow 0.2s, transform 0.2s, background 0.25s;
+    /* ‚îÄ‚îÄ SECTION HEADING ‚îÄ‚îÄ */
+    .section-heading {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      padding: 28px 0 12px;
+      border-bottom: 2px solid var(--navy);
+      margin-bottom: 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
     }
-    .yt-card:hover { box-shadow: 0 6px 24px var(--shadow-hover); transform: translateY(-2px); }
-    .yt-thumb { width: 100%; aspect-ratio: 16/9; object-fit: cover; background: var(--bg-off); }
-    .yt-info { padding: 16px 20px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
-    .yt-title { font-size: 15px; font-weight: 700; color: var(--text); line-height: 1.45; }
-    .yt-meta  { font-size: 12px; color: var(--yt-src-color); font-weight: 600; }
-    .yt-cta   { font-size: 13px; font-weight: 700; color: var(--yt-src-color); margin-top: auto; padding-top: 8px; }
 
-    /* Panels */
-    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 36px; }
-    .panel { background: var(--bg-card); border-radius: 16px; padding: 26px; box-shadow: 0 1px 4px var(--shadow); transition: background 0.25s; }
-    .panel-head { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; }
-    .panel-head h3 { font-size: 18px; font-weight: 800; color: var(--text); }
-    .panel-head .pc { margin-left: auto; font-size: 13px; color: var(--text-muted); background: var(--bg-chip); padding: 4px 14px; border-radius: 99px; font-weight: 600; }
-    .sent-bars { display: flex; flex-direction: column; gap: 9px; margin-bottom: 20px; }
-    .sent-row { display: flex; align-items: center; gap: 8px; font-size: 14px; }
-    .sent-lbl { width: 64px; color: var(--text-mid); font-weight: 600; }
-    .sent-track { flex: 1; height: 8px; background: var(--bg-off); border-radius: 99px; overflow: hidden; }
-    .sent-fill  { height: 100%; border-radius: 99px; transition: width 0.8s ease; }
-    .sent-n { width: 28px; text-align: right; font-size: 13px; font-weight: 700; color: var(--text-muted); }
-    .post-list { display: flex; flex-direction: column; gap: 10px; }
-    .post-item { padding: 14px 16px; background: var(--bg-post); border-radius: 12px; border-left: 4px solid; display: flex; flex-direction: column; gap: 6px; transition: background 0.25s; }
-    .pi-meta  { font-size: 12px; color: var(--text-muted); display: flex; gap: 8px; flex-wrap: wrap; font-weight: 500; }
-    .pi-score { font-weight: 700; color: #f97316; }
-    .pi-title { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.5; }
-    .pi-title a { color: inherit; text-decoration: none; }
-    .pi-title a:hover { text-decoration: underline; }
+    /* ‚îÄ‚îÄ FEATURED STORY ‚îÄ‚îÄ */
+    .featured-wrap {
+      padding: 40px 0;
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+    .featured-article .article-category {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .featured-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 42px;
+      font-weight: 700;
+      font-style: italic;
+      line-height: 1.2;
+      color: var(--navy);
+      margin-bottom: 18px;
+    }
+    .featured-title a:hover { color: var(--accent); }
+    .featured-excerpt {
+      font-size: 17px;
+      line-height: 1.8;
+      color: #444;
+      margin-bottom: 16px;
+      font-style: italic;
+    }
+    .featured-source {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
 
-    .chart-card { background: var(--bg-card); border-radius: 16px; padding: 28px; box-shadow: 0 1px 4px var(--shadow); margin-bottom: 36px; transition: background 0.25s; }
-    .chart-card h3 { font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 18px; text-transform: uppercase; letter-spacing: 1px; }
-    .chart-card canvas { max-height: 220px; }
+    /* ‚îÄ‚îÄ READ MORE ‚îÄ‚îÄ */
+    .read-more {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--navy);
+      letter-spacing: 0.5px;
+      display: inline-block;
+      margin-top: 8px;
+    }
+    .read-more:hover { color: var(--accent); }
 
-    .no-data { padding: 32px; text-align: center; color: var(--text-muted); font-size: 15px; background: var(--bg-off); border-radius: 12px; border: 2px dashed var(--border); font-weight: 500; line-height: 1.6; }
+    /* ‚îÄ‚îÄ 3 COLUMN GRID ‚îÄ‚îÄ */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 40px;
+    }
+    @media(max-width: 900px) { .grid-3 { grid-template-columns: 1fr 1fr; } }
+    @media(max-width: 600px) { .grid-3 { grid-template-columns: 1fr; } }
 
-    .rpt-footer { text-align: center; padding: 28px; font-size: 14px; color: var(--text-muted); border-top: 1px solid var(--border-light); background: var(--bg-card); line-height: 1.6; transition: background 0.25s; }
-    .rpt-footer a { color: var(--text); text-decoration: none; cursor: pointer; font-weight: 700; border-bottom: 2px solid var(--text); }
+    .article-card {
+      padding: 24px 28px;
+      border-right: 1px solid var(--border);
+    }
+    .article-card:last-child { border-right: none; }
 
-    @media (max-width: 768px) {
-      #landing { padding: 60px 24px; align-items: center; text-align: center; }
-      .src-blocks { justify-content: center; }
-      .chips { justify-content: center; }
-      .duh-wordmark { font-size: 72px; letter-spacing: -4px; }
-      .duh-tagline-big { font-size: 28px; }
-      .two-col { grid-template-columns: 1fr; }
-      .news-grid, .medium-grid, .yt-grid { grid-template-columns: 1fr; }
-      .rpt-header { padding: 24px 16px; }
-      .rpt-header h1 { font-size: 28px; }
-      .rpt-body { padding: 18px 14px; }
-      .kpi-row { grid-template-columns: 1fr 1fr; }
-      .load-steps, .prog-track { width: 100%; max-width: 360px; }
-      .theme-toggle { top: 14px; right: 14px; padding: 7px 14px; font-size: 13px; }
+    .article-category {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .article-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 19px;
+      font-weight: 700;
+      font-style: italic;
+      line-height: 1.35;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+    .article-title a:hover { color: var(--accent); }
+
+    .article-excerpt {
+      font-size: 13.5px;
+      color: #555;
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+
+    /* ‚îÄ‚îÄ 2 COLUMN LAYOUT ‚îÄ‚îÄ */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      padding: 0 0 40px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 40px;
+    }
+    @media(max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+
+    .col-section { }
+
+    .col-article {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .col-article:last-child { border-bottom: none; }
+
+    /* ‚îÄ‚îÄ SUBSCRIBE ‚îÄ‚îÄ */
+    .subscribe-wrap {
+      background: var(--light);
+      border-top: 2px solid var(--navy);
+      border-bottom: 2px solid var(--navy);
+      padding: 48px 40px;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .subscribe-wrap h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 30px;
+      font-weight: 700;
+      font-style: italic;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+    .subscribe-wrap p {
+      font-size: 15px;
+      color: var(--muted);
+      margin-bottom: 24px;
+      font-style: italic;
+    }
+    .sub-form {
+      display: flex;
+      gap: 0;
+      max-width: 420px;
+      margin: 0 auto;
+      border: 1px solid var(--navy);
+    }
+    .sub-form input {
+      flex: 1;
+      padding: 12px 16px;
+      border: none;
+      font-size: 14px;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+      background: white;
+    }
+    .sub-form button {
+      background: var(--navy);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      white-space: nowrap;
+    }
+    .sub-form button:hover { background: var(--accent); }
+
+    /* ‚îÄ‚îÄ FOOTER ‚îÄ‚îÄ */
+    footer {
+      background: var(--navy);
+      color: rgba(255,255,255,0.6);
+      padding: 40px;
+      text-align: center;
+    }
+    .footer-logo {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: 6px;
+      color: white;
+      margin-bottom: 12px;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin: 16px 0;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      color: rgba(255,255,255,0.6);
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .footer-links a:hover { color: white; }
+    .footer-text {
+      font-size: 12px;
+      font-family: 'Inter', sans-serif;
+      line-height: 1.8;
     }
   </style>
 </head>
 <body>
 
-<!-- ════ THEME TOGGLE ════ -->
-<button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
-  <span id="themeIcon">🌙</span>
-  <span id="themeLabel">Dark</span>
-</button>
-
-<!-- ════════ LANDING ════════ -->
-<div id="landing">
-  <div style="max-width:720px;width:100%">
-    <div class="duh-wordmark">duh.</div>
-    <div class="duh-tagline-big">Free and instant<br>topic intelligence</div>
-    <p class="tagline">
-      Type any topic and get a sharp brief from <a>News</a>, <a>Reddit</a>, <a>Hacker News</a>, <a>Medium</a> and <a>YouTube</a> — summarised by AI in seconds. No signup, no paywall, no ads.
-    </p>
-    <div class="search-wrap">
-      <input id="topicInput" type="text" placeholder="e.g. West Hyderabad real estate rents…" autocomplete="off" />
-      <button onclick="generate()">Brief Me →</button>
-    </div>
-    <div class="src-section-label">Sources we search</div>
-    <div class="src-blocks">
-      <div class="src-block news"><span class="src-icon">📰</span> Google News</div>
-      <div class="src-block reddit"><span class="src-icon">🔴</span> Reddit</div>
-      <div class="src-block hn"><span class="src-icon">🟠</span> Hacker News</div>
-      <div class="src-block medium"><span class="src-icon">📝</span> Medium</div>
-      <div class="src-block youtube"><span class="src-icon">▶️</span> YouTube</div>
-    </div>
-    <div class="chips-label">Try a topic</div>
-    <div class="chips">
-      <button class="chip" onclick="qs('West Hyderabad real estate rents')">West Hyd Rents</button>
-      <button class="chip" onclick="qs('Zepto Blinkit quick commerce India')">Quick Commerce</button>
-      <button class="chip" onclick="qs('AI agents 2025')">AI Agents 2025</button>
-      <button class="chip" onclick="qs('Bengaluru traffic infrastructure')">Bengaluru Traffic</button>
-      <button class="chip" onclick="qs('electric vehicles India 2025')">EVs in India</button>
-      <button class="chip" onclick="qs('SEBI stock market India 2025')">SEBI &amp; Markets</button>
-      <button class="chip" onclick="qs('startup funding India 2025')">India Startups</button>
-    </div>
+<!-- TOP BAR -->
+<div class="topbar">
+  <span>‚òÄÔ∏è Tuesday, March 03, 2026</span>
+  <div class="topbar-links">
+    <a href="#">About</a>
+    <a href="#">Subscribe</a>
+    <a href="#">Archive</a>
   </div>
 </div>
 
-<!-- ════════ LOADING ════════ -->
-<div id="loading" style="display:none">
-  <div class="load-mark">duh.</div>
-  <div class="load-topic" id="loadTopic"></div>
-  <div class="load-steps">
-    <div class="load-step" id="step0"><span class="step-icon">📰</span> Fetching news &amp; Medium articles…</div>
-    <div class="load-step" id="step1"><span class="step-icon">🔴</span> Scanning Reddit discussions…</div>
-    <div class="load-step" id="step2"><span class="step-icon">▶️</span> Checking Hacker News &amp; YouTube…</div>
-    <div class="load-step" id="step3"><span class="step-icon">✨</span> Generating AI summary…</div>
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-top">
+    <span style="font-style:italic">News so simple, you'll go duh</span>
+    <span>Updated daily at 7am IST</span>
   </div>
-  <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+  <div class="logo">DUH</div>
+  <div class="tagline">India's news in plain English ‚Äî no jargon, no drama</div>
+  <hr class="masthead-rule"/>
 </div>
 
-<!-- ════════ REPORT ════════ -->
-<div id="report" style="display:none"></div>
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-item active" href="#">Today</a>
+    <a class="nav-item" href="#">India</a>
+    <a class="nav-item" href="#">World</a>
+    <a class="nav-item" href="#">Business</a>
+    <a class="nav-item" href="#">Sports</a>
+    <a class="nav-item" href="#">Technology</a>
+    <a class="nav-item" href="#">Entertainment</a>
+  </div>
+</nav>
 
-<script>
-// ════ THEME ════
-function toggleTheme() {
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  const next = isDark ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', next);
-  localStorage.setItem('duh-theme', next);
-  document.getElementById('themeIcon').textContent  = next === 'dark' ? '☀️' : '🌙';
-  document.getElementById('themeLabel').textContent = next === 'dark' ? 'Light' : 'Dark';
-  if (charts.kw) { charts.kw.options.scales.x.grid.color = next==='dark'?'#222':'#f0f0f0'; charts.kw.update(); }
-}
-(function initTheme(){
-  const saved = localStorage.getItem('duh-theme') || 'light';
-  document.documentElement.setAttribute('data-theme', saved);
-  document.getElementById('themeIcon').textContent  = saved === 'dark' ? '☀️' : '🌙';
-  document.getElementById('themeLabel').textContent = saved === 'dark' ? 'Light' : 'Dark';
-})();
+<!-- EDITION BAR -->
+<div class="edition-bar">
+  Edition of Tuesday, March 03, 2026 &nbsp;¬∑&nbsp; Updated at 10:50 AM IST
+</div>
 
-// ════ DATA ════
-const POSITIVE = new Set(['good','great','excellent','affordable','worth','nice','happy','love','best','recommend','cheap','value','improve','safe','clean','convenient','modern','beautiful','fantastic','amazing','awesome','perfect','wonderful','helpful','easy','better','quality','reasonable','satisfied','enjoy','superb','brilliant','outstanding','impressive','smooth','reliable','efficient','fair','useful','solid','strong','profitable','growing','boom','success','win','innovative','exciting','positive','benefit','gain','accessible','friendly','fast','thriving','opportunity','promising','boost','soar','surge','rise','launch','expand','record']);
-const NEGATIVE = new Set(['expensive','bad','terrible','awful','worst','hate','avoid','scam','overpriced','problem','issue','difficult','concern','flood','pollution','traffic','poor','horrible','pathetic','disappointed','cheated','fraud','waste','useless','broken','fail','failure','ridiculous','absurd','outrageous','shock','alarming','unaffordable','inflation','corrupt','fake','mislead','wrong','error','mistake','regret','sad','angry','frustrated','annoyed','disgusted','scared','worried','danger','risky','overrated','decline','falling','drop','crisis','collapse','nightmare','trap','delay','cancel','ban','breach','leak','attack','threat','loss','cut','layoff','fire','arrest','scandal','crash','plunge','slump']);
-const STOPWORDS = new Set(['a','about','above','after','again','all','am','an','and','any','are','as','at','be','because','been','before','being','below','between','both','but','by','can','did','do','does','doing','down','during','each','few','for','from','further','get','got','had','has','have','having','he','her','here','him','his','how','i','if','in','into','is','it','its','just','me','more','most','my','no','nor','not','now','of','off','on','once','only','or','other','our','out','over','own','s','same','she','so','some','such','t','than','that','the','their','them','then','there','these','they','this','those','through','to','too','under','until','up','very','was','we','were','what','when','where','which','while','who','whom','why','will','with','you','your','like','also','think','look','want','one','use','make','even','see','time','go','come','take','people','lot','still','back','way','well','really','thing','actually','already','always','never','ever','said','say','know','going','getting','looking','trying','making','using','doing','having','being','saying','thinking','coming','taking','different','right','left','first','last','long','high','low','next','big','little','old','small','large','same','used','work','life','place','case','point','fact','though','since','while','around','per','let','put','might','could','would','should','may','must','can','ask','find','give','help','keep','move','need','seem','show','try','turn','start','end','stay','set','add','day','part','world','feel','real','hand','kind','line','side','name','two','three','four','five','ago','post','comment','reddit','something','anything','someone','anyone','everyone','re','ve','isn','wasn','aren','weren','haven','hadn','doesn','didn','don','won','wouldn','shouldn','couldn','ll','d','m','yeah','yes','nah','okay','im','ive','id','lol','tbh','imo','fyi','https','http','www','com','new','year','month','week','many','much','less']);
+<!-- MAIN -->
+<div class="container">
 
-let charts = {};
-const $    = id => document.getElementById(id);
-const show = id => $(id).style.display = '';
-const hide = id => $(id).style.display = 'none';
-const esc  = s  => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-function qs(t) { $('topicInput').value = t; generate(); }
+  <!-- FEATURED -->
+  <div class="featured-wrap">
+    
+        <article class="featured-article">
+          <p class="article-category">India</p>
+          <h2 class="featured-title"><a href="https://www.ndtv.com/world-news/mark-zuckerberg-buys-170-million-mansion-in-miami-breaks-record-11161549#publisher=newsstand" target="_blank">Zuckerberg Buys $170 Million Mansion In Miami, Breaks Record. Pic Inside</a></h2>
+          <p class="featured-excerpt">Mark Zuckerberg bought the home from celebrity plastic surgeon Aaron Rollins and his wife, Marine.</p>
+          <p class="featured-source">NDTV News Search Records Found 1000</p>
+          <a href="https://www.ndtv.com/world-news/mark-zuckerberg-buys-170-million-mansion-in-miami-breaks-record-11161549#publisher=newsstand" target="_blank" class="read-more">Read full article ¬ª</a>
+        </article>
+  </div>
 
-function setStep(i) {
-  ['step0','step1','step2','step3'].forEach((s,idx)=>{
-    const el=$(s); el.classList.remove('active','done');
-    if(idx<i) el.classList.add('done');
-    if(idx===i) el.classList.add('active');
-  });
-  $('progFill').style.width=(i*24+4)+'%';
-}
+  <!-- TOP 3 GRID -->
+  <div class="section-heading">
+    <span>Top Stories</span>
+    <span style="font-style:italic;font-family:'Source Serif 4',serif;font-size:11px;font-weight:300;letter-spacing:0;">Today's most important news</span>
+  </div>
+  <div class="grid-3">
+    
+        <article class="article-card">
+          <p class="article-category">India</p>
+          <h3 class="article-title"><a href="https://www.ndtv.com/india-news/iran-israel-war-sonia-gandhi-ayatollah-ali-khamenei-silence-not-neutral-sonia-gandhi-slams-centres-silence-on-khamenei-death-11161558#publisher=newsstand" target="_blank">"Silence Not Neutral": Sonia Gandhi Slams Centre's Stand On Khamenei Death</a></h3>
+          <p class="article-excerpt">Sonia Gandhi has questioned the Centre's silence on Khamenei's killing</p>
+          <a href="https://www.ndtv.com/india-news/iran-israel-war-sonia-gandhi-ayatollah-ali-khamenei-silence-not-neutral-sonia-gandhi-slams-centres-silence-on-khamenei-death-11161558#publisher=newsstand" target="_blank" class="read-more">Read full article ¬ª</a>
+        </article>
+        <article class="article-card">
+          <p class="article-category">Business</p>
+          <h3 class="article-title"><a href="https://timesofindia.indiatimes.com/business/india-business/gold-and-silver-prices-soar-yellow-metal-hits-rs-1-66-lakh-silver-gains-rs-20000-should-you-buy-on-dips/articleshow/128958316.cms" target="_blank">Gold and silver prices soar: Yellow metal hits Rs 1.66 lakh, silver gains Rs 20,000 — should you buy on dips?</a></h3>
+          <p class="article-excerpt">Gold and silver prices surged on Monday due to escalating Middle East geopolitical tensions, with gold reaching Rs 1.66 lakh per 10 grams and silver Rs 2.86 lakh per kg....</p>
+          <a href="https://timesofindia.indiatimes.com/business/india-business/gold-and-silver-prices-soar-yellow-metal-hits-rs-1-66-lakh-silver-gains-rs-20000-should-you-buy-on-dips/articleshow/128958316.cms" target="_blank" class="read-more">Read full article ¬ª</a>
+        </article>
+        <article class="article-card">
+          <p class="article-category">Sports</p>
+          <h3 class="article-title"><a href="https://timesofindia.indiatimes.com/sports/new-zealand-in-india-2016/top-stories/india-v-new-zealand-odi-tickets-worth-rs-52-36-lakh-went-unsold-claims-ck-khanna/articleshow/55230517.cms" target="_blank">ODI tickets worth Rs 52.36 lakh went unsold: Khanna</a></h3>
+          <p class="article-excerpt">"Tickets worth Rupees 52,36,000 were unsold. Why all the tickets were not sold-out? DDCA started online ticket sale quite late that too without proper advertisement," Khanna claimed in a media...</p>
+          <a href="https://timesofindia.indiatimes.com/sports/new-zealand-in-india-2016/top-stories/india-v-new-zealand-odi-tickets-worth-rs-52-36-lakh-went-unsold-claims-ck-khanna/articleshow/55230517.cms" target="_blank" class="read-more">Read full article ¬ª</a>
+        </article>
+  </div>
 
-function relDate(str) {
-  try {
-    const diff=Date.now()-new Date(str).getTime(), h=Math.floor(diff/3600000);
-    if(h<1) return 'Just now';
-    if(h<24) return `${h}h ago`;
-    const d=Math.floor(h/24);
-    if(d<7) return `${d}d ago`;
-    if(d<30) return `${Math.floor(d/7)}w ago`;
-    return new Date(str).toLocaleDateString('en-IN',{month:'short',year:'numeric'});
-  } catch { return ''; }
-}
-
-async function fetchNews(topic) {
-  try {
-    const res=await fetch(`/api/news?q=${encodeURIComponent(topic)}`);
-    const xml=new DOMParser().parseFromString(await res.text(),'application/xml');
-    return Array.from(xml.querySelectorAll('item')).slice(0,6).map(item=>{
-      const rawTitle=item.querySelector('title')?.textContent||'';
-      const srcEl=item.querySelector('source');
-      const srcName=srcEl?.textContent||'';
-      const srcUrl=srcEl?.getAttribute('url')||'';
-      const link=item.querySelector('link')?.textContent||'';
-      const pubDate=item.querySelector('pubDate')?.textContent||'';
-      const title=rawTitle.replace(/ - [^-]+$/,'').trim();
-      const tmp=document.createElement('div');
-      tmp.innerHTML=item.querySelector('description')?.textContent||'';
-      const desc=tmp.textContent.replace(/\s+/g,' ').trim().slice(0,220);
-      const domain=srcUrl?(()=>{try{return new URL(srcUrl).hostname;}catch{return '';}})():'';
-      return {title,srcName,srcUrl,domain,link,pubDate,desc};
-    }).filter(n=>n.title&&n.srcName);
-  } catch(e){console.warn('News:',e);return [];}
-}
-
-async function fetchMedium(topic) {
-  try {
-    const res=await fetch(`/api/medium?q=${encodeURIComponent(topic)}`);
-    const xml=new DOMParser().parseFromString(await res.text(),'application/xml');
-    return Array.from(xml.querySelectorAll('item')).slice(0,4).map(item=>{
-      const title=item.querySelector('title')?.textContent?.replace(/<!\[CDATA\[|\]\]>/g,'').trim()||'';
-      const link=item.querySelector('link')?.textContent||item.querySelector('guid')?.textContent||'';
-      const pubDate=item.querySelector('pubDate')?.textContent||'';
-      const creator=item.getElementsByTagNameNS('*','creator')[0]?.textContent||item.querySelector('author')?.textContent||'Medium';
-      return {title,link,pubDate,author:creator};
-    }).filter(m=>m.title&&m.link);
-  } catch(e){console.warn('Medium:',e);return [];}
-}
-
-async function fetchReddit(topic) {
-  try {
-    // Use our serverless function which calls Pullpush.io (a public Reddit data API)
-    const res=await fetch(`/api/reddit?q=${encodeURIComponent(topic)}`);
-    const data=await res.json();
-    return data.data.children.map(c=>c.data).filter(p=>p.title&&p.selftext!=='[deleted]'&&p.selftext!=='[removed]');
-  } catch(e){console.warn('Reddit:',e);return [];}
-}
-
-async function fetchHN(topic) {
-  try {
-    const res=await fetch(`https://hn.algolia.com/api/v1/search?query=${encodeURIComponent(topic)}&tags=story&hitsPerPage=20`);
-    return (await res.json()).hits?.filter(h=>h.title)||[];
-  } catch(e){console.warn('HN:',e);return [];}
-}
-
-async function fetchYoutube(topic) {
-  try {
-    const res=await fetch(`/api/youtube?q=${encodeURIComponent(topic)}`);
-    return (await res.json()).items||[];
-  } catch(e){console.warn('YouTube:',e);return [];}
-}
-
-async function fetchSummary(topic,news,reddit,hn,medium) {
-  try {
-    const allNews=[...news,...medium.map(m=>({title:m.title,srcName:'Medium',desc:''}))];
-    const res=await fetch('/api/summarize',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({topic,news:allNews,reddit,hn})
-    });
-    const data=await res.json();
-    return { summary: data.summary||null, oneliner: data.oneliner||null };
-  } catch(e){console.warn('Summary:',e);return {summary:null,oneliner:null};}
-}
-
-function tokenize(t){return(t||'').toLowerCase().replace(/[^a-z\s]/g,' ').split(/\s+/).filter(w=>w.length>2&&!STOPWORDS.has(w));}
-function sentScore(t){const ws=tokenize(t);let p=0,n=0;ws.forEach(w=>{if(POSITIVE.has(w))p++;else if(NEGATIVE.has(w))n++;});const tot=p+n;return tot===0?0:(p-n)/tot;}
-function classify(s){return s>0.2?'positive':s<-0.2?'negative':'neutral';}
-function topKws(texts,n=10){const f={};texts.forEach(t=>tokenize(t).forEach(w=>{f[w]=(f[w]||0)+1;}));return Object.entries(f).sort((a,b)=>b[1]-a[1]).slice(0,n);}
-function extractSummary(news,reddit,hn){
-  const cands=[];
-  news.forEach(n=>{if(n.desc?.length>40)cands.push({text:n.desc,src:n.srcName,score:2});});
-  reddit.slice(0,12).forEach(p=>{
-    const sents=(p.selftext||'').split(/[.!?]+/).filter(s=>s.trim().length>50);
-    sents.slice(0,1).forEach(s=>cands.push({text:s.trim(),src:'Reddit r/'+p.subreddit,score:p.score/200}));
-    if(!sents.length&&p.title)cands.push({text:p.title,src:'Reddit',score:p.score/200});
-  });
-  hn.slice(0,5).forEach(h=>{if(h.title)cands.push({text:h.title,src:'Hacker News',score:(h.points||0)/50});});
-  if(!cands.length)return[];
-  const allText=cands.map(c=>c.text).join(' '),freq={};
-  tokenize(allText).forEach(w=>{freq[w]=(freq[w]||0)+1;});
-  cands.forEach(c=>{const ws=tokenize(c.text);c.rank=ws.reduce((s,w)=>s+(freq[w]||0),0)/Math.max(ws.length,1)+c.score;});
-  const seen=new Set(),out=[];
-  cands.sort((a,b)=>b.rank-a.rank).forEach(c=>{const k=c.text.slice(0,40).toLowerCase();if(!seen.has(k)&&out.length<5){seen.add(k);out.push(c);}});
-  return out;
-}
-
-function destroyCharts(){Object.values(charts).forEach(c=>c.destroy());charts={};}
-
-function renderReport(topic,news,reddit,hn,aiSummary,oneliner,medium,youtube){
-  const rSents=reddit.map(p=>classify(sentScore(p.title+' '+p.selftext)));
-  const rPos=rSents.filter(s=>s==='positive').length,rNeg=rSents.filter(s=>s==='negative').length,rNeu=reddit.length-rPos-rNeg;
-  const hSents=hn.map(h=>classify(sentScore(h.title)));
-  const hPos=hSents.filter(s=>s==='positive').length,hNeg=hSents.filter(s=>s==='negative').length,hNeu=hn.length-hPos-hNeg;
-  const allTexts=[...news.map(n=>n.title+' '+n.desc),...reddit.map(p=>p.title),...hn.map(h=>h.title||''),...medium.map(m=>m.title)];
-  const overallLabel=classify(sentScore(allTexts.join(' ')));
-  const sentEmoji={positive:'🟢',negative:'🔴',neutral:'🟡'}[overallLabel];
-  const sentKpi={positive:'green',negative:'red',neutral:'orange'}[overallLabel];
-  const kws=topKws(allTexts,10),summary=extractSummary(news,reddit,hn);
-  const topR=[...reddit].sort((a,b)=>b.score-a.score).slice(0,4);
-  const topH=[...hn].sort((a,b)=>(b.points||0)-(a.points||0)).slice(0,4);
-  const now=new Date().toLocaleString('en-IN',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
-  const redditActivity=reddit.length>=10?'High':reddit.length>=5?'Moderate':reddit.length>=1?'Low':'Limited';
-  const redditActivityEmoji=reddit.length>=10?'🔥':reddit.length>=5?'💬':reddit.length>=1?'📉':'😶';
-  const totalSrc=news.length+reddit.length+hn.length+medium.length+youtube.length;
-
-  $('report').innerHTML=`
-    <div class="rpt-header">
-      <button class="rpt-back" onclick="goBack()">← New Search</button>
-      <div class="rpt-pill">Intelligence Brief</div>
-      <h1>${esc(topic)}</h1>
-      <div class="rpt-meta">Generated ${now}</div>
-      ${oneliner ? `<div class="rpt-oneliner">"${esc(oneliner)}"</div>` : ''}
-      <div class="rpt-src-row">
-        <div class="rpt-src-chip news-chip">📰 News <strong>${news.length}</strong></div>
-        <div class="rpt-src-chip reddit-chip">🔴 Reddit <strong>${reddit.length}</strong></div>
-        <div class="rpt-src-chip hn-chip">🟠 HN <strong>${hn.length}</strong></div>
-        <div class="rpt-src-chip medium-chip">📝 Medium <strong>${medium.length}</strong></div>
-        ${youtube.length?`<div class="rpt-src-chip yt-chip">▶️ YouTube <strong>${youtube.length}</strong></div>`:''}
-      </div>
+  <!-- TWO COLUMN: INDIA + BUSINESS -->
+  <div class="two-col">
+    <div class="col-section">
+      <div class="section-heading">India</div>
+      
+        <article class="article-card">
+          <p class="article-category">India</p>
+          <h3 class="article-title"><a href="https://www.ndtv.com/world-news/elon-musk-is-on-trial-over-his-tweets-ahead-of-twitter-purchase-11161593#publisher=newsstand" target="_blank">Elon Musk Is On Trial Over His Tweets Ahead Of Twitter Purchase</a></h3>
+          <p class="article-excerpt">Elon Musk eventually paid $44 billion for Twitter that fall.</p>
+          <a href="https://www.ndtv.com/world-news/elon-musk-is-on-trial-over-his-tweets-ahead-of-twitter-purchase-11161593#publisher=newsstand" target="_blank" class="read-more">Read full article ¬ª</a>
+        </article>
+        <article class="article-card">
+          <p class="article-category">India</p>
+          <h3 class="article-title"><a href="https://www.ndtv.com/world-news/dubai-news-us-iran-israel-war-middle-east-war-irans-double-strike-in-dubai-us-army-building-australian-base-hit-11161508#publisher=newsstand" target="_blank">Iran's Double Strike In Dubai: US Army Building, Australian Base Hit</a></h3>
+          <p class="article-excerpt">Iran has claimed that its operations in the Gulf are only aimed at American troops.</p>
+          <a href="https://www.ndtv.com/world-news/dubai-news-us-iran-israel-war-middle-east-war-irans-double-strike-in-dubai-us-army-building-australian-base-hit-11161508#publisher=newsstand" target="_blank" class="read-more">Read full article ¬ª</a>
+        </article>
+        <article class="article-card">
+          <p class="article-category">India</p>
+          <h3 class="article-title"><a href="https://www.ndtv.com/world-news/iran-israel-news-trumps-u-turn-on-boots-on-ground-after-us-embassy-in-riyadh-attacked-11161379#publisher=newsstand" target="_blank">Trump's U-Turn On "Boots On Ground" After US Embassy In Riyadh Attacked</a></h3>
+          <p class="article-excerpt">Trump earlier claimed that he does not "have the yips" for having boots on the ground.</p>
+          <a href="https://www.ndtv.com/world-news/iran-israel-news-trumps-u-turn-on-boots-on-ground-after-us-embassy-in-riyadh-attacked-11161379#publisher=newsstand" target="_blank" class="read-more">Read full article ¬ª</a>
+        </article>
     </div>
-    <div class="rpt-body">
-      <div class="kpi-row">
-        <div class="kpi yellow"><div class="kl">Sources</div><div class="kv">${totalSrc}</div><div class="ks">Items analysed</div></div>
-        <div class="kpi ${sentKpi}"><div class="kl">Sentiment</div><div class="kv" style="font-size:18px">${sentEmoji} ${overallLabel.charAt(0).toUpperCase()+overallLabel.slice(1)}</div><div class="ks">Overall tone</div></div>
-        <div class="kpi red"><div class="kl">Reddit Activity</div><div class="kv" style="font-size:20px">${redditActivityEmoji} ${redditActivity}</div><div class="ks">${reddit.length} discussion${reddit.length!==1?'s':''} found</div></div>
-        <div class="kpi orange"><div class="kl">HN Points</div><div class="kv">${hn.reduce((s,h)=>s+(h.points||0),0)}</div><div class="ks">Total upvotes</div></div>
-      </div>
-
-      <div class="tldr">
-        <div class="tldr-eyebrow">✨ AI Summary — Powered by Adi</div>
-        <div class="tldr-heading">${esc(topic)}</div>
-        <div class="tldr-list">
-          ${aiSummary
-            ? aiSummary.split('\n').filter(l=>l.trim()).map(line=>`<div class="tldr-item"><div class="tldr-dot"></div><div>${esc(line.trim())}</div></div>`).join('')
-            : summary.length
-              ? summary.map(s=>`<div class="tldr-item"><div class="tldr-dot"></div><div>${esc(s.text)} <span class="tldr-src">— ${esc(s.src)}</span></div></div>`).join('')
-              : '<div class="tldr-item"><div class="tldr-dot"></div><div>Not enough content to summarise. Try a broader search.</div></div>'
-          }
-        </div>
-      </div>
-
-      <div class="sec">📰 In the News</div>
-      ${news.length?`<div class="news-grid">${news.map(n=>`
-        <a class="news-card" href="${esc(n.link)}" target="_blank" rel="noopener noreferrer">
-          <div class="nc-meta">${n.domain?`<img class="nc-fav" src="https://www.google.com/s2/favicons?domain=${n.domain}&sz=32" onerror="this.style.display='none'" />`:''}
-            <span class="nc-src">${esc(n.srcName)}</span><span class="nc-date">${relDate(n.pubDate)}</span></div>
-          <div class="nc-title">${esc(n.title)}</div>
-          ${n.desc?`<div class="nc-desc">${esc(n.desc)}</div>`:''}
-          <div class="nc-cta">Read article →</div>
-        </a>`).join('')}</div>`
-      :'<div class="no-data" style="margin-bottom:36px">No news articles found for this topic.</div>'}
-
-      ${medium.length?`
-      <div class="sec">📝 On Medium</div>
-      <div class="medium-grid">${medium.map(m=>`
-        <a class="medium-card" href="${esc(m.link)}" target="_blank" rel="noopener noreferrer">
-          <div class="nc-meta"><span class="mc-src">Medium</span><span class="mc-date">${relDate(m.pubDate)}</span></div>
-          <div class="mc-title">${esc(m.title)}</div>
-          <div class="mc-author">by ${esc(m.author)}</div>
-          <div class="mc-cta">Read on Medium →</div>
-        </a>`).join('')}</div>`:''}
-
-      ${youtube.length?`
-      <div class="sec">▶️ On YouTube</div>
-      <div class="yt-grid">${youtube.map(v=>{
-        const vid=v.id?.videoId||'';
-        const s=v.snippet||{};
-        const thumb=s.thumbnails?.medium?.url||s.thumbnails?.default?.url||'';
-        const url=vid?`https://www.youtube.com/watch?v=${vid}`:'#';
-        return `<a class="yt-card" href="${esc(url)}" target="_blank" rel="noopener noreferrer">
-          ${thumb?`<img class="yt-thumb" src="${esc(thumb)}" alt="" loading="lazy" />`:'<div class="yt-thumb"></div>'}
-          <div class="yt-info">
-            <div class="yt-title">${esc(s.title||'')}</div>
-            <div class="yt-meta">${esc(s.channelTitle||'')}</div>
-            <div class="yt-cta">Watch on YouTube →</div>
-          </div></a>`;
-      }).join('')}</div>`:''}
-
-      <div class="two-col">
-        <div class="panel">
-          <div class="panel-head"><span>🔴</span><h3>Reddit</h3><span class="pc">${reddit.length} posts</span></div>
-          ${reddit.length?`
-          <div class="sent-bars">${[['Positive','#22c55e',rPos,reddit.length],['Negative','#ef4444',rNeg,reddit.length],['Neutral','#888',rNeu,reddit.length]].map(([l,c,n,t])=>`
-            <div class="sent-row"><span class="sent-lbl" style="color:${c}">${l}</span><div class="sent-track"><div class="sent-fill" style="width:${t?Math.round(n/t*100):0}%;background:${c}"></div></div><span class="sent-n">${n}</span></div>`).join('')}</div>
-          <div class="post-list">${topR.map(p=>`
-            <div class="post-item" style="border-color:${classify(sentScore(p.title))==='positive'?'#22c55e':classify(sentScore(p.title))==='negative'?'#ef4444':'#555'}">
-              <div class="pi-meta"><span>r/${esc(p.subreddit)}</span><span class="pi-score">▲ ${p.score}</span><span>${p.num_comments} comments</span></div>
-              <div class="pi-title">${esc(p.title)}</div>
-            </div>`).join('')}</div>`
-          :'<div class="no-data">No Reddit posts found for this topic.</div>'}
-        </div>
-        <div class="panel">
-          <div class="panel-head"><span>🟠</span><h3>Hacker News</h3><span class="pc">${hn.length} stories</span></div>
-          ${hn.length?`
-          <div class="sent-bars">${[['Positive','#22c55e',hPos,hn.length],['Negative','#ef4444',hNeg,hn.length],['Neutral','#888',hNeu,hn.length]].map(([l,c,n,t])=>`
-            <div class="sent-row"><span class="sent-lbl" style="color:${c}">${l}</span><div class="sent-track"><div class="sent-fill" style="width:${t?Math.round(n/t*100):0}%;background:${c}"></div></div><span class="sent-n">${n}</span></div>`).join('')}</div>
-          <div class="post-list">${topH.map(h=>`
-            <div class="post-item" style="border-color:var(--src-hn-bg)">
-              <div class="pi-meta"><span>by ${esc(h.author||'?')}</span><span class="pi-score">▲ ${h.points||0}</span><span>${h.num_comments||0} comments</span></div>
-              <div class="pi-title">${h.url?`<a href="${esc(h.url)}" target="_blank" rel="noopener">${esc(h.title)}</a>`:esc(h.title)}</div>
-            </div>`).join('')}</div>`
-          :'<div class="no-data">No Hacker News stories found.</div>'}
-        </div>
-      </div>
-
-      ${kws.length?`
-      <div class="sec">🔍 Key Themes</div>
-      <div class="chart-card">
-        <h3>Most Discussed Keywords Across All Sources</h3>
-        <canvas id="kwChart"></canvas>
-      </div>`:''}
+    <div class="col-section">
+      <div class="section-heading">Business</div>
+      
+        <article class="article-card">
+          <p class="article-category">Business</p>
+          <h3 class="article-title"><a href="https://timesofindia.indiatimes.com/business/international-business/asian-stocks-today-nikkei-falls-over-1400-points-kospi-plunges-4-markets-continue-to-fall-amid-middle-east-tensions/articleshow/128958932.cms" target="_blank">Asian stocks today: Nikkei falls over 1,400 points, Kospi plunges 4%; markets continue to fall amid Middle East tensions</a></h3>
+          <p class="article-excerpt">Asian stocks tumbled Tuesday amid escalating Iran tensions, impacting regional energy supplies. Japan's Nikkei and South Korea's Kospi saw significant drops, with energy and defense shares hit hard. Oil prices...</p>
+          <a href="https://timesofindia.indiatimes.com/business/international-business/asian-stocks-today-nikkei-falls-over-1400-points-kospi-plunges-4-markets-continue-to-fall-amid-middle-east-tensions/articleshow/128958932.cms" target="_blank" class="read-more">Read full article ¬ª</a>
+        </article>
+        <article class="article-card">
+          <p class="article-category">Business</p>
+          <h3 class="article-title"><a href="https://timesofindia.indiatimes.com/business/india-business/sensex-falls-1048-pts-on-war-in-west-asia-fear-index-up-25/articleshow/128957946.cms" target="_blank">Sensex falls 1,048 pts on war in West Asia, fear index up 25%</a></h3>
+          <p class="article-excerpt">Dalal Street investors lost Rs 6.6 lakh crore as escalating West Asian war triggered a sharp fall in stock markets. The Sensex closed 1.3% lower at 80,239 points, reflecting heightened...</p>
+          <a href="https://timesofindia.indiatimes.com/business/india-business/sensex-falls-1048-pts-on-war-in-west-asia-fear-index-up-25/articleshow/128957946.cms" target="_blank" class="read-more">Read full article ¬ª</a>
+        </article>
+        <article class="article-card">
+          <p class="article-category">Business</p>
+          <h3 class="article-title"><a href="https://timesofindia.indiatimes.com/business/india-business/current-account-deficit-widens-to-13-2bn-in-q3/articleshow/128958056.cms" target="_blank">Current account deficit widens to $13.2bn in Q3</a></h3>
+          <p class="article-excerpt"></p>
+          <a href="https://timesofindia.indiatimes.com/business/india-business/current-account-deficit-widens-to-13-2bn-in-q3/articleshow/128958056.cms" target="_blank" class="read-more">Read full article ¬ª</a>
+        </article>
     </div>
-    <div class="rpt-footer">
-      <strong>duh.</strong> · News · Reddit · HN · Medium · YouTube · ${now} · <a onclick="goBack()">Search another topic</a>
-    </div>
-  `;
+  </div>
 
-  show('report'); hide('loading');
+  <!-- BOTTOM GRID: SPORTS / TECH / ENTERTAINMENT -->
+  <div class="section-heading">More Stories</div>
+  <div class="grid-3" style="margin-bottom:40px;">
+    
+        <article class="article-card">
+          <p class="article-category">Sports</p>
+          <h3 class="article-title"><a href="https://timesofindia.indiatimes.com/sports/new-zealand-in-india-2016/top-stories/icc-odi-rankings-axar-patel-breaks-into-top-10-bowlers-amit-mishra-achieves-career-best-spot/articleshow/55141314.cms" target="_blank">Axar Patel breaks into top-10 ODI bowlers</a></h3>
+          <p class="article-excerpt">Axar Patel has become the highest placed India bowler in the latest ICC ODI rankings after breaking into the top-10 bowler's list while legspinner Amit Mishra has vaulted 25 places...</p>
+          <a href="https://timesofindia.indiatimes.com/sports/new-zealand-in-india-2016/top-stories/icc-odi-rankings-axar-patel-breaks-into-top-10-bowlers-amit-mishra-achieves-career-best-spot/articleshow/55141314.cms" target="_blank" class="read-more">Read full article ¬ª</a>
+        </article>
+        <article class="article-card">
+          <p class="article-category">Technology</p>
+          <h3 class="article-title"><a href="https://timesofindia.indiatimes.com/science/total-lunar-eclipse-on-march-3-2026-will-be-the-last-one-visible-until-2029/articleshow/128943979.cms" target="_blank">Total lunar eclipse on March 3, 2026 will be the last one visible until 2029</a></h3>
+          <p class="article-excerpt"></p>
+          <a href="https://timesofindia.indiatimes.com/science/total-lunar-eclipse-on-march-3-2026-will-be-the-last-one-visible-until-2029/articleshow/128943979.cms" target="_blank" class="read-more">Read full article ¬ª</a>
+        </article>
+        <article class="article-card">
+          <p class="article-category">Technology</p>
+          <h3 class="article-title"><a href="https://timesofindia.indiatimes.com/science/total-lunar-eclipse-when-and-where-to-watch-the-celestial-event-imd-shares-locations-timings/articleshow/128940167.cms" target="_blank">Total lunar eclipse: When and where to watch the celestial event; IMD shares locations, timings</a></h3>
+          <p class="article-excerpt">India will witness a spectacular total lunar eclipse on Tuesday, March 3, 2026. This deep celestial event, where the Moon fully enters Earth's shadow, will be visible across the nation....</p>
+          <a href="https://timesofindia.indiatimes.com/science/total-lunar-eclipse-when-and-where-to-watch-the-celestial-event-imd-shares-locations-timings/articleshow/128940167.cms" target="_blank" class="read-more">Read full article ¬ª</a>
+        </article>
+        <article class="article-card">
+          <p class="article-category">Entertainment</p>
+          <h3 class="article-title"><a href="https://timesofindia.indiatimes.com/entertainment/hindi/bollywood/box-office/the-kerala-story-2-goes-beyond-box-office-collection-day-4-film-crosses-rs-12-crore-on-first-monday-despite-drop/articleshow/128957080.cms" target="_blank">'The Kerala Story 2' crosses Rs 12 crore on Day 4</a></h3>
+          <p class="article-excerpt">'The Kerala Story 2 Goes Beyond' has seen a significant drop in box office collections compared to its predecessor. After a modest opening weekend, the film's Day 4 earnings fell...</p>
+          <a href="https://timesofindia.indiatimes.com/entertainment/hindi/bollywood/box-office/the-kerala-story-2-goes-beyond-box-office-collection-day-4-film-crosses-rs-12-crore-on-first-monday-despite-drop/articleshow/128957080.cms" target="_blank" class="read-more">Read full article ¬ª</a>
+        </article>
+  </div>
 
-  if(kws.length){
-    const isDark=document.documentElement.getAttribute('data-theme')==='dark';
-    setTimeout(()=>{
-      destroyCharts();
-      charts.kw=new Chart(document.getElementById('kwChart'),{
-        type:'bar',
-        data:{
-          labels:kws.map(([w])=>w),
-          datasets:[{data:kws.map(([,n])=>n),backgroundColor:kws.map(([w])=>POSITIVE.has(w)?'#22c55e':NEGATIVE.has(w)?'#ef4444':'#7eb8f7'),borderRadius:8}]
-        },
-        options:{
-          indexAxis:'y',responsive:true,
-          plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw} mentions`}}},
-          scales:{
-            x:{ticks:{stepSize:1,color:isDark?'#777':'#aaa'},grid:{color:isDark?'#222':'#f0f0f0'}},
-            y:{grid:{display:false},ticks:{color:isDark?'#aaa':'#555'}}
-          }
-        }
-      });
-    },100);
-  }
-}
+</div>
 
-async function generate(){
-  const topic=$('topicInput').value.trim();
-  if(!topic){$('topicInput').focus();return;}
-  destroyCharts();$('report').innerHTML='';
-  hide('landing');show('loading');
-  $('loadTopic').textContent=`"${topic}"`;
-  setStep(0);
-  const newsP=fetchNews(topic),mediumP=fetchMedium(topic),redditP=fetchReddit(topic),hnP=fetchHN(topic),youtubeP=fetchYoutube(topic);
-  const [news,medium]=await Promise.all([newsP,mediumP]);
-  setStep(1);
-  const reddit=await redditP;
-  setStep(2);
-  const [hn,youtube]=await Promise.all([hnP,youtubeP]);
-  setStep(3);
-  const {summary:aiSummary,oneliner}=await fetchSummary(topic,news,reddit,hn,medium);
-  $('progFill').style.width='100%';
-  await new Promise(r=>setTimeout(r,300));
-  renderReport(topic,news,reddit,hn,aiSummary,oneliner,medium,youtube);
-}
+<!-- SUBSCRIBE -->
+<div class="subscribe-wrap">
+  <h2>Start your morning with DUH</h2>
+  <p>India's news, explained simply ‚Äî in your inbox every day at 7am. Free, always.</p>
+  <div class="sub-form">
+    <input type="email" placeholder="your@email.com"/>
+    <button>Subscribe</button>
+  </div>
+</div>
 
-function goBack(){destroyCharts();hide('report');hide('loading');show('landing');}
-$('topicInput').addEventListener('keydown',e=>{if(e.key==='Enter')generate();});
-</script>
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">DUH</div>
+  <div class="footer-links">
+    <a href="#">Home</a>
+    <a href="#">About</a>
+    <a href="#">Archive</a>
+    <a href="#">Subscribe</a>
+    <a href="#">Contact</a>
+  </div>
+  <div class="footer-text">
+    News so simple, you'll go duh &nbsp;¬∑&nbsp; duh.co.in<br/>
+    Not financial or legal advice. Just news, made human.
+  </div>
+</footer>
+
 </body>
 </html>
